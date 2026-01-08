@@ -1,0 +1,191 @@
+---
+title: "MATH 3339: Introduction to Data Science"
+subtitle: "Course Schedule"
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    theme: cosmo
+---
+
+## Links
+
+- [Textbook](Textbook/table-of-contents.qmd)
+- [Course Website (this page)](https://paulsavala.github.io/math-3339-intro-data-science-with-llms/)
+
+---
+
+## Chapter 1: Exploratory Data Analysis & AI-Assisted Coding
+
+### Learning Objectives
+- Use AI coding assistants effectively with good prompts
+- Manipulate data with Pandas (loading, filtering, cleaning)
+- Calculate and interpret statistical summaries
+- Create effective visualizations with Seaborn
+- Test data analysis code with assert statements
+
+### Schedule
+
+| Date | Topic | Textbook | In-class Activity |
+|------|-------|---------|------------------|
+| Mon, Jan 12 | Course intro, What is EDA?, AI coding assistants |  |  |
+| Wed, Jan 14 | Writing effective prompts, when to use AI vs by hand | Section 1 | [Link](In-class%20activities/Chapter%201/1.1%20-%20Setup%20and%20Prompting.html) |
+| Fri, Jan 16 | Quiz 1a | | |
+| Wed, Jan 21 | Pandas basics: loading data, selecting/filtering, dat cleaning | Section 2 | [Link](In-class%20activities/Chapter%201/1.2%20-%20EDA%20First%20Look.ipynb) |
+| Fri, Jan 23 | Statistical summaries, outlier detection | Section 3 | [Link](In-class%20activities/Chapter%201/1.3%20-%20Statistical%20Summaries.ipynb) |
+| Mon, Jan 26 | Quiz 1b | | |
+| Wed, Jan 28 | Data visualization and testing | Sections 4 and 5 | [Link](In-class%20activities/Chapter%201/1.4-1.5%20-%20Visualization%20and%20Testing.ipynb) |
+| Fri, Jan 30 | In-class activity: EDA in practice | Sections 6 and 7 | [Link](In-class%20activities/Chapter%201/1.6-1.7%20-%20Iterative%20EDA.ipynb) |
+| Mon, Feb 2 | Quiz 1c | | |
+
+**Homework 1 due date:** Mon, Feb 2
+
+### Resources
+- [Chapter 1: EDA and AI-Assisted Coding](Textbook/Chapter%201%20-%20EDA/chapter-1-eda.qmd)
+- [Chapter 1 Homework](Assignments/Chapter%201%20-%20EDA/chapter-1-homework.qmd)
+
+---
+
+## Mini Project 1: EDA
+
+| Date | Activity |
+|------|----------|
+| Wed, Feb 4 | Mini project work day |
+| Fri, Feb 6 | Mini project work day |
+| Mon, Feb 9 | Mini project presentations |
+
+---
+
+## Chapter 2: Regression Models
+
+### Learning Objectives
+- Understand proper train/validation/test methodology
+- Use cross-validation for reliable model evaluation
+- Understand and check linear regression assumptions
+- Interpret regression coefficients correctly
+- Use residual analysis to diagnose model problems
+- Apply polynomial features for non-linear relationships
+- Recognize and handle multicollinearity
+- Use Ridge, Lasso, and Elastic Net regularization
+
+### Schedule
+
+| Date | Topic | Textbook | In-class Activity |
+|------|-------|----------|-------------------|
+| Wed, Feb 11 | Train/validation/test methodology, cross-validation intro | Section 1 | [Link](In-class%20activities/Chapter%202/2.1%20-%20Train%20Test%20Split.ipynb) |
+| Fri, Feb 13 | Linear regression fundamentals & assumptions | Section 2 | [Link](In-class%20activities/Chapter%202/2.2%20-%20Linear%20Regression.ipynb) |
+| Mon, Feb 16 | Quiz 2a | |
+| Wed, Feb 18 | Regression evaluation metrics (MSE, MAE, R², Adjusted R²) | Section 3 | [Link](In-class%20activities/Chapter%202/2.3%20-%20Evaluation%20Metrics.ipynb) |
+| Fri, Feb 20 | Residual analysis and diagnostic plots | Section 4 | [Link](In-class%20activities/Chapter%202/2.4%20-%20Residual%20Analysis.ipynb) |
+| Mon, Feb 23 | Quiz 2b | |
+| Wed, Feb 25 | Polynomial regression and feature expansion | Section 5 | [Link](In-class%20activities/Chapter%202/2.5%20-%20Polynomial%20Regression.ipynb) |
+| Fri, Feb 27 | Multicollinearity: detection and handling | Section 6 | [Link](In-class%20activities/Chapter%202/2.6%20-%20Multicollinearity.ipynb) |
+| Mon, Mar 2 | Quiz 2c |
+| Wed, Mar 4 | Regularization: Ridge and Lasso regression | Section 7 | [Link](In-class%20activities/Chapter%202/2.7%20-%20Regularization.ipynb) |
+| Fri, Mar 6 | Elastic Net and choosing between approaches | Section 8 | [Link](In-class%20activities/Chapter%202/2.8-2.9%20-%20Elastic%20Net.ipynb) |
+| Mon, Mar 9 | Quiz 2d | |
+
+**Homework 2 due date:** Mon, Mar 9
+
+### Resources
+- [Chapter 2: Regression Models](Textbook/Chapter-2-Regression/chapter-2-regression.qmd)
+- [Chapter 2 Homework](Assignments/Chapter%202%20-%20Regression/chapter-2-homework.qmd)
+
+---
+
+## Mini Project 2: Regression models
+
+| Date | Activity |
+|------|----------|
+| Wed, Mar 11 | Mini project work day |
+| Fri, Mar 13 | Mini project work day |
+| Mon, Mar 23 | Mini project presentations |
+
+---
+
+## Chapter 3: Classification Models
+
+### Learning Objectives
+- Understand supervised vs unsupervised learning paradigms
+- Understand logistic regression and interpret odds ratios
+- Read and interpret confusion matrices
+- Calculate precision, recall, F1 score and choose appropriately
+- Fit and tune decision trees, random forests, SVMs, k-NN
+- Use ROC curves and AUC for model comparison
+- Handle class imbalance with weights and resampling
+
+### Schedule
+
+| Date | Topic | Textbook |
+|------|-------|----------|
+| Wed, Mar 25 | Supervised vs unsupervised learning, classification intro | Sections 1 and 2 |
+| Fri, Mar 27 | Logistic regression and confusion matrices | Sections 3 |
+| Mon, Mar 30 | Quiz 3a | |
+| Wed, Apr 1 | Classification metrics: precision, recall, F1, ROC/AUC | Section 4 |
+| Fri, Apr 3 | Decision trees and random forests | Sections 5 and 6 |
+| Mon, Apr 6 | Quiz 3b | |
+| Wed, Apr 8 | Support vector machines and k-Nearest neighbors | Sections 7 and 8 |
+| Fri, Apr 10 | Class imbalance handling (SMOTE, class weights) | Section 10 |
+| Mon, Apr 13 | Quiz 3c |
+
+**Homework 3 due date:** Mon, Apr 13
+
+### Resources
+- [Chapter 3: Classification Models](Textbook/Chapter-3-Classification/chapter-3-classification.qmd)
+- [Chapter 3 Homework](Assignments/Chapter%203%20-%20Classification/chapter-3-homework.qmd)
+
+---
+
+## Chapter 4: LLMs for Feature Engineering and Data Extraction
+
+### Learning Objectives
+
+- Understand how LLMs can transform unstructured text into ML-ready features
+- Write effective prompts for information extraction tasks
+- Integrate LLM APIs (OpenAI, Anthropic, Google) into data pipelines
+- Parse and validate JSON responses from LLMs
+- Calculate and compare API costs across different providers
+- Validate LLM-extracted features for quality and consistency
+- Integrate LLM-generated features into traditional ML models
+- Make informed decisions about when to use LLMs vs. traditional approaches
+
+### Schedule
+
+| Date | Topic |
+|------|-------|
+| Wed, Apr 15 | Introduction to LLMs for feature extraction; Zero-shot extraction; Writing effective prompts, **Begin final project** |
+| Fri, Apr 17 | API integration (OpenAI, Anthropic, Google); Parameters (temperature, max_tokens); Cost calculation |
+| Mon, Apr 20 | Quiz 4a: Prompt engineering and API basics |
+| Wed, Apr 22 | JSON parsing and validation; Handling malformed responses; Building DataFrames |
+| Fri, Apr 24 | Few-shot prompting; Quality assessment; Integration with ML pipelines |
+| Mon, Apr 27 | Quiz 4b: Integration and quality control |
+
+**Homework 4 due date:** Mon, Apr 27
+
+### Resources
+
+- **Textbook:** [Chapter 4: LLMs for Feature Engineering](Textbook/Chapter-4-LLMs-Feature-Engineering/chapter-4-llms-feature-engineering.qmd)
+- **Homework:** [Chapter 4 Homework](Assignments/Chapter%204%20-%20LLMs%20Feature%20Engineering/chapter-4-homework.qmd)
+
+--
+
+## Final exam week: Presentations & Wrap-up
+
+| Date | Topic |
+|------|-------|
+| Wed, Apr 29 | Final project work day |
+| Fri, May 1 | Final project work day |
+| Wed, May 6 | Final project presentations |
+
+---
+
+## Assessment Overview
+
+| Assessment | Weight |
+|------------|--------|
+| Quizzes | 25% |
+| Homework | 20% |
+| Mini projects | 12.5% each = 25% |
+| Attendance | 10% |
+| Final Project | 20% |
+

@@ -1,0 +1,531 @@
+---
+title: "Module 5 Homework: Classification Models"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    theme: cosmo
+---
+
+## Instructions
+
+**Due Date:** [To be assigned by instructor]
+
+This homework is divided into two parts. Part A should be completed **without AI assistance** to build your foundational understanding of classification models, metrics, and evaluation. Part B should be completed **with AI assistance** (like Gemini CLI) to practice comprehensive model comparison and hyperparameter tuning at scale.
+
+For all questions, submit:
+
+1. Your code (in a `.py` file or Jupyter notebook)
+2. All visualizations generated
+3. Written answers to interpretation questions (can be in markdown or comments)
+4. For Part B: Include the prompts you used with the AI assistant
+
+### Datasets
+
+You'll be working with three datasets:
+
+**Dataset 1:** `titanic.csv` - Titanic passenger survival data with columns:
+
+- `Survived`: Whether passenger survived (0=No, 1=Yes) (TARGET)
+- `Pclass`: Passenger class (1, 2, or 3)
+- `Sex`: Passenger sex
+- `Age`: Passenger age
+- `SibSp`: Number of siblings/spouses aboard
+- `Parch`: Number of parents/children aboard
+- `Fare`: Ticket fare
+- `Embarked`: Port of embarkation (C, Q, S)
+
+**Dataset 2:** `spotify.csv` - Spotify song data with columns:
+
+- `popularity`: Song popularity score (0-100)
+- `danceability`, `energy`, `loudness`, `speechiness`, `acousticness`, `instrumentalness`, `liveness`, `valence`, `tempo`: Audio features
+
+You will create a binary target: viral_hit = popularity > 80
+
+**Dataset 3:** `isp_customers.csv` - Internet service provider customer data with columns:
+
+- `Churn`: Whether customer churned (TARGET)
+- `gender`, `SeniorCitizen`, `Partner`, `Dependents`: Demographics
+- `tenure`: Months with company
+- `PhoneService`, `InternetService`, `Contract`: Service details
+- `MonthlyCharges`, `TotalCharges`: Billing information
+
+---
+
+## Part A: By Hand (No AI Assistance)
+
+Complete questions 1-10 without using AI coding assistants. The goal is to build your foundational understanding of classification models and metrics.
+
+### Question 1 (4 points)
+
+Load the `titanic.csv` dataset and prepare it for classification:
+
+a) Drop rows with missing values in `Age`, `Fare`, and `Survived`
+
+b) Create feature matrix X using: `Pclass`, `Age`, `SibSp`, `Parch`, `Fare`
+
+c) Create target vector y using `Survived`
+
+d) Split into train/test sets (80/20, random_state=42)
+
+e) How many passengers are in each class (survived vs not survived) in the training set? Is this balanced or imbalanced?
+
+---
+
+### Question 2 (5 points)
+
+Fit a Logistic Regression model on the Titanic data:
+
+a) Fit the model on X_train and y_train
+
+b) Get predictions on X_test
+
+c) Create and display a confusion matrix
+
+d) Calculate accuracy, precision, recall, and F1 score manually from the confusion matrix values
+
+e) Verify your calculations match sklearn's metric functions
+
+---
+
+### Question 3 (5 points)
+
+Interpret the logistic regression results:
+
+a) Extract the coefficients and create a DataFrame showing feature names and their coefficients
+
+b) Calculate the odds ratio for each feature (exp of coefficient)
+
+c) Which feature has the strongest positive association with survival? Strongest negative?
+
+d) Interpret the Pclass coefficient in plain language: "For each unit increase in passenger class..."
+
+e) Why should we be careful interpreting these coefficients?
+
+---
+
+### Question 4 (4 points)
+
+Fit a Decision Tree classifier on the Titanic data:
+
+a) Fit a tree with max_depth=3
+
+b) Calculate training and test accuracy
+
+c) Extract and plot feature importances as a horizontal bar chart
+
+d) Which feature does the decision tree consider most important? Does this match the logistic regression coefficients?
+
+---
+
+### Question 5 (5 points)
+
+Investigate the bias-variance tradeoff with decision trees:
+
+a) Fit decision trees with max_depth values: [1, 2, 3, 5, 7, 10, 15, 20, None]
+
+b) For each, calculate training and test accuracy
+
+c) Plot both accuracies vs. max_depth on the same graph
+
+d) At what depth does overfitting become apparent?
+
+e) What max_depth would you choose for this dataset? Why?
+
+---
+
+### Question 6 (4 points)
+
+Fit a Random Forest classifier:
+
+a) Fit with n_estimators=100, max_depth=5, random_state=42
+
+b) Compare its test accuracy to the single decision tree with max_depth=5
+
+c) Extract feature importances from both models and compare them
+
+d) Why might the feature importances differ between a single tree and a random forest?
+
+---
+
+### Question 7 (5 points)
+
+Fit a k-Nearest Neighbors classifier:
+
+a) Scale the features using StandardScaler (fit on train, transform both)
+
+b) Fit k-NN with k=5 on the scaled data
+
+c) Calculate test accuracy
+
+d) Test k values [1, 3, 5, 7, 10, 15, 20] and plot test accuracy vs. k
+
+e) What k value gives the best performance? What happens at very small and very large k?
+
+---
+
+### Question 8 (4 points)
+
+Create an ROC curve for the logistic regression model:
+
+a) Get probability predictions for the positive class
+
+b) Calculate FPR and TPR using roc_curve
+
+c) Calculate the AUC score
+
+d) Plot the ROC curve with the diagonal reference line and display AUC in the legend
+
+---
+
+### Question 9 (5 points)
+
+Compare multiple classifiers:
+
+a) Fit Logistic Regression, Decision Tree (depth=5), Random Forest (100 trees), and k-NN (k=5, scaled)
+
+b) Calculate test accuracy for each
+
+c) Create a bar chart comparing accuracies
+
+d) Get ROC curves for all models that provide predict_proba and plot them on the same axes
+
+e) Based on both accuracy and AUC, which model performs best?
+
+---
+
+### Question 10 (4 points)
+
+Explain in your own words (3-4 sentences each):
+
+a) When would you choose precision as your primary metric? Give a real-world example.
+
+b) When would you choose recall as your primary metric? Give a real-world example.
+
+c) What is the F1 score and when is it useful?
+
+d) Why is accuracy often misleading for imbalanced datasets?
+
+---
+
+## Part B: With AI Assistance
+
+For questions 11-20, you should use an AI coding assistant (like Gemini CLI) to help you perform comprehensive classification analysis. The goal is to practice systematic model comparison and handling real-world challenges.
+
+**Important:** For each question, save the prompt(s) you used with the AI assistant. Part of your grade will be based on the quality of your prompts.
+
+---
+
+### Question 11 (5 points)
+
+Use AI to perform comprehensive hyperparameter tuning for a Decision Tree on the Titanic dataset.
+
+Test combinations of:
+- max_depth: [2, 3, 5, 7, 10, 15]
+- min_samples_split: [2, 5, 10, 20]
+- min_samples_leaf: [1, 2, 5, 10]
+
+Your code should:
+
+- Use GridSearchCV with 5-fold cross-validation
+- Find the best hyperparameter combination
+- Display the top 5 parameter combinations
+- Fit the best model and evaluate on test set
+
+**Deliverables:**
+
+- Code
+- Best parameters and test accuracy
+- Written interpretation (3-4 sentences)
+- Your AI prompt(s)
+
+---
+
+### Question 12 (6 points)
+
+Prompt AI to create a comprehensive model comparison on the Titanic dataset.
+
+Compare these classifiers:
+- Logistic Regression
+- Decision Tree (tuned)
+- Random Forest (tuned)
+- SVM with RBF kernel
+- k-NN (tuned)
+
+Your code should:
+
+- Use GridSearchCV to tune each model
+- Create a comparison table with accuracy, precision, recall, F1, and AUC
+- Plot all ROC curves on the same graph
+- Create a heatmap of the comparison metrics
+
+Write a paragraph recommending which model to use and why.
+
+**Deliverables:**
+
+- Code
+- Comparison table and visualizations
+- ROC curve comparison plot
+- Written recommendation (5-6 sentences)
+- Your AI prompt(s)
+
+---
+
+### Question 13 (6 points)
+
+Use AI to analyze class imbalance in the Spotify dataset.
+
+Create a binary classification target: viral_hit = popularity > 80
+
+Your code should:
+
+- Show the class distribution
+- Fit a baseline model (Logistic Regression) without handling imbalance
+- Apply three strategies: class_weight='balanced', SMOTE, random undersampling
+- Compare performance using precision, recall, F1, and AUC for each strategy
+- Create confusion matrices for each approach
+
+Which strategy works best for identifying viral hits?
+
+**Deliverables:**
+
+- Code
+- Class distribution visualization
+- Performance comparison table
+- Confusion matrices for each approach
+- Written analysis (5-6 sentences)
+- Your AI prompt(s)
+
+---
+
+### Question 14 (6 points)
+
+Prompt AI to visualize decision boundaries for different classifiers.
+
+Using the Titanic dataset with only `Age` and `Fare` as features:
+
+- Create decision boundary plots for:
+  - Logistic Regression
+  - Decision Tree (depth=3)
+  - Decision Tree (depth=10)
+  - Random Forest
+  - SVM (linear kernel)
+  - SVM (RBF kernel)
+  - k-NN (k=3)
+  - k-NN (k=20)
+
+Arrange all 8 plots in a 2x4 grid with consistent axis limits and color schemes.
+
+How do the decision boundaries differ? Which creates the most complex boundaries?
+
+**Deliverables:**
+
+- Code
+- Decision boundary visualization (2x4 grid)
+- Written comparison (4-5 sentences)
+- Your AI prompt(s)
+
+---
+
+### Question 15 (5 points)
+
+Use AI to analyze feature importance across different models.
+
+Using the Titanic dataset (all numeric features):
+
+- Extract feature importances from:
+  - Logistic Regression (absolute coefficients)
+  - Decision Tree
+  - Random Forest
+  - Permutation importance for k-NN and SVM
+
+- Create a heatmap showing feature importance rankings across all models
+
+Which features are consistently important? Which differ between models?
+
+**Deliverables:**
+
+- Code
+- Feature importance heatmap
+- Written analysis (3-4 sentences)
+- Your AI prompt(s)
+
+---
+
+### Question 16 (6 points)
+
+Prompt AI to perform cross-dataset model evaluation.
+
+Train models on the Titanic dataset and ISP customer dataset (predicting churn):
+
+- For each dataset, tune and fit: Logistic Regression, Random Forest, k-NN
+- Compare how well each model type performs across the two datasets
+- Create a comparison table showing model performance on each dataset
+
+Do the same model types perform best on both datasets? Why or why not?
+
+**Deliverables:**
+
+- Code for both datasets
+- Cross-dataset comparison table
+- Written analysis (5-6 sentences)
+- Your AI prompt(s)
+
+---
+
+### Question 17 (6 points)
+
+Prompt AI to create an ensemble voting classifier.
+
+Using the Titanic dataset:
+
+- Create a VotingClassifier combining:
+  - Logistic Regression
+  - Random Forest
+  - SVM (with probability=True)
+- Use both 'hard' and 'soft' voting
+- Compare the ensemble to individual models
+
+Does the ensemble outperform the best individual model?
+
+**Deliverables:**
+
+- Code
+- Performance comparison table
+- Written analysis (4-5 sentences)
+- Your AI prompt(s)
+
+---
+
+### Question 18 (6 points)
+
+Use AI to analyze k-NN with different distance metrics.
+
+Using the ISP customer dataset (with a mix of categorical and numerical features):
+
+- Test distance metrics: euclidean, manhattan, cosine
+- For categorical features, use appropriate encoding
+- Compare performance across metrics
+- Analyze which metric works best for this mixed-type data
+
+How does the choice of distance metric affect performance?
+
+**Deliverables:**
+
+- Code
+- Performance comparison table
+- Written analysis (4-5 sentences)
+- Your AI prompt(s)
+
+---
+
+### Question 19 (12 points)
+
+For this final question, ask AI to help you conduct a **complete classification analysis** from start to finish on the ISP customer dataset (predicting churn).
+
+Your analysis should include:
+
+1. **Exploratory Data Analysis:**
+   - Summary statistics
+   - Class distribution
+   - Feature distributions by target class
+   - Correlation analysis
+
+2. **Data Preparation:**
+   - Handle missing values
+   - Encode categorical variables
+   - Feature scaling (where appropriate)
+   - Train/validation/test split (60/20/20)
+
+3. **Model Development:**
+   - Fit multiple models: Logistic Regression, Decision Tree, Random Forest, SVM, k-NN
+   - Hyperparameter tuning using validation set
+   - Handle class imbalance appropriately
+
+4. **Model Evaluation:**
+   - Compare all models using appropriate metrics (given potential imbalance)
+   - ROC curves for all models
+   - Select best model based on business context (what matters more: finding churners or not falsely flagging loyal customers?)
+
+5. **Final Model:**
+   - Evaluate on test set (only once!)
+   - Feature importance analysis
+   - Create confusion matrix with business interpretation
+
+Write a 1-page executive summary (300-400 words) that explains:
+
+- The business problem (customer churn prediction)
+- Data characteristics and challenges
+- Models tested and evaluation approach
+- How the best model was selected
+- Performance on test set
+- Key features predicting churn
+- Business recommendations
+
+**Deliverables:**
+
+- Complete analysis code (well-commented)
+- All visualizations (EDA, ROC curves, confusion matrices)
+- Executive summary
+- Your AI prompt(s)
+- Reflection: What classification-specific challenges did you encounter that you wouldn't face in regression?
+
+---
+
+## Submission Guidelines
+
+Submit a ZIP file containing:
+
+1. **Code files:** All `.py` files or Jupyter notebooks
+2. **Visualizations folder:** All plots and charts generated
+3. **Written responses:** A single document (PDF or Markdown) with all your written answers, interpretations, and AI prompts used
+4. **Data:** Include the datasets if you made any modifications
+
+---
+
+## Grading Rubric
+
+**Part A: By Hand (45 points)**
+
+- Code correctness and implementation: 25 points
+- Proper understanding of classification metrics and models: 12 points
+- Written interpretations and explanations: 8 points
+
+**Part B: AI-Assisted (55 points)**
+
+- Code functionality and correctness: 25 points
+- Quality and specificity of AI prompts: 14 points
+- Visualizations (ROC curves, confusion matrices, comparisons): 10 points
+- Written interpretations and insights: 6 points
+
+**Total: 100 points**
+
+---
+
+## Tips for Success
+
+### For Part A:
+
+- Always check class balance before fitting models
+- Remember: precision = "of those I predicted positive, how many were correct?"
+- Remember: recall = "of those that were actually positive, how many did I find?"
+- Decision tree depth controls overfitting—start shallow
+- k-NN requires scaling; trees do not
+- When comparing models, use multiple metrics, not just accuracy
+
+### For Part B:
+
+- Ask AI to test many hyperparameter combinations systematically
+- Request ROC curves for all models on the same plot for easy comparison
+- When dealing with imbalance, always compare multiple strategies
+- Ask for decision boundary visualizations to understand model behavior
+- Request confusion matrices normalized by row (actual class) for better interpretation
+
+### General:
+
+- Accuracy can be misleading—always check class balance first
+- Think about the business context when choosing metrics
+- ROC/AUC is great for model comparison but doesn't tell the whole story
+- Feature importance from different models may disagree—that's okay
+- Use your brain. That's what it's there for.

@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Module 4 Homework: Regression Models – MATH 3339: Introduction to Data Science with LLMs</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles/textbook-nav.css">
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-search-results"></div>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#instructions" id="toc-instructions" class="nav-link active" data-scroll-target="#instructions">Instructions</a>
+  <ul class="collapse">
+  <li><a href="#datasets" id="toc-datasets" class="nav-link" data-scroll-target="#datasets">Datasets</a></li>
+  </ul></li>
+  <li><a href="#part-a-by-hand-no-ai-assistance" id="toc-part-a-by-hand-no-ai-assistance" class="nav-link" data-scroll-target="#part-a-by-hand-no-ai-assistance">Part A: By Hand (No AI Assistance)</a>
+  <ul class="collapse">
+  <li><a href="#question-1-4-points" id="toc-question-1-4-points" class="nav-link" data-scroll-target="#question-1-4-points">Question 1 (4 points)</a></li>
+  <li><a href="#question-2-5-points" id="toc-question-2-5-points" class="nav-link" data-scroll-target="#question-2-5-points">Question 2 (5 points)</a></li>
+  <li><a href="#question-3-5-points" id="toc-question-3-5-points" class="nav-link" data-scroll-target="#question-3-5-points">Question 3 (5 points)</a></li>
+  <li><a href="#question-4-5-points" id="toc-question-4-5-points" class="nav-link" data-scroll-target="#question-4-5-points">Question 4 (5 points)</a></li>
+  <li><a href="#question-5-5-points" id="toc-question-5-5-points" class="nav-link" data-scroll-target="#question-5-5-points">Question 5 (5 points)</a></li>
+  <li><a href="#question-6-4-points" id="toc-question-6-4-points" class="nav-link" data-scroll-target="#question-6-4-points">Question 6 (4 points)</a></li>
+  <li><a href="#question-7-5-points" id="toc-question-7-5-points" class="nav-link" data-scroll-target="#question-7-5-points">Question 7 (5 points)</a></li>
+  <li><a href="#question-8-4-points" id="toc-question-8-4-points" class="nav-link" data-scroll-target="#question-8-4-points">Question 8 (4 points)</a></li>
+  <li><a href="#question-9-4-points" id="toc-question-9-4-points" class="nav-link" data-scroll-target="#question-9-4-points">Question 9 (4 points)</a></li>
+  <li><a href="#question-10-4-points" id="toc-question-10-4-points" class="nav-link" data-scroll-target="#question-10-4-points">Question 10 (4 points)</a></li>
+  </ul></li>
+  <li><a href="#part-b-with-ai-assistance" id="toc-part-b-with-ai-assistance" class="nav-link" data-scroll-target="#part-b-with-ai-assistance">Part B: With AI Assistance</a>
+  <ul class="collapse">
+  <li><a href="#question-11-5-points" id="toc-question-11-5-points" class="nav-link" data-scroll-target="#question-11-5-points">Question 11 (5 points)</a></li>
+  <li><a href="#question-12-6-points" id="toc-question-12-6-points" class="nav-link" data-scroll-target="#question-12-6-points">Question 12 (6 points)</a></li>
+  <li><a href="#question-13-6-points" id="toc-question-13-6-points" class="nav-link" data-scroll-target="#question-13-6-points">Question 13 (6 points)</a></li>
+  <li><a href="#question-14-6-points" id="toc-question-14-6-points" class="nav-link" data-scroll-target="#question-14-6-points">Question 14 (6 points)</a></li>
+  <li><a href="#question-15-5-points" id="toc-question-15-5-points" class="nav-link" data-scroll-target="#question-15-5-points">Question 15 (5 points)</a></li>
+  <li><a href="#question-16-6-points" id="toc-question-16-6-points" class="nav-link" data-scroll-target="#question-16-6-points">Question 16 (6 points)</a></li>
+  <li><a href="#question-17-5-points" id="toc-question-17-5-points" class="nav-link" data-scroll-target="#question-17-5-points">Question 17 (5 points)</a></li>
+  <li><a href="#question-18-6-points" id="toc-question-18-6-points" class="nav-link" data-scroll-target="#question-18-6-points">Question 18 (6 points)</a></li>
+  <li><a href="#question-19-6-points" id="toc-question-19-6-points" class="nav-link" data-scroll-target="#question-19-6-points">Question 19 (6 points)</a></li>
+  <li><a href="#question-20-7-points" id="toc-question-20-7-points" class="nav-link" data-scroll-target="#question-20-7-points">Question 20 (7 points)</a></li>
+  </ul></li>
+  <li><a href="#submission-guidelines" id="toc-submission-guidelines" class="nav-link" data-scroll-target="#submission-guidelines">Submission Guidelines</a></li>
+  <li><a href="#grading-rubric" id="toc-grading-rubric" class="nav-link" data-scroll-target="#grading-rubric">Grading Rubric</a></li>
+  <li><a href="#tips-for-success" id="toc-tips-for-success" class="nav-link" data-scroll-target="#tips-for-success">Tips for Success</a>
+  <ul class="collapse">
+  <li><a href="#for-part-a" id="toc-for-part-a" class="nav-link" data-scroll-target="#for-part-a">For Part A:</a></li>
+  <li><a href="#for-part-b" id="toc-for-part-b" class="nav-link" data-scroll-target="#for-part-b">For Part B:</a></li>
+  <li><a href="#general" id="toc-general" class="nav-link" data-scroll-target="#general">General:</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Module 4 Homework: Regression Models</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="instructions" class="level2">
+<h2 class="anchored" data-anchor-id="instructions">Instructions</h2>
+<p><strong>Due Date:</strong> [To be assigned by instructor]</p>
+<p>This homework is divided into two parts. Part A should be completed <strong>without AI assistance</strong> to build your foundational understanding of regression models, diagnostics, and regularization. Part B should be completed <strong>with AI assistance</strong> (like Gemini CLI) to practice comprehensive model selection and diagnostic analysis at scale.</p>
+<p>For all questions, submit:</p>
+<ol type="1">
+<li>Your code (in a <code>.py</code> file or Jupyter notebook)</li>
+<li>All visualizations generated</li>
+<li>Written answers to interpretation questions (can be in markdown or comments)</li>
+<li>For Part B: Include the prompts you used with the AI assistant</li>
+</ol>
+<section id="datasets" class="level3">
+<h3 class="anchored" data-anchor-id="datasets">Datasets</h3>
+<p>You’ll be working with three datasets:</p>
+<p><strong>Dataset 1:</strong> <code>real_estate.csv</code> - Real estate pricing data with columns:</p>
+<ul>
+<li><code>price</code>: Sale price in dollars (TARGET)</li>
+<li><code>sqft</code>: Square footage</li>
+<li><code>bedrooms</code>: Number of bedrooms</li>
+<li><code>bathrooms</code>: Number of bathrooms</li>
+<li><code>age</code>: Age of property in years</li>
+<li><code>distance_downtown</code>: Distance to downtown in miles</li>
+<li><code>crime_rate</code>: Neighborhood crime rate</li>
+<li><code>school_rating</code>: Local school rating (1-10)</li>
+</ul>
+<p><strong>Dataset 2:</strong> <code>advertising.csv</code> - Advertising budget and sales data with columns:</p>
+<ul>
+<li><code>sales</code>: Product sales in thousands (TARGET)</li>
+<li><code>tv</code>: TV advertising budget in thousands</li>
+<li><code>radio</code>: Radio advertising budget in thousands</li>
+<li><code>newspaper</code>: Newspaper advertising budget in thousands</li>
+</ul>
+<p><strong>Dataset 3:</strong> <code>employee_performance.csv</code> - Employee metrics with multicollinearity with columns:</p>
+<ul>
+<li><code>performance_score</code>: Performance rating (TARGET)</li>
+<li><code>years_experience</code>: Years of experience</li>
+<li><code>training_hours</code>: Hours of training completed</li>
+<li><code>projects_completed</code>: Number of projects completed</li>
+<li><code>months_employed</code>: Months with company (highly correlated with years_experience)</li>
+<li><code>certifications</code>: Number of certifications</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="part-a-by-hand-no-ai-assistance" class="level2">
+<h2 class="anchored" data-anchor-id="part-a-by-hand-no-ai-assistance">Part A: By Hand (No AI Assistance)</h2>
+<p>Complete questions 1-10 without using AI coding assistants. The goal is to build your foundational understanding of regression diagnostics and regularization.</p>
+<section id="question-1-4-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-1-4-points">Question 1 (4 points)</h3>
+<p>Load the <code>advertising.csv</code> dataset and fit a Linear Regression model to predict <code>sales</code> using all three advertising channels.</p>
+<ol type="a">
+<li><p>Extract and display the coefficients for each feature</p></li>
+<li><p>Interpret each coefficient in plain language (e.g., “For every additional thousand dollars spent on TV advertising, sales increase by…”)</p></li>
+<li><p>Which advertising channel has the strongest impact on sales?</p></li>
+<li><p>Calculate R² for this model. What does this value tell you about the model’s performance?</p></li>
+</ol>
+<hr>
+</section>
+<section id="question-2-5-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-2-5-points">Question 2 (5 points)</h3>
+<p>Continuing with the advertising dataset, manually calculate the following for your linear regression model:</p>
+<ol type="a">
+<li><p>Calculate the residuals (actual - predicted) for the first 5 data points</p></li>
+<li><p>Compute the Mean Squared Error (MSE) manually from all residuals</p></li>
+<li><p>Compute the Mean Absolute Error (MAE) manually from all residuals</p></li>
+<li><p>Verify your calculations match sklearn’s <code>mean_squared_error</code> and <code>mean_absolute_error</code></p></li>
+<li><p>Which metric (MSE or MAE) is more sensitive to outliers? Why?</p></li>
+</ol>
+<hr>
+</section>
+<section id="question-3-5-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-3-5-points">Question 3 (5 points)</h3>
+<p>Create diagnostic plots for the linear regression model from Question 1:</p>
+<ol type="a">
+<li><p>Create a scatter plot of residuals vs.&nbsp;fitted values (predictions)</p></li>
+<li><p>Add a horizontal line at y=0</p></li>
+<li><p>What pattern would you expect to see if the model assumptions are satisfied?</p></li>
+<li><p>Do you observe any concerning patterns in your plot? What might they indicate?</p></li>
+<li><p>Create a histogram of the residuals. Do they appear approximately normally distributed?</p></li>
+</ol>
+<hr>
+</section>
+<section id="question-4-5-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-4-5-points">Question 4 (5 points)</h3>
+<p>Load the <code>real_estate.csv</code> dataset. Calculate the correlation matrix for all numerical features.</p>
+<ol type="a">
+<li><p>Display the correlation matrix</p></li>
+<li><p>Which pair of features has the highest correlation (excluding correlations with the target)?</p></li>
+<li><p>What is multicollinearity and why is it problematic for linear regression?</p></li>
+<li><p>Based on the correlation matrix, do you see evidence of multicollinearity in this dataset?</p></li>
+</ol>
+<hr>
+</section>
+<section id="question-5-5-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-5-5-points">Question 5 (5 points)</h3>
+<p>Using the <code>real_estate.csv</code> dataset, fit three models predicting <code>price</code>:</p>
+<ul>
+<li><strong>Model 1:</strong> Linear Regression (no regularization)</li>
+<li><strong>Model 2:</strong> Ridge Regression with alpha=1.0</li>
+<li><strong>Model 3:</strong> Lasso Regression with alpha=1.0</li>
+</ul>
+<p>For each model:</p>
+<ol type="a">
+<li><p>Fit the model using all features</p></li>
+<li><p>Display the coefficients</p></li>
+<li><p>Calculate R² on the test set (use 80/20 train/test split, random_state=42)</p></li>
+<li><p>How do the coefficients differ between the three models? Which model has the smallest coefficient magnitudes?</p></li>
+</ol>
+<hr>
+</section>
+<section id="question-6-4-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-6-4-points">Question 6 (4 points)</h3>
+<p>Explain in your own words (3-4 sentences each):</p>
+<ol type="a">
+<li><p>What is the purpose of regularization in regression? When would you choose to use it?</p></li>
+<li><p>What is the difference between Ridge (L2) and Lasso (L1) regularization?</p></li>
+<li><p>Why might Lasso set some coefficients to exactly zero while Ridge does not?</p></li>
+<li><p>In what situation would you prefer Lasso over Ridge?</p></li>
+</ol>
+<hr>
+</section>
+<section id="question-7-5-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-7-5-points">Question 7 (5 points)</h3>
+<p>Using the <code>advertising.csv</code> dataset, create polynomial features of degree 2 for the <code>tv</code> feature only.</p>
+<ol type="a">
+<li><p>Use <code>PolynomialFeatures(degree=2, include_bias=False)</code> to create polynomial features</p></li>
+<li><p>Fit a Linear Regression model using the original features plus the polynomial features of TV</p></li>
+<li><p>Compare R² with the original linear model (without polynomial features)</p></li>
+<li><p>Did adding polynomial features improve performance? Why might this be the case?</p></li>
+<li><p>Plot sales vs.&nbsp;TV budget, showing both the linear and polynomial model predictions</p></li>
+</ol>
+<hr>
+</section>
+<section id="question-8-4-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-8-4-points">Question 8 (4 points)</h3>
+<p>You fit a linear regression model and observe the following residual plot:</p>
+<ul>
+<li>For low fitted values: residuals are mostly positive</li>
+<li>For medium fitted values: residuals are mostly negative</li>
+<li>For high fitted values: residuals are mostly positive</li>
+</ul>
+<ol type="a">
+<li><p>What assumption of linear regression might be violated?</p></li>
+<li><p>What does this pattern suggest about the relationship between features and target?</p></li>
+<li><p>Suggest two approaches to address this issue.</p></li>
+</ol>
+<hr>
+</section>
+<section id="question-9-4-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-9-4-points">Question 9 (4 points)</h3>
+<p>Using the <code>employee_performance.csv</code> dataset, fit a Ridge regression model with alpha=10.0.</p>
+<ol type="a">
+<li><p>Split data into train/test (80/20, random_state=42)</p></li>
+<li><p>Fit the model and calculate train R² and test R²</p></li>
+<li><p>Now fit Ridge models with alpha values: [0.1, 1.0, 10.0, 100.0]</p></li>
+<li><p>For each alpha, record the test R². Which alpha gives the best test performance?</p></li>
+<li><p>What happens to the coefficients as alpha increases?</p></li>
+</ol>
+<hr>
+</section>
+<section id="question-10-4-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-10-4-points">Question 10 (4 points)</h3>
+<p>Write a function called <code>plot_residual_diagnostics</code> that:</p>
+<ul>
+<li>Takes a fitted model, X_test, and y_test as inputs</li>
+<li>Calculates residuals</li>
+<li>Creates two plots side by side: (1) residuals vs fitted values, (2) histogram of residuals</li>
+<li>Returns the residuals array</li>
+</ul>
+<p>Test your function on a linear regression model fitted to the advertising dataset.</p>
+<p>Based on the plots, do the residuals appear randomly distributed? Are they centered around zero?</p>
+<hr>
+</section>
+</section>
+<section id="part-b-with-ai-assistance" class="level2">
+<h2 class="anchored" data-anchor-id="part-b-with-ai-assistance">Part B: With AI Assistance</h2>
+<p>For questions 11-20, you should use an AI coding assistant (like Gemini CLI) to help you perform comprehensive regression analysis. The goal is to practice systematic model selection and diagnostic analysis.</p>
+<p><strong>Important:</strong> For each question, save the prompt(s) you used with the AI assistant. Part of your grade will be based on the quality of your prompts.</p>
+<hr>
+<section id="question-11-5-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-11-5-points">Question 11 (5 points)</h3>
+<p>Use AI to perform a comprehensive grid search for Ridge regression on the <code>real_estate.csv</code> dataset.</p>
+<p>Test alpha values: [0.001, 0.01, 0.1, 1, 10, 100, 1000]</p>
+<p>Your code should:</p>
+<ul>
+<li>Perform grid search with cross-validation</li>
+<li>Plot test R² vs.&nbsp;alpha (use log scale for x-axis)</li>
+<li>Identify the optimal alpha value</li>
+<li>Show the coefficients for the best model</li>
+</ul>
+<p>What happens to model performance as alpha increases? Is there a point where it gets worse?</p>
+<p><strong>Deliverables:</strong></p>
+<ul>
+<li>Code</li>
+<li>Performance vs.&nbsp;alpha plot</li>
+<li>Best alpha and corresponding R²</li>
+<li>Written interpretation (3-4 sentences)</li>
+<li>Your AI prompt(s)</li>
+</ul>
+<hr>
+</section>
+<section id="question-12-6-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-12-6-points">Question 12 (6 points)</h3>
+<p>Prompt AI to create a comprehensive comparison of regularization techniques on the <code>employee_performance.csv</code> dataset (which has multicollinearity).</p>
+<p>Compare:</p>
+<ul>
+<li>Linear Regression (no regularization)</li>
+<li>Ridge with optimal alpha</li>
+<li>Lasso with optimal alpha</li>
+<li>Elastic Net with optimal alpha</li>
+</ul>
+<p>Your code should:</p>
+<ul>
+<li>Use GridSearchCV to find optimal alpha for each regularized method</li>
+<li>Create a bar plot comparing test R² across all methods</li>
+<li>Create a heatmap showing coefficient values for all methods</li>
+<li>Identify which features Lasso set to zero</li>
+</ul>
+<p>Write a paragraph discussing how regularization helped with the multicollinearity problem.</p>
+<p><strong>Deliverables:</strong></p>
+<ul>
+<li>Code</li>
+<li>Performance comparison plot</li>
+<li>Coefficient heatmap</li>
+<li>Written analysis (5-6 sentences)</li>
+<li>Your AI prompt(s)</li>
+</ul>
+<hr>
+</section>
+<section id="question-13-6-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-13-6-points">Question 13 (6 points)</h3>
+<p>Use AI to test polynomial regression of different degrees on the <code>advertising.csv</code> dataset using the <code>tv</code> feature.</p>
+<p>Test polynomial degrees: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]</p>
+<p>Your code should:</p>
+<ul>
+<li>Fit polynomial models for each degree</li>
+<li>Calculate train and test MSE for each</li>
+<li>Plot both MSE curves vs.&nbsp;polynomial degree</li>
+<li>Create a visualization showing the fitted curves for degrees [1, 3, 5, 8] overlaid on the actual data</li>
+</ul>
+<p>At what degree does overfitting begin to occur? How can you tell?</p>
+<p><strong>Deliverables:</strong></p>
+<ul>
+<li>Code</li>
+<li>MSE vs.&nbsp;degree plot</li>
+<li>Fitted curves visualization</li>
+<li>Written interpretation (4-5 sentences)</li>
+<li>Your AI prompt(s)</li>
+</ul>
+<hr>
+</section>
+<section id="question-14-6-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-14-6-points">Question 14 (6 points)</h3>
+<p>Prompt AI to generate a complete regression diagnostics report for a linear regression model on <code>real_estate.csv</code>.</p>
+<p>The report should include:</p>
+<ul>
+<li>Residuals vs.&nbsp;Fitted values plot</li>
+<li>Residuals vs.&nbsp;each feature plot (to detect non-linearity with specific features)</li>
+<li>Histogram of residuals</li>
+<li>Scale-location plot (sqrt of standardized residuals vs.&nbsp;fitted)</li>
+<li>Summary statistics of residuals (mean, median, std, min, max)</li>
+</ul>
+<p>Based on these diagnostics, are the linear regression assumptions satisfied? Which assumptions (if any) are violated?</p>
+<p><strong>Deliverables:</strong></p>
+<ul>
+<li>Code for complete diagnostics</li>
+<li>All diagnostic plots</li>
+<li>Written assessment of assumptions (5-6 sentences)</li>
+<li>Your AI prompt(s)</li>
+</ul>
+<hr>
+</section>
+<section id="question-15-5-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-15-5-points">Question 15 (5 points)</h3>
+<p>Use AI to create a “coefficient path” visualization for Lasso regression.</p>
+<p>Using the <code>real_estate.csv</code> dataset:</p>
+<ul>
+<li>Fit Lasso models with alpha values ranging from 0.001 to 1000 (log scale, 50 points)</li>
+<li>Track the coefficient values for each feature at each alpha</li>
+<li>Create a line plot showing how each coefficient changes with alpha</li>
+<li>Mark the point where each coefficient becomes zero</li>
+</ul>
+<p>Which features are most important (last to be zeroed out)? Which are least important?</p>
+<p><strong>Deliverables:</strong></p>
+<ul>
+<li>Code</li>
+<li>Coefficient path visualization</li>
+<li>Written interpretation (3-4 sentences)</li>
+<li>Your AI prompt(s)</li>
+</ul>
+<hr>
+</section>
+<section id="question-16-6-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-16-6-points">Question 16 (6 points)</h3>
+<p>Prompt AI to compare polynomial regression with and without regularization.</p>
+<p>Using the <code>advertising.csv</code> dataset with TV feature:</p>
+<ul>
+<li>Fit polynomial models of degree 10 with:
+<ul>
+<li>No regularization (Linear Regression)</li>
+<li>Ridge regularization (optimal alpha)</li>
+<li>Lasso regularization (optimal alpha)</li>
+</ul></li>
+<li>Compare test MSE for all three</li>
+<li>Visualize the fitted curves for all three</li>
+<li>Show the coefficient values for all three</li>
+</ul>
+<p>Does regularization help control overfitting in high-degree polynomials? How?</p>
+<p><strong>Deliverables:</strong></p>
+<ul>
+<li>Code</li>
+<li>Performance comparison</li>
+<li>Fitted curves visualization</li>
+<li>Coefficient comparison</li>
+<li>Written analysis (4-5 sentences)</li>
+<li>Your AI prompt(s)</li>
+</ul>
+<hr>
+</section>
+<section id="question-17-5-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-17-5-points">Question 17 (5 points)</h3>
+<p>Use AI to investigate the impact of feature scaling on Ridge and Lasso regression.</p>
+<p>Using the <code>real_estate.csv</code> dataset:</p>
+<ul>
+<li>Fit Ridge and Lasso models (alpha=1.0) with:
+<ul>
+<li>No scaling (raw features)</li>
+<li>StandardScaler (z-score normalization)</li>
+<li>MinMaxScaler (0-1 scaling)</li>
+</ul></li>
+<li>Compare test R² for all combinations</li>
+<li>Show how coefficients differ with different scaling approaches</li>
+</ul>
+<p>Why does scaling matter for regularized regression but not for standard linear regression?</p>
+<p><strong>Deliverables:</strong></p>
+<ul>
+<li>Code</li>
+<li>Performance comparison table</li>
+<li>Coefficient comparison</li>
+<li>Written explanation (3-4 sentences)</li>
+<li>Your AI prompt(s)</li>
+</ul>
+<hr>
+</section>
+<section id="question-18-6-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-18-6-points">Question 18 (6 points)</h3>
+<p>Prompt AI to create an automated feature selection pipeline using Lasso.</p>
+<p>The pipeline should:</p>
+<ul>
+<li>Take a dataset and alpha value as input</li>
+<li>Fit Lasso regression</li>
+<li>Identify features with non-zero coefficients</li>
+<li>Refit a Linear Regression model using only selected features</li>
+<li>Compare performance with using all features</li>
+<li>Generate a report showing selected features and performance comparison</li>
+</ul>
+<p>Test this on the <code>real_estate.csv</code> dataset with alpha=0.1.</p>
+<p>How many features were selected? Did feature selection improve or hurt performance?</p>
+<p><strong>Deliverables:</strong></p>
+<ul>
+<li>Pipeline code</li>
+<li>Feature selection results</li>
+<li>Performance comparison</li>
+<li>Written analysis (4-5 sentences)</li>
+<li>Your AI prompt(s)</li>
+</ul>
+<hr>
+</section>
+<section id="question-19-6-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-19-6-points">Question 19 (6 points)</h3>
+<p>Use AI to create a comprehensive model selection workflow that combines polynomial features with regularization.</p>
+<p>Using the <code>advertising.csv</code> dataset:</p>
+<ul>
+<li>Test polynomial degrees [1, 2, 3, 4, 5]</li>
+<li>For each degree, test Ridge, Lasso, and Linear Regression</li>
+<li>Use cross-validation to evaluate each combination</li>
+<li>Create a heatmap showing performance (columns=method, rows=polynomial degree)</li>
+<li>Identify the best combination</li>
+</ul>
+<p>Your code should:</p>
+<ul>
+<li>Automatically test all combinations</li>
+<li>Generate comprehensive comparison visualizations</li>
+<li>Select the best model based on cross-validation score</li>
+<li>Evaluate the best model on a held-out test set</li>
+</ul>
+<p><strong>Deliverables:</strong></p>
+<ul>
+<li>Code for complete workflow</li>
+<li>Performance heatmap</li>
+<li>Best model identification</li>
+<li>Final test set results</li>
+<li>Written summary (5-6 sentences)</li>
+<li>Your AI prompt(s)</li>
+</ul>
+<hr>
+</section>
+<section id="question-20-7-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-20-7-points">Question 20 (7 points)</h3>
+<p>For this final question, ask AI to help you conduct a <strong>complete regression analysis</strong> from start to finish on the <code>real_estate.csv</code> dataset.</p>
+<p>Your analysis should include:</p>
+<ol type="1">
+<li><strong>Exploratory Data Analysis:</strong>
+<ul>
+<li>Summary statistics</li>
+<li>Correlation analysis</li>
+<li>Multicollinearity detection (VIF scores)</li>
+</ul></li>
+<li><strong>Model Development:</strong>
+<ul>
+<li>Train/validation/test split (60/20/20)</li>
+<li>Fit multiple models: Linear, Ridge, Lasso, Polynomial (with regularization)</li>
+<li>Hyperparameter tuning using validation set</li>
+</ul></li>
+<li><strong>Model Diagnostics:</strong>
+<ul>
+<li>Complete diagnostic plots for best model</li>
+<li>Residual analysis</li>
+<li>Assumption checking</li>
+</ul></li>
+<li><strong>Model Selection:</strong>
+<ul>
+<li>Compare all models on validation set</li>
+<li>Select best model</li>
+<li>Evaluate on test set (only once!)</li>
+</ul></li>
+<li><strong>Interpretation:</strong>
+<ul>
+<li>Feature importance</li>
+<li>Coefficient interpretation</li>
+<li>Business insights</li>
+</ul></li>
+</ol>
+<p>Write a 1-page executive summary (300-400 words) that explains:</p>
+<ul>
+<li>Data characteristics and challenges (multicollinearity, etc.)</li>
+<li>Models tested and why</li>
+<li>How the best model was selected</li>
+<li>Performance on test set and what it means</li>
+<li>Key features driving predictions</li>
+<li>Recommendations and limitations</li>
+</ul>
+<p><strong>Deliverables:</strong></p>
+<ul>
+<li>Complete analysis code (well-commented)</li>
+<li>All visualizations (EDA, diagnostics, comparisons)</li>
+<li>Executive summary</li>
+<li>Your AI prompt(s)</li>
+<li>Reflection: How did understanding diagnostics and regularization improve your modeling approach compared to just trying different models blindly?</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="submission-guidelines" class="level2">
+<h2 class="anchored" data-anchor-id="submission-guidelines">Submission Guidelines</h2>
+<p>Submit a ZIP file containing:</p>
+<ol type="1">
+<li><strong>Code files:</strong> All <code>.py</code> files or Jupyter notebooks</li>
+<li><strong>Visualizations folder:</strong> All plots and charts generated</li>
+<li><strong>Written responses:</strong> A single document (PDF or Markdown) with all your written answers, interpretations, and AI prompts used</li>
+<li><strong>Data:</strong> Include the datasets if you made any modifications</li>
+</ol>
+<hr>
+</section>
+<section id="grading-rubric" class="level2">
+<h2 class="anchored" data-anchor-id="grading-rubric">Grading Rubric</h2>
+<p><strong>Part A: By Hand (45 points)</strong></p>
+<ul>
+<li>Code correctness and implementation: 25 points</li>
+<li>Proper understanding of diagnostics and regularization: 12 points</li>
+<li>Written interpretations and explanations: 8 points</li>
+</ul>
+<p><strong>Part B: AI-Assisted (55 points)</strong></p>
+<ul>
+<li>Code functionality and correctness: 25 points</li>
+<li>Quality and specificity of AI prompts: 14 points</li>
+<li>Visualizations and diagnostic quality: 10 points</li>
+<li>Written interpretations and insights: 6 points</li>
+</ul>
+<p><strong>Total: 100 points</strong></p>
+<hr>
+</section>
+<section id="tips-for-success" class="level2">
+<h2 class="anchored" data-anchor-id="tips-for-success">Tips for Success</h2>
+<section id="for-part-a" class="level3">
+<h3 class="anchored" data-anchor-id="for-part-a">For Part A:</h3>
+<ul>
+<li>Draw residual plots carefully and look for patterns</li>
+<li>When computing metrics by hand, work with small subsets first to verify</li>
+<li>Regularization coefficients shrink toward zero—compare magnitudes across models</li>
+<li>Understanding assumptions is crucial—violating them can make predictions unreliable</li>
+<li>Polynomial features can capture non-linear relationships but risk overfitting</li>
+</ul>
+</section>
+<section id="for-part-b" class="level3">
+<h3 class="anchored" data-anchor-id="for-part-b">For Part B:</h3>
+<ul>
+<li>Request diagnostic plots that check all assumptions systematically</li>
+<li>Ask for log-scale plots when testing many alpha values</li>
+<li>Request coefficient path plots to understand feature selection</li>
+<li>Ask for side-by-side comparisons to see regularization effects clearly</li>
+<li>When testing polynomials, visualize the fitted curves to see overfitting</li>
+</ul>
+</section>
+<section id="general" class="level3">
+<h3 class="anchored" data-anchor-id="general">General:</h3>
+<ul>
+<li>Start early—comprehensive diagnostics take time to interpret</li>
+<li>Focus on understanding why regularization helps, not just applying it</li>
+<li>Use residual plots as your primary diagnostic tool</li>
+<li>Connect regularization back to bias-variance tradeoff from Module 3</li>
+<li>Use your brain. That’s what it’s there for.</li>
+</ul>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/paulsavala\.github\.io\/math-3339-intro-data-science-with-llms\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

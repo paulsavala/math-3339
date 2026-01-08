@@ -1,0 +1,2165 @@
+---
+title: "Chapter 4: LLMs for Feature Engineering and Data Extraction"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    theme: cosmo
+jupyter: python3
+---
+
+## Chapter Resources
+
+**Related Assignments:**
+
+- [Chapter 4 Homework](../../Assignments/Chapter%204%20-%20LLMs%20Feature%20Engineering/chapter-4-homework.qmd)
+
+---
+
+## Introduction
+
+You've spent weeks learning how to build machine learning models—linear regression, logistic regression, random forests, SVMs. You know how to tune hyperparameters, evaluate performance, and diagnose problems. But here's the thing: all those models need one critical ingredient before they can work their magic.
+
+**Features.**
+
+And not just any features—numeric or categorical features that capture the information hidden in your data. If you have structured data (age, income, house size), you're set. But what about unstructured data? What about customer reviews, support tickets, job descriptions, social media posts, news articles? Most real-world data lives in text, and traditional machine learning models can't directly consume text.
+
+This is where Large Language Models (LLMs) come in—not as the end goal, but as powerful **feature engineering tools**. Think of LLMs as intelligent extractors that can read text, understand context, and pull out structured information. Need to know if a review is positive or negative? LLM. Want to extract job requirements from a posting? LLM. Need to categorize thousands of support tickets? LLM.
+
+The beautiful part? You don't need to train these models. You don't need GPUs. You don't even need to understand how they work internally. You just call an API, send some text with instructions, and get back structured data ready for your ML pipeline.
+
+But LLMs aren't free, and they aren't perfect. Every API call costs money. Extraction quality varies. Some tasks work beautifully with simpler versions of LLMs, such as GPT-4o, Gemini Flash, Claude Haiku, while others need more powerful models like GPT-5, Gemini Pro, or Claude Sonnet. Sometimes a simple regex pattern works better than an expensive LLM call. The skill isn't just using LLMs—it's knowing **when** to use them, **which** one to use, and **how** to validate the results.
+
+This chapter teaches you to use LLMs as practical data science tools. You'll learn to write prompts that extract information reliably, parse and validate LLM responses, calculate costs, integrate extracted features into ML pipelines, and most importantly—judge when LLMs add value versus when simpler approaches suffice.
+
+Let's jump in.
+
+---
+
+## 1. The Feature Engineering Challenge: From Text to Numbers
+
+### 1.1 Why Traditional ML Needs Structured Features
+
+Remember our housing price predictor from earlier chapters? The input was clean: square footage (numeric), number of bedrooms (numeric), neighborhood (categorical). Easy. Train-test split, fit the model, done.
+
+But look at this product review:
+
+> "This coffee maker is amazing! Brews quickly and the coffee tastes great. Only downside is it's a bit loud, but I can live with that for this price."
+
+What features can we extract? What information is hidden here that might help predict if other customers will find this review helpful?
+
+```{python}
+import pandas as pd
+import numpy as np
+
+# Example: Product review data
+review_text = "This coffee maker is amazing! Brews quickly and the coffee tastes great. Only downside is it's a bit loud, but I can live with that for this price."
+
+# Traditional ML needs numbers or categories
+# We could count words, but that misses the meaning
+word_count = len(review_text.split())
+print(f"Word count: {word_count}")
+
+# We could look for specific keywords
+has_positive_words = any(word in review_text.lower() for word in ['amazing', 'great', 'love'])
+has_negative_words = any(word in review_text.lower() for word in ['bad', 'terrible', 'hate'])
+print(f"Has positive words: {has_positive_words}")
+print(f"Has negative words: {has_negative_words}")
+
+# But we're missing so much: 
+# - sentiment nuance
+# - specific features mentioned
+# - overall tone
+# - ...
+```
+
+Word counts and keyword matching capture some information, but they miss the **meaning**. This review is mostly positive despite mentioning a downside. A keyword approach might rate it as mixed because it has both positive and negative words. But a human reading it understands: this person likes the product.
+
+### 1.2 What Information Is Hidden in Text?
+
+Text contains structured information waiting to be extracted:
+
+**Sentiment/Opinion:**
+
+- Overall positive/negative/neutral
+- Strength of sentiment (mildly positive vs. extremely positive)
+- Sentiment about specific aspects (loves taste, dislikes noise)
+
+**Categories/Classification:**
+
+- Product category (coffee maker, not coffee beans)
+- Issue type in support tickets (billing vs. technical)
+- Job seniority level (entry vs. senior)
+
+**Entities and Attributes:**
+
+- Brands mentioned
+- Specific features discussed (speed, taste, noise)
+- Requirements (in job postings: "5 years experience", "Python required")
+
+**Numeric Values:**
+
+- Implicit ratings ("amazing" = 5 stars, "okay" = 3 stars)
+- Quantities mentioned
+- Price ranges
+
+### 1.3 Traditional NLP Approaches
+
+Before LLMs, we had a few options:
+
+**1. Keyword/Regex Matching:**
+
+This approach attempts to search for specific keywords in the text. For example, look at the `positive_words` and `negative_words` in the code below.
+```{python}
+import re
+
+def simple_sentiment(text):
+    """Basic sentiment using keyword matching"""
+    positive_words = ['amazing', 'great', 'excellent', 'love', 'perfect']
+    negative_words = ['bad', 'terrible', 'hate', 'awful', 'waste']
+
+    text_lower = text.lower()
+    pos_count = sum(1 for word in positive_words if word in text_lower)
+    neg_count = sum(1 for word in negative_words if word in text_lower)
+
+    if pos_count > neg_count:
+        return "positive"
+    elif neg_count > pos_count:
+        return "negative"
+    else:
+        return "neutral"
+
+review = "This coffee maker is amazing! Brews quickly and the coffee tastes great."
+print(f"Simple sentiment: {simple_sentiment(review)}")
+```
+
+**When to use this:**
+
+- When you have specific words you're looking for, such as students mentioning a specific course
+
+**When this fails:**
+
+- This works for simple cases but breaks easily:
+    - "This product is not bad" → Incorrectly classified as negative
+    - "I expected amazing quality but got terrible service" → Confusing mix
+    - Doesn't handle sarcasm, context, or nuance
+
+**2. Bag-of-Words + ML:**
+"Bag of words" is a simple way to represent text as a vector of word counts. For example, we might assign:
+
+- "apple" = 0
+- "banana" = 1
+- "orange" = 2
+
+These number represent the _index_ of each word in our vector. So "apple" is at index 0, "banana" is at index 1, and "orange" is at index 2. Then we might count up how many times each word appears in the text. For example, the text "I have an apple and a banana" would be represented as [1, 1, 0] ("apple" apears once as indicated in index zero, and "banana" appears once, but "orange" never appears).
+
+This gives us numeric values, which can then be used in any of the machine learning models you've learned so far this semester.
+
+Problems with this approach include:
+
+- Need a large labeled dataset, which is expensive to create
+- Need to retrain for new domains (i.e. the dataset you have may not cover the domain you're interested in)
+- Separate model for each extraction task (i.e. you need a separate model for each feature you want to extract, such as sentiment, brand, price, etc.)
+
+**3. Other approaches:**
+Traditionally, people used many, many different approaches for feature extraction, such as TF-IDF, word embeddings, and more. These approaches were often ad-hoc and required a lot of expertise to implement. 
+
+Once LLMs arose, people quickly realized that we can simply _ask the LLM_ to extract what we want. While not always perfect, this approach is highly flexible, tuneable, and easily implemented. Because of that, we'll focus the majority of our efforts on this technique.
+
+### 1.4 The LLM Advantage: Zero-Shot Extraction
+
+LLMs offer something revolutionary: **zero-shot learning**, which means that you can extract information without training on your specific task, without labeled data, just by asking clearly.
+
+Here's a preview (we'll implement this properly soon):
+
+> **Prompt:** "What is the sentiment of this review? Answer with just 'positive', 'negative', or 'neutral': This coffee maker is amazing! Brews quickly and the coffee tastes great. Only downside is it's a bit loud."
+>
+> **LLM Response:** "positive"
+
+No training. No labeled data. Just clear instructions and the text. The LLM understands context, handles negation, grasps nuance. It knows "only downside" indicates a minor criticism in an otherwise positive review.
+
+This is powerful. But it's also expensive, sometimes inconsistent, and not always necessary. In addition, it's clearly a black box, since we have no idea how the LLM decided this should be a positive review. Of course, we could continually tweak instructions to get outcomes closer to what we want. This is the art and science of working with LLMs.
+
+---
+
+## 2. Your First LLM Extraction: Sentiment Analysis
+
+### 2.1 Setting Up API Access
+
+To use LLMs, you need API access. The main options:
+
+- **OpenAI (GPT-5):** Most popular, good quality, moderate cost
+- **Anthropic (Claude):** High quality, good for long texts, moderate cost
+- **Google (Gemini):** Competitive quality, often cheaper
+- **Open-source via Hugging Face:** Free but requires more setup
+
+For this chapter, we'll use OpenAI's API since it's widely available. The concepts transfer to other providers.
+
+::: {.callout-note}
+**About Running These Examples:**
+The code examples in this chapter that call the OpenAI API will require an API key to run. If you don't have an API key set, the examples will be skipped during rendering. This is intentional - you can still learn from reading the code and understanding the patterns. When you're ready to run these examples yourself:
+
+1. Sign up for an OpenAI API account at [platform.openai.com](https://platform.openai.com)
+2. Generate an API key
+3. Set it as an environment variable: `export OPENAI_API_KEY="your-key-here"`
+4. Be mindful of costs - start with small tests before processing large datasets
+:::
+
+```{python}
+# First, install the OpenAI library if needed
+# pip install openai
+
+from openai import OpenAI
+import os
+
+# Set up your API key
+# IMPORTANT: Never hard-code API keys! Use environment variables
+# Set this in your terminal: export OPENAI_API_KEY="your-key-here"
+
+# Check if API key is set
+if os.getenv("OPENAI_API_KEY") is None:
+    print("⚠️  API key not found. Set OPENAI_API_KEY environment variable.")
+    print("⚠️  API calls in this chapter will be skipped.")
+    client = None
+else:
+    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+    print("✓ API key is set")
+```
+
+::: {.callout-warning}
+**Never commit API keys to GitHub!** Use environment variables or config files that are in `.gitignore`. Exposed keys can lead to unexpected charges or account suspension.
+:::
+
+### 2.2 Making Your First Extraction Call
+
+Let's extract sentiment from a product review:
+
+```{python}
+def extract_sentiment_simple(review_text):
+    """
+    Extract sentiment using GPT-3.5
+    Returns: 'positive', 'negative', or 'neutral'
+    """
+    if client is None:
+        print("⚠️  Skipping API call (no API key set)")
+        return "neutral"  # Default response
+
+    # Create the prompt
+    prompt = f"""What is the sentiment of this review?
+Answer with just one word: 'positive', 'negative', or 'neutral'.
+
+Review: {review_text}
+
+Sentiment:"""
+
+    # Call the API
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",  # Cheaper, faster model
+        messages=[
+            {"role": "user", "content": prompt}
+        ],
+        temperature=0,  # Deterministic output
+        max_tokens=10   # We only need one word
+    )
+
+    # Extract the response
+    sentiment = response.choices[0].message.content.strip().lower()
+    return sentiment
+
+# Test it (only if API key is available)
+if client is not None:
+    review1 = "This coffee maker is amazing! Brews quickly and the coffee tastes great. Only downside is it's a bit loud."
+    review2 = "Total waste of money. Broke after two uses. Terrible product."
+    review3 = "It's okay. Does the job but nothing special."
+
+    print(f"Review 1 sentiment: {extract_sentiment_simple(review1)}")
+    print(f"Review 2 sentiment: {extract_sentiment_simple(review2)}")
+    print(f"Review 3 sentiment: {extract_sentiment_simple(review3)}")
+else:
+    print("Skipping examples - set OPENAI_API_KEY to run")
+    print("\nExpected output when API key is set:")
+    print("Review 1 sentiment: positive")
+    print("Review 2 sentiment: negative")
+    print("Review 3 sentiment: neutral")
+```
+
+We sent a clear instruction, included the text, and got back exactly what we asked for. No training, no labeled data, no complex preprocessing. Notice how the LLM correctly identifies Review 1 as positive despite it mentioning a downside—it understands that "only downside" indicates a minor complaint in an otherwise positive review.
+
+### 2.3 Understanding the API Call
+
+Let's break down the important parameters:
+
+**model:** Which LLM to use
+
+- `gpt-3.5-turbo`: Cheaper ($0.0005 per 1K tokens), faster, good for most tasks
+- `gpt-4`: More expensive ($0.03 per 1K tokens), smarter, better for complex extraction
+- Start with 3.5, upgrade to 4 if quality isn't sufficient
+
+**temperature:** Controls randomness (0 to 2)
+
+- `0`: Deterministic, same input → same output
+- `0.7-1.0`: More creative/varied (for generation tasks)
+- For extraction: use `0` for consistency
+
+**max_tokens:** Maximum length of response
+
+- Tokens ≈ words × 1.3 (rough estimate)
+- For simple extraction: 10-50 tokens
+- For detailed extraction: 100-500 tokens
+- More tokens = higher cost
+
+```{python}
+# Let's see token usage and cost
+if client is not None:
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[{"role": "user", "content": "What is 2+2?"}],
+        temperature=0
+    )
+
+    usage = response.usage
+    print(f"Prompt tokens: {usage.prompt_tokens}")
+    print(f"Completion tokens: {usage.completion_tokens}")
+    print(f"Total tokens: {usage.total_tokens}")
+
+    # Calculate cost (GPT-3.5-turbo pricing as of 2024)
+    cost_per_1k_tokens = 0.0005
+    cost = (usage.total_tokens / 1000) * cost_per_1k_tokens
+    print(f"Cost for this call: ${cost:.6f}")
+else:
+    print("Skipping - set OPENAI_API_KEY to run")
+    print("\nExpected output when API key is set:")
+    print("Prompt tokens: 14")
+    print("Completion tokens: 1")
+    print("Total tokens: 15")
+    print("Cost for this call: $0.000008")
+```
+
+For our simple sentiment extraction, we're using about 50-100 tokens per review. At $0.0005 per 1K tokens, that's $0.00005 per review. To process 10,000 reviews: $0.50. Cheap!
+
+### 2.4 Handling Errors and Edge Cases
+
+LLMs don't always follow instructions perfectly. Let's make our extraction more robust:
+
+```{python}
+def extract_sentiment_robust(review_text):
+    """
+    Robust sentiment extraction with error handling
+    """
+    try:
+        prompt = f"""What is the sentiment of this review?
+Answer with ONLY one of these words: positive, negative, neutral
+
+Review: {review_text}
+
+Sentiment:"""
+
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0,
+            max_tokens=10
+        )
+
+        sentiment = response.choices[0].message.content.strip().lower()
+
+        # Validate the response
+        valid_sentiments = ['positive', 'negative', 'neutral']
+        if sentiment in valid_sentiments:
+            return sentiment
+        else:
+            # Try to extract valid sentiment from response
+            for valid in valid_sentiments:
+                if valid in sentiment:
+                    return valid
+            # If we still can't find it, return None
+            return None
+
+    except Exception as e:
+        print(f"Error during extraction: {e}")
+        return None
+
+# Test with various inputs
+reviews = [
+    "Love it!",
+    "Terrible product.",
+    "It's fine.",
+    ""  # Empty review - will this break?
+]
+
+if client is not None:
+    for review in reviews:
+        result = extract_sentiment_robust(review)
+        print(f"'{review}' → {result}")
+else:
+    print("Skipping examples - set OPENAI_API_KEY to run")
+    print("\nExpected output when API key is set:")
+    print("'Love it!' → positive")
+    print("'Terrible product.' → negative")
+    print("'It's fine.' → neutral")
+    print("'' → None")
+```
+
+Key improvements:
+
+1. **Try-except block** catches API errors
+2. **Validation** checks if response matches expected values
+3. **Fallback logic** tries to extract valid sentiment if response is wordy
+4. **Returns None** if extraction fails (rather than crashing)
+
+Notice how the function handles the empty review gracefully by returning `None` instead of crashing.
+
+---
+
+## 3. Prompt Engineering for Reliable Extraction
+
+### 3.1 The Anatomy of a Good Extraction Prompt
+
+A good prompt has four parts:
+
+1. **Clear task description:** What do you want extracted?
+2. **Output format specification:** Exactly how should the response look?
+3. **The input data:** The text to analyze
+4. **Any constraints or examples:** Helps guide the LLM
+
+Let's compare bad vs. good prompts:
+
+```{python}
+# BAD PROMPT - Vague, no format specified
+bad_prompt = """
+Tell me about this review:
+{review_text}
+"""
+
+# GOOD PROMPT - Clear, specific format
+good_prompt = """
+Extract the following information from this product review:
+- Sentiment: positive, negative, or neutral
+- Rating: estimated star rating from 1-5
+- Main complaint: brief description, or "none" if no complaints
+
+Format your response as JSON:
+{{"sentiment": "positive/negative/neutral", "rating": 1-5, "complaint": "text or none"}}
+
+Review: {review_text}
+
+JSON:"""
+
+review = "Great coffee maker! Makes excellent coffee quickly. Wish it was quieter though. 4 stars."
+
+# The good prompt will give us structured, parseable output
+```
+
+See the difference? The good prompt:
+- Lists exactly what to extract
+- Specifies valid values for each field
+- Requests JSON format for easy parsing
+- Shows the structure we expect
+
+### 3.2 Requesting Structured Output (JSON)
+
+JSON is your best friend for extraction. It's easy to parse and works with any number of fields:
+
+```{python}
+import json
+
+def extract_review_features(review_text):
+    """
+    Extract multiple features from a review using JSON output
+    """
+    if client is None:
+        print("⚠️  Skipping API call (no API key set)")
+        return None
+
+    prompt = f"""Extract information from this product review.
+
+Respond with ONLY valid JSON in this exact format:
+{{
+    "sentiment": "positive/negative/neutral",
+    "rating": 1-5,
+    "pros": ["list", "of", "positive", "aspects"],
+    "cons": ["list", "of", "negative", "aspects"]
+}}
+
+Review: {review_text}
+
+JSON:"""
+
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0,
+        max_tokens=200
+    )
+
+    # Parse the JSON response
+    try:
+        result_text = response.choices[0].message.content.strip()
+        # Sometimes LLMs add markdown formatting, remove it
+        result_text = result_text.replace('```json', '').replace('```', '').strip()
+        result = json.loads(result_text)
+        return result
+    except json.JSONDecodeError as e:
+        print(f"Failed to parse JSON: {e}")
+        print(f"Raw response: {result_text}")
+        return None
+
+# Test it (only if API key is available)
+if client is not None:
+    review = """This coffee maker is fantastic! The coffee tastes amazing and
+    it's very fast. Design is sleek. Only complaint is it's somewhat loud
+    during brewing, but that's minor. Highly recommend!"""
+
+    features = extract_review_features(review)
+    if features:
+        print("Extracted features:")
+        print(json.dumps(features, indent=2))
+else:
+    print("Skipping example - set OPENAI_API_KEY to run")
+    print("\nExpected output when API key is set:")
+    print("Extracted features:")
+    print("""{
+  "sentiment": "positive",
+  "rating": 4,
+  "pros": [
+    "Coffee tastes amazing",
+    "Very fast",
+    "Sleek design"
+  ],
+  "cons": [
+    "Somewhat loud during brewing"
+  ]
+}""")
+```
+
+This gives us structured data we can immediately put into a DataFrame! Notice how the LLM extracted multiple pieces of information from a single review: overall sentiment, an estimated rating, specific positive aspects, and even the one complaint mentioned.
+
+### 3.3 Few-Shot Learning: Teaching by Example
+
+Sometimes clear instructions aren't enough. LLMs learn better with examples:
+
+```{python}
+def extract_with_examples(review_text):
+    """
+    Use few-shot learning - provide examples of correct extraction
+    """
+    if client is None:
+        print("⚠️  Skipping API call (no API key set)")
+        return "neutral"
+
+    prompt = f"""Extract sentiment from product reviews.
+
+Examples:
+
+Review: "Best purchase ever! Love this product."
+Sentiment: positive
+
+Review: "Broke after one day. Waste of money."
+Sentiment: negative
+
+Review: "It's okay. Does what it says."
+Sentiment: neutral
+
+Now extract sentiment from this review:
+
+Review: {review_text}
+Sentiment:"""
+
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0,
+        max_tokens=10
+    )
+
+    return response.choices[0].message.content.strip().lower()
+
+# Test with tricky example (only if API key is available)
+if client is not None:
+    tricky_review = "I wanted to love this, but it's just not good enough."
+    sentiment = extract_with_examples(tricky_review)
+    print(f"Tricky review sentiment: {sentiment}")
+else:
+    print("Skipping example - set OPENAI_API_KEY to run")
+    print("\nExpected output when API key is set:")
+    print("Tricky review sentiment: negative")
+```
+
+Few-shot prompting (providing 2-5 examples) helps with:
+- Ambiguous edge cases
+- Specific formatting requirements
+- Consistency across similar inputs
+- Domain-specific language
+
+::: {.callout-tip}
+**Few-Shot Prompting Best Practices:**
+- Use 2-5 examples (more doesn't always help)
+- Examples should cover different scenarios (positive, negative, neutral)
+- Keep examples concise
+- Examples cost tokens—balance quality vs. cost
+:::
+
+### 3.4 Iterating on Prompts: A Real Example
+
+Prompts rarely work perfectly the first time. Let's iterate:
+
+```{python}
+# V1: First attempt - too vague
+prompt_v1 = "What category is this job posting?"
+
+# V2: More specific
+prompt_v2 = """What job category is this posting?
+Choose from: Engineering, Marketing, Sales, Customer Support, Other"""
+
+# V3: Even more specific with format
+prompt_v3 = """Classify this job posting into ONE category.
+Valid categories: Engineering, Marketing, Sales, Customer Support, Other
+Respond with ONLY the category name, nothing else.
+
+Job posting: {text}
+
+Category:"""
+
+# V4: Add examples for edge cases
+prompt_v4 = """Classify this job posting into ONE category.
+
+Valid categories: Engineering, Marketing, Sales, Customer Support, Other
+
+Examples:
+"Senior Python Developer needed" → Engineering
+"Social Media Manager wanted" → Marketing
+"Account Executive" → Sales
+
+Job posting: {text}
+
+Category:"""
+
+# This iterative process is normal and expected
+# Start simple, add specificity based on failures
+```
+
+The key is testing your prompts on real data and refining based on errors. We'll see more on validation in the next section.
+
+---
+
+## 4. Parsing, Validating, and Converting to DataFrames
+
+### 4.1 Parsing JSON Responses
+
+Let's build a robust system for extracting and parsing:
+
+```{python}
+def extract_job_features(job_text):
+    """
+    Extract structured information from job postings
+    Returns a dictionary or None if extraction fails
+    """
+    if client is None:
+        print("⚠️  Skipping API call (no API key set)")
+        return None
+
+    prompt = f"""Extract these fields from the job posting.
+
+Respond with valid JSON:
+{{
+    "title": "job title",
+    "category": "Engineering/Marketing/Sales/Support/Other",
+    "experience_level": "Entry/Mid/Senior/Lead",
+    "remote_policy": "Remote/Hybrid/Onsite",
+    "key_skills": ["skill1", "skill2", "skill3"]
+}}
+
+Job posting: {job_text}
+
+JSON:"""
+
+    try:
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0,
+            max_tokens=300
+        )
+
+        # Get response text
+        result_text = response.choices[0].message.content.strip()
+
+        # Clean up markdown formatting if present
+        result_text = result_text.replace('```json', '').replace('```', '').strip()
+
+        # Parse JSON
+        result = json.loads(result_text)
+
+        return result
+
+    except json.JSONDecodeError as e:
+        print(f"JSON parsing error: {e}")
+        return None
+    except Exception as e:
+        print(f"API error: {e}")
+        return None
+
+# Test it (only if API key is available)
+if client is not None:
+    job_posting = """
+    Senior Data Scientist - Remote
+    We're seeking an experienced data scientist with 5+ years experience.
+    Required: Python, SQL, machine learning, deep learning.
+    Fully remote position.
+    """
+
+    features = extract_job_features(job_posting)
+    if features:
+        print("Extracted job features:")
+        for key, value in features.items():
+            print(f"  {key}: {value}")
+else:
+    print("Skipping example - set OPENAI_API_KEY to run")
+    print("\nExpected output when API key is set:")
+    print("Extracted job features:")
+    print("  title: Senior Data Scientist")
+    print("  category: Engineering")
+    print("  experience_level: Senior")
+    print("  remote_policy: Remote")
+    print("  key_skills: ['Python', 'SQL', 'machine learning', 'deep learning']")
+```
+
+### 4.2 Validating Extractions
+
+Always validate LLM outputs—they don't always follow instructions:
+
+```{python}
+def validate_job_features(features):
+    """
+    Validate that extracted features match expected format
+    Returns True if valid, False otherwise
+    """
+    if features is None:
+        return False
+
+    # Define expected fields and valid values
+    expected_fields = ['title', 'category', 'experience_level', 'remote_policy', 'key_skills']
+    valid_categories = ['Engineering', 'Marketing', 'Sales', 'Support', 'Other']
+    valid_experience = ['Entry', 'Mid', 'Senior', 'Lead']
+    valid_remote = ['Remote', 'Hybrid', 'Onsite']
+
+    # Check all required fields present
+    if not all(field in features for field in expected_fields):
+        print("Missing required fields")
+        return False
+
+    # Check category is valid
+    if features['category'] not in valid_categories:
+        print(f"Invalid category: {features['category']}")
+        return False
+
+    # Check experience level is valid
+    if features['experience_level'] not in valid_experience:
+        print(f"Invalid experience level: {features['experience_level']}")
+        return False
+
+    # Check remote policy is valid
+    if features['remote_policy'] not in valid_remote:
+        print(f"Invalid remote policy: {features['remote_policy']}")
+        return False
+
+    # Check key_skills is a list
+    if not isinstance(features['key_skills'], list):
+        print("key_skills should be a list")
+        return False
+
+    return True
+
+# Test validation (only if we have features from previous cell)
+if client is not None:
+    # features was defined in previous cell when client is not None
+    is_valid = validate_job_features(features)
+    print(f"\nValidation result: {is_valid}")
+else:
+    print("Skipping validation - set OPENAI_API_KEY to run")
+    print("\nExpected output when API key is set:")
+    print("Validation result: True")
+```
+
+See what happened? All the extracted fields are in the expected format: category is one of the valid options, experience level is valid, remote policy is valid, and key_skills is a list. The validation passed!
+
+::: {.callout-warning}
+**Never Trust LLM Output Blindly**
+LLMs can:
+- Return invalid categories
+- Return wrong data types
+- Hallucinate information not in the text
+- Miss fields entirely
+
+Always validate before using extracted features in ML models.
+:::
+
+### 4.3 Batch Processing Multiple Texts
+
+Real datasets have hundreds or thousands of texts. Let's process them efficiently:
+
+```{python}
+def extract_batch(texts, extract_func, show_progress=True):
+    """
+    Extract features from multiple texts
+
+    Args:
+        texts: List of text strings
+        extract_func: Function that extracts features from one text
+        show_progress: Whether to print progress
+
+    Returns:
+        List of extracted features (same length as texts)
+    """
+    results = []
+
+    for i, text in enumerate(texts):
+        if show_progress and (i % 10 == 0):
+            print(f"Processing {i}/{len(texts)}...")
+
+        result = extract_func(text)
+        results.append(result)
+
+    return results
+
+# Example: Batch process multiple reviews
+reviews = [
+    "Amazing product! Best purchase ever.",
+    "Terrible quality. Broke immediately.",
+    "It's fine. Nothing special.",
+    "Great value for money!",
+    "Disappointed with this purchase."
+]
+
+# Note: This would actually call the API multiple times
+# We'll implement a more efficient version with error handling next
+sentiments = extract_batch(reviews, extract_sentiment_robust, show_progress=True)
+
+print("\nResults:")
+for review, sentiment in zip(reviews, sentiments):
+    print(f"'{review[:30]}...' → {sentiment}")
+```
+
+### 4.4 Converting to pandas DataFrame
+
+Now the payoff—converting extracted features to a clean DataFrame ready for ML:
+
+```{python}
+import pandas as pd
+
+# Simulated extraction results (in practice, these come from API calls)
+extraction_results = [
+    {
+        "title": "Senior Data Scientist",
+        "category": "Engineering",
+        "experience_level": "Senior",
+        "remote_policy": "Remote",
+        "key_skills": ["Python", "SQL", "ML"]
+    },
+    {
+        "title": "Marketing Manager",
+        "category": "Marketing",
+        "experience_level": "Mid",
+        "remote_policy": "Hybrid",
+        "key_skills": ["SEO", "Analytics", "Content"]
+    },
+    {
+        "title": "Sales Representative",
+        "category": "Sales",
+        "experience_level": "Entry",
+        "remote_policy": "Onsite",
+        "key_skills": ["Communication", "CRM"]
+    }
+]
+
+# Convert to DataFrame
+df = pd.DataFrame(extraction_results)
+
+# Handle the list field (key_skills)
+df['num_skills'] = df['key_skills'].apply(len)
+df['skills_str'] = df['key_skills'].apply(lambda x: ', '.join(x))
+
+df.head()
+```
+
+Now we have a clean DataFrame! The categorical variables (category, experience_level, remote_policy) are ready for encoding. The skills are processed. This data is ready to be fed into machine learning models.
+
+---
+
+## 5. Integration with ML Pipelines
+
+### 5.1 The Complete Pipeline: Text → Features → Model
+
+Let's build a complete example: extract features from reviews, then predict review helpfulness:
+
+```{python}
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report
+
+# Simulated dataset: product reviews with helpfulness labels
+reviews_data = {
+    'review_text': [
+        "Amazing product! The quality is outstanding. Highly recommend.",
+        "Total waste of money. Broke after one use.",
+        "It's okay. Does the job but nothing special.",
+        "Best purchase I've made! Love everything about it.",
+        "Disappointed. Expected better quality for the price.",
+        "Works as described. No complaints.",
+        "Fantastic! Exceeded my expectations in every way.",
+        "Not worth it. Too expensive for what you get.",
+        "Pretty good. Would buy again.",
+        "Terrible product. Avoid at all costs."
+    ],
+    'helpful_votes': [45, 32, 8, 51, 28, 12, 48, 25, 15, 38]  # Number of helpful votes
+}
+
+df_reviews = pd.DataFrame(reviews_data)
+
+# Create binary target: helpful (>20 votes) or not helpful (≤20 votes)
+df_reviews['is_helpful'] = (df_reviews['helpful_votes'] > 20).astype(int)
+
+print("Dataset:")
+print(df_reviews[['review_text', 'helpful_votes', 'is_helpful']].head())
+```
+
+Now let's extract features using our LLM:
+
+```{python}
+def extract_review_features_for_ml(review_text):
+    """
+    Extract features specifically useful for predicting helpfulness
+    """
+    if client is None:
+        # Return default values if no API key
+        return {
+            "sentiment": "neutral",
+            "is_detailed": False,
+            "mentions_specific_features": False,
+            "mentions_price_value": False,
+            "has_comparison": False
+        }
+
+    prompt = f"""Analyze this product review and extract features.
+
+Respond with valid JSON:
+{{
+    "sentiment": "positive/negative/neutral",
+    "is_detailed": true/false,
+    "mentions_specific_features": true/false,
+    "mentions_price_value": true/false,
+    "has_comparison": true/false
+}}
+
+Review: {review_text}
+
+JSON:"""
+
+    try:
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0,
+            max_tokens=150
+        )
+
+        result_text = response.choices[0].message.content.strip()
+        result_text = result_text.replace('```json', '').replace('```', '').strip()
+        features = json.loads(result_text)
+        return features
+    except:
+        # Return default values if extraction fails
+        return {
+            "sentiment": "neutral",
+            "is_detailed": False,
+            "mentions_specific_features": False,
+            "mentions_price_value": False,
+            "has_comparison": False
+        }
+
+# Extract features for all reviews
+# NOTE: In practice, this would make API calls
+# For this example, we'll simulate the results
+llm_features = [
+    {"sentiment": "positive", "is_detailed": True, "mentions_specific_features": True,
+     "mentions_price_value": False, "has_comparison": False},
+    {"sentiment": "negative", "is_detailed": False, "mentions_specific_features": False,
+     "mentions_price_value": False, "has_comparison": False},
+    {"sentiment": "neutral", "is_detailed": False, "mentions_specific_features": False,
+     "mentions_price_value": False, "has_comparison": False},
+    {"sentiment": "positive", "is_detailed": True, "mentions_specific_features": True,
+     "mentions_price_value": False, "has_comparison": False},
+    {"sentiment": "negative", "is_detailed": True, "mentions_specific_features": False,
+     "mentions_price_value": True, "has_comparison": False},
+    {"sentiment": "neutral", "is_detailed": False, "mentions_specific_features": False,
+     "mentions_price_value": False, "has_comparison": False},
+    {"sentiment": "positive", "is_detailed": True, "mentions_specific_features": True,
+     "mentions_price_value": False, "has_comparison": False},
+    {"sentiment": "negative", "is_detailed": True, "mentions_specific_features": False,
+     "mentions_price_value": True, "has_comparison": False},
+    {"sentiment": "positive", "is_detailed": False, "mentions_specific_features": False,
+     "mentions_price_value": False, "has_comparison": False},
+    {"sentiment": "negative", "is_detailed": False, "mentions_specific_features": False,
+     "mentions_price_value": False, "has_comparison": False},
+]
+
+# Add LLM features to DataFrame
+df_features = pd.DataFrame(llm_features)
+df_reviews = pd.concat([df_reviews, df_features], axis=1)
+
+df_reviews.head()
+```
+
+### 5.2 Encoding and Training
+
+Now we have LLM-extracted features. Let's train a model:
+
+```{python}
+# Encode sentiment
+le = LabelEncoder()
+df_reviews['sentiment_encoded'] = le.fit_transform(df_reviews['sentiment'])
+
+# Select features for ML model
+feature_columns = [
+    'sentiment_encoded',
+    'is_detailed',
+    'mentions_specific_features',
+    'mentions_price_value',
+    'has_comparison'
+]
+
+X = df_reviews[feature_columns]
+y = df_reviews['is_helpful']
+
+# Train-test split
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=42
+)
+
+# Train a classifier
+clf = RandomForestClassifier(n_estimators=100, random_state=42)
+clf.fit(X_train, y_train)
+
+# Evaluate
+y_pred = clf.predict(X_test)
+print("\nModel Performance:")
+print(classification_report(y_test, y_pred))
+
+# Feature importance
+feature_importance = pd.DataFrame({
+    'feature': feature_columns,
+    'importance': clf.feature_importances_
+}).sort_values('importance', ascending=False)
+
+print("\nFeature Importance:")
+print(feature_importance)
+```
+
+See what we did? We used LLM to extract features from text, encoded them properly, and trained a traditional ML model. The LLM extracted semantic information (sentiment, detail level, specific mentions) that would be hard to capture with simple word counts or regex patterns.
+
+### 5.3 Avoiding Data Leakage with LLM Features
+
+Important consideration: when do you extract features?
+
+```{python}
+# WRONG WAY - Data leakage!
+# Don't do this: extracting features from full dataset before split
+# The LLM might learn patterns from test set during extraction
+
+# RIGHT WAY - Extract after split
+# But wait... LLMs don't "learn" from your prompts in real-time
+# So technically, this isn't data leakage in the traditional sense
+
+# However, best practice:
+# 1. Split your data first
+# 2. Develop/test prompts ONLY on training data
+# 3. Once prompt is finalized, apply to train and test separately
+# 4. Never iterate on prompts while looking at test set results
+```
+
+The principle: don't use test set information to develop your extraction prompts, just like you wouldn't use test set to select model hyperparameters.
+
+### 5.4 Comparing With and Without LLM Features
+
+Let's see if LLM features actually help:
+
+```{python}
+# Baseline: Just simple features (no LLM)
+df_reviews['review_length'] = df_reviews['review_text'].apply(len)
+df_reviews['word_count'] = df_reviews['review_text'].apply(lambda x: len(x.split()))
+df_reviews['exclamation_count'] = df_reviews['review_text'].apply(lambda x: x.count('!'))
+
+# Model 1: Without LLM features
+X_baseline = df_reviews[['review_length', 'word_count', 'exclamation_count']]
+X_train_base, X_test_base, y_train, y_test = train_test_split(
+    X_baseline, y, test_size=0.3, random_state=42
+)
+
+clf_baseline = RandomForestClassifier(n_estimators=100, random_state=42)
+clf_baseline.fit(X_train_base, y_train)
+baseline_score = clf_baseline.score(X_test_base, y_test)
+
+# Model 2: With LLM features
+X_llm = df_reviews[['review_length', 'word_count', 'exclamation_count'] + feature_columns]
+X_train_llm, X_test_llm, y_train, y_test = train_test_split(
+    X_llm, y, test_size=0.3, random_state=42
+)
+
+clf_llm = RandomForestClassifier(n_estimators=100, random_state=42)
+clf_llm.fit(X_train_llm, y_train)
+llm_score = clf_llm.score(X_test_llm, y_test)
+
+print(f"Baseline model (no LLM) accuracy: {baseline_score:.3f}")
+print(f"With LLM features accuracy: {llm_score:.3f}")
+print(f"Improvement: {llm_score - baseline_score:.3f}")
+```
+
+This comparison tells you whether the LLM extraction was worth the cost. Sometimes it helps significantly. Sometimes simple features work just as well. Always compare!
+
+---
+
+## 6. Cost Analysis and Provider Comparison
+
+### 6.1 Understanding Token-Based Pricing
+
+LLM APIs charge per token. Understanding costs is crucial:
+
+```{python}
+def estimate_tokens(text):
+    """
+    Rough estimate: 1 token ≈ 0.75 words
+    Or approximately: 1 token ≈ 4 characters
+    """
+    # Method 1: Based on words
+    word_estimate = len(text.split()) * 1.3
+
+    # Method 2: Based on characters
+    char_estimate = len(text) / 4
+
+    # Average the two methods
+    return int((word_estimate + char_estimate) / 2)
+
+# Example texts
+texts = [
+    "Short review.",
+    "This is a medium-length review with several sentences about the product.",
+    """This is a long, detailed review that goes into great depth about
+    various aspects of the product including quality, price, features,
+    customer service, shipping speed, packaging, and overall value for money.
+    I would definitely recommend this to anyone considering a purchase."""
+]
+
+for text in texts:
+    estimated = estimate_tokens(text)
+    print(f"Text length: {len(text)} chars, ~{estimated} tokens")
+```
+
+### 6.2 Calculating Extraction Costs
+
+Let's calculate real costs for a dataset:
+
+```{python}
+def calculate_extraction_cost(
+    num_texts,
+    avg_text_length,
+    prompt_tokens,
+    response_tokens,
+    model='gpt-3.5-turbo'
+):
+    """
+    Calculate total cost for extracting features from a dataset
+
+    Pricing (as of 2024):
+    - GPT-3.5-turbo: $0.0005 per 1K tokens (input and output)
+    - GPT-4: $0.03 per 1K input tokens, $0.06 per 1K output tokens
+    - Claude Sonnet: $0.003 per 1K input tokens, $0.015 per 1K output tokens
+    """
+    # Estimate tokens per extraction
+    text_tokens = avg_text_length / 4  # Rough estimate
+    total_input_tokens = (prompt_tokens + text_tokens) * num_texts
+    total_output_tokens = response_tokens * num_texts
+
+    # Pricing
+    if model == 'gpt-3.5-turbo':
+        cost_per_1k_input = 0.0005
+        cost_per_1k_output = 0.0005
+    elif model == 'gpt-4':
+        cost_per_1k_input = 0.03
+        cost_per_1k_output = 0.06
+    elif model == 'claude-sonnet':
+        cost_per_1k_input = 0.003
+        cost_per_1k_output = 0.015
+    else:
+        raise ValueError(f"Unknown model: {model}")
+
+    input_cost = (total_input_tokens / 1000) * cost_per_1k_input
+    output_cost = (total_output_tokens / 1000) * cost_per_1k_output
+    total_cost = input_cost + output_cost
+
+    return {
+        'total_input_tokens': int(total_input_tokens),
+        'total_output_tokens': int(total_output_tokens),
+        'input_cost': input_cost,
+        'output_cost': output_cost,
+        'total_cost': total_cost
+    }
+
+# Example: Extract sentiment from 10,000 product reviews
+num_reviews = 10000
+avg_review_length = 200  # characters
+prompt_tokens = 50  # Our prompt
+response_tokens = 5  # Just "positive"/"negative"/"neutral"
+
+print("Cost comparison for 10,000 reviews:\n")
+
+for model in ['gpt-3.5-turbo', 'gpt-4', 'claude-sonnet']:
+    cost_info = calculate_extraction_cost(
+        num_reviews, avg_review_length, prompt_tokens, response_tokens, model
+    )
+    print(f"{model}:")
+    print(f"  Total tokens: {cost_info['total_input_tokens'] + cost_info['total_output_tokens']:,}")
+    print(f"  Total cost: ${cost_info['total_cost']:.2f}\n")
+```
+
+This shows the dramatic cost difference between models. For simple extraction, GPT-3.5 is often sufficient and much cheaper.
+
+### 6.3 When to Use Which Model
+
+Decision framework:
+
+```{python}
+def recommend_model(task_complexity, dataset_size, budget):
+    """
+    Recommend which LLM to use based on requirements
+
+    Args:
+        task_complexity: 'simple', 'moderate', 'complex'
+        dataset_size: number of texts to process
+        budget: maximum budget in dollars
+
+    Returns:
+        Recommended model and reasoning
+    """
+    # Estimate costs (simplified)
+    gpt35_cost_per_item = 0.0001
+    gpt4_cost_per_item = 0.001
+
+    gpt35_total = gpt35_cost_per_item * dataset_size
+    gpt4_total = gpt4_cost_per_item * dataset_size
+
+    recommendations = []
+
+    if task_complexity == 'simple':
+        recommendations.append({
+            'model': 'gpt-3.5-turbo',
+            'reasoning': 'Simple extraction tasks work well with GPT-3.5',
+            'estimated_cost': gpt35_total
+        })
+
+    elif task_complexity == 'moderate':
+        if gpt35_total <= budget:
+            recommendations.append({
+                'model': 'gpt-3.5-turbo (try first)',
+                'reasoning': 'Start with GPT-3.5, upgrade if quality insufficient',
+                'estimated_cost': gpt35_total
+            })
+        if gpt4_total <= budget:
+            recommendations.append({
+                'model': 'gpt-4 (if GPT-3.5 fails)',
+                'reasoning': 'Better accuracy but 10x cost',
+                'estimated_cost': gpt4_total
+            })
+
+    else:  # complex
+        if gpt4_total <= budget:
+            recommendations.append({
+                'model': 'gpt-4',
+                'reasoning': 'Complex tasks need GPT-4 reasoning',
+                'estimated_cost': gpt4_total
+            })
+        else:
+            recommendations.append({
+                'model': 'Consider alternatives',
+                'reasoning': 'Budget insufficient for GPT-4 at this scale. Consider: sampling, fine-tuning smaller model, or traditional NLP',
+                'estimated_cost': None
+            })
+
+    return recommendations
+
+# Examples
+scenarios = [
+    ('simple', 10000, 10),
+    ('moderate', 5000, 5),
+    ('complex', 1000, 50),
+]
+
+for complexity, size, budget in scenarios:
+    print(f"\nScenario: {complexity} task, {size:,} items, ${budget} budget")
+    recs = recommend_model(complexity, size, budget)
+    for rec in recs:
+        print(f"  → {rec['model']}: {rec['reasoning']}")
+        if rec['estimated_cost']:
+            print(f"    Estimated cost: ${rec['estimated_cost']:.2f}")
+```
+
+::: {.callout-tip}
+**Cost Optimization Strategies:**
+1. **Start cheap:** Try GPT-3.5 first, upgrade only if needed
+2. **Sample first:** Test on 100 examples before processing 10,000
+3. **Shorten prompts:** Every token counts—be concise
+4. **Cache results:** Don't reprocess the same text twice
+5. **Consider batching:** Some providers offer batch APIs at lower cost
+:::
+
+### 6.4 ROI Analysis: LLM vs. Alternatives
+
+Is LLM extraction worth it? Compare alternatives:
+
+```{python}
+# Scenario: Classify 10,000 customer support tickets
+
+alternatives = {
+    'Manual labeling': {
+        'cost': 0.50 * 10000,  # $0.50 per ticket
+        'time_hours': 333,  # 2 mins per ticket
+        'accuracy': 0.95,
+        'scalability': 'Poor'
+    },
+    'Traditional ML (train from scratch)': {
+        'cost': 2000,  # Data labeling for training set
+        'time_hours': 40,  # Development time
+        'accuracy': 0.85,
+        'scalability': 'Excellent (after training)'
+    },
+    'LLM extraction (GPT-3.5)': {
+        'cost': 1.0 * 10000 * 0.0001,  # $1.00
+        'time_hours': 1,  # Just API calls
+        'accuracy': 0.90,
+        'scalability': 'Excellent'
+    },
+    'LLM extraction (GPT-4)': {
+        'cost': 10.0 * 10000 * 0.0001,  # $10.00
+        'time_hours': 1,
+        'accuracy': 0.93,
+        'scalability': 'Excellent'
+    }
+}
+
+comparison = pd.DataFrame(alternatives).T
+comparison.head()
+```
+
+For this scenario, LLM extraction with GPT-3.5 is clearly the winner: cheap, fast, accurate enough, and scalable. But the best choice depends on your specific constraints.
+
+---
+
+## 7. Quality Control and Validation
+
+### 7.1 Measuring Extraction Accuracy
+
+How do you know if your LLM extraction is working well?
+
+```{python}
+def calculate_extraction_accuracy(extracted, ground_truth):
+    """
+    Compare LLM extractions to ground truth labels
+
+    Args:
+        extracted: List of LLM-extracted labels
+        ground_truth: List of correct labels
+
+    Returns:
+        Accuracy metrics
+    """
+    correct = sum(e == g for e, g in zip(extracted, ground_truth))
+    total = len(ground_truth)
+    accuracy = correct / total
+
+    # Breakdown by category
+    from collections import defaultdict
+    category_stats = defaultdict(lambda: {'correct': 0, 'total': 0})
+
+    for ext, truth in zip(extracted, ground_truth):
+        category_stats[truth]['total'] += 1
+        if ext == truth:
+            category_stats[truth]['correct'] += 1
+
+    return {
+        'overall_accuracy': accuracy,
+        'correct': correct,
+        'total': total,
+        'by_category': dict(category_stats)
+    }
+
+# Example: Sentiment extraction validation
+ground_truth_sentiments = ['positive', 'negative', 'neutral', 'positive', 'negative']
+llm_extracted_sentiments = ['positive', 'negative', 'neutral', 'positive', 'negative']
+
+accuracy = calculate_extraction_accuracy(llm_extracted_sentiments, ground_truth_sentiments)
+print(f"Overall accuracy: {accuracy['overall_accuracy']:.2%}")
+print(f"Correct: {accuracy['correct']}/{accuracy['total']}")
+```
+
+### 7.2 Spot-Checking and Manual Review
+
+You can't manually check everything, but strategic sampling helps:
+
+```{python}
+def spot_check_extractions(texts, extractions, n_samples=20, random_state=42):
+    """
+    Sample extractions for manual review
+
+    Shows random samples + edge cases for human verification
+    """
+    np.random.seed(random_state)
+
+    # Random sample
+    indices = np.random.choice(len(texts), min(n_samples, len(texts)), replace=False)
+
+    print("Random sample for manual review:\n")
+    for i, idx in enumerate(indices, 1):
+        print(f"{i}. Text: {texts[idx][:80]}...")
+        print(f"   Extraction: {extractions[idx]}")
+        print(f"   Correct? (Y/N): ___")
+        print()
+
+    return indices
+
+# Example usage
+sample_reviews = [
+    "This product is amazing! Love it.",
+    "Terrible. Waste of money.",
+    "It's okay, I guess.",
+    "Best purchase ever made!",
+    "Not great, not terrible."
+]
+sample_sentiments = ['positive', 'negative', 'neutral', 'positive', 'neutral']
+
+spot_check_extractions(sample_reviews, sample_sentiments, n_samples=3)
+```
+
+### 7.3 Identifying Systematic Errors
+
+Look for patterns in failures:
+
+```{python}
+def analyze_errors(texts, extracted, ground_truth):
+    """
+    Find patterns in extraction errors
+    """
+    errors = []
+
+    for text, ext, truth in zip(texts, extracted, ground_truth):
+        if ext != truth:
+            errors.append({
+                'text': text,
+                'extracted': ext,
+                'ground_truth': truth,
+                'text_length': len(text),
+                'word_count': len(text.split())
+            })
+
+    if not errors:
+        print("No errors found!")
+        return
+
+    error_df = pd.DataFrame(errors)
+
+    print(f"Total errors: {len(errors)}/{len(texts)} ({len(errors)/len(texts):.1%})\n")
+
+    # Analyze error patterns
+    print("Errors by true category:")
+    print(error_df['ground_truth'].value_counts())
+
+    print("\nAverage length of texts with errors:")
+    print(f"  Characters: {error_df['text_length'].mean():.0f}")
+    print(f"  Words: {error_df['word_count'].mean():.0f}")
+
+    print("\nSample errors:")
+    for _, row in error_df.head(3).iterrows():
+        print(f"  Text: {row['text'][:60]}...")
+        print(f"  Extracted: {row['extracted']}, True: {row['ground_truth']}\n")
+
+    return error_df
+
+# Example with some errors
+texts_with_errors = [
+    "Love this product!",
+    "It's not bad.",  # Tricky: double negative
+    "Terrible quality.",
+    "I wouldn't say it's good.",  # Tricky: negation
+    "Amazing!"
+]
+extracted_with_errors = ['positive', 'negative', 'negative', 'negative', 'positive']
+ground_truth_with_errors = ['positive', 'positive', 'negative', 'negative', 'positive']
+
+error_analysis = analyze_errors(texts_with_errors, extracted_with_errors, ground_truth_with_errors)
+```
+
+### 7.4 When Extraction Quality Is "Good Enough"
+
+Perfect extraction isn't always necessary:
+
+```{python}
+def is_quality_sufficient(accuracy, task_requirements):
+    """
+    Determine if extraction quality meets requirements
+
+    Args:
+        accuracy: Measured extraction accuracy (0-1)
+        task_requirements: Dict with requirements
+
+    Returns:
+        Boolean and explanation
+    """
+    min_accuracy = task_requirements.get('min_accuracy', 0.85)
+    critical_task = task_requirements.get('critical', False)
+
+    if critical_task:
+        # High-stakes tasks need very high accuracy
+        threshold = max(min_accuracy, 0.95)
+        sufficient = accuracy >= threshold
+        msg = f"Critical task requires ≥{threshold:.0%} accuracy. "
+    else:
+        # Normal tasks can tolerate some errors
+        threshold = min_accuracy
+        sufficient = accuracy >= threshold
+        msg = f"Task requires ≥{threshold:.0%} accuracy. "
+
+    msg += f"Current accuracy: {accuracy:.1%}. "
+    msg += "✓ Sufficient" if sufficient else "✗ Insufficient"
+
+    return sufficient, msg
+
+# Examples
+scenarios_quality = [
+    (0.92, {'min_accuracy': 0.85, 'critical': False}),  # Good enough
+    (0.92, {'min_accuracy': 0.85, 'critical': True}),   # Not good enough (critical)
+    (0.78, {'min_accuracy': 0.85, 'critical': False}),  # Not good enough
+]
+
+for acc, reqs in scenarios_quality:
+    sufficient, message = is_quality_sufficient(acc, reqs)
+    print(message)
+    print()
+```
+
+::: {.callout-note}
+**Quality Thresholds by Task Type:**
+- **Medical/Legal:** 95%+ accuracy required (often manual review needed)
+- **Financial:** 90-95% accuracy
+- **Marketing/Content:** 80-85% accuracy often sufficient
+- **Exploratory analysis:** 70-80% may be acceptable
+
+Remember: LLM features are inputs to ML models. Small extraction errors might not significantly hurt final model performance.
+:::
+
+---
+
+## 8. When to Use LLMs vs. Traditional NLP
+
+### 8.1 Decision Framework
+
+Not every text problem needs an LLM. Here's how to decide:
+
+```{python}
+def should_use_llm(task_description):
+    """
+    Decision tree: LLM vs. traditional NLP
+
+    Returns recommendation and reasoning
+    """
+    # Simple pattern matching tasks
+    simple_patterns = [
+        'contains keyword',
+        'find email addresses',
+        'extract phone numbers',
+        'detect URLs',
+        'count words'
+    ]
+
+    # Traditional ML appropriate
+    traditional_ml_tasks = [
+        'you have large labeled dataset',
+        'need very fast inference',
+        'extremely cost-sensitive',
+        'offline/no internet'
+    ]
+
+    # LLM appropriate
+    llm_tasks = [
+        'understand context',
+        'extract categories not seen before',
+        'handle nuance',
+        'multiple languages',
+        'complex reasoning',
+        'no labeled data available'
+    ]
+
+    task_lower = task_description.lower()
+
+    # Check each category
+    if any(pattern in task_lower for pattern in simple_patterns):
+        return {
+            'recommendation': 'Use regex or simple string matching',
+            'reasoning': 'Simple pattern matching - no need for expensive LLM',
+            'example_tool': 're module in Python'
+        }
+
+    if any(indicator in task_lower for indicator in traditional_ml_tasks):
+        return {
+            'recommendation': 'Train traditional ML model',
+            'reasoning': 'Your constraints favor traditional ML over LLM APIs',
+            'example_tool': 'scikit-learn text classification'
+        }
+
+    if any(indicator in task_lower for indicator in llm_tasks):
+        return {
+            'recommendation': 'Use LLM extraction',
+            'reasoning': 'Task requires language understanding that LLMs excel at',
+            'example_tool': 'GPT-3.5 or GPT-4 via API'
+        }
+
+    # Default: try simple first
+    return {
+        'recommendation': 'Try simple methods first, then LLM if needed',
+        'reasoning': 'Always start with simplest solution',
+        'example_tool': 'Regex → Traditional ML → LLM (in that order)'
+    }
+
+# Test with different tasks
+tasks = [
+    "Extract email addresses from text",
+    "Determine sentiment of product reviews with nuanced language",
+    "Classify support tickets into categories with 10,000 labeled examples",
+    "Extract job requirements that vary significantly across postings",
+    "Count how many times 'refund' appears in complaints"
+]
+
+print("Task recommendations:\n")
+for task in tasks:
+    rec = should_use_llm(task)
+    print(f"Task: {task}")
+    print(f"  → {rec['recommendation']}")
+    print(f"  Reasoning: {rec['reasoning']}")
+    print(f"  Tool: {rec['example_tool']}\n")
+```
+
+### 8.2 Simple Regex vs. LLM: A Comparison
+
+Let's see both approaches on the same task:
+
+```{python}
+import re
+
+# Task: Extract product category from reviews
+
+# Approach 1: Regex/keyword matching
+def extract_category_regex(review_text):
+    """Simple keyword matching"""
+    text_lower = review_text.lower()
+
+    if any(word in text_lower for word in ['coffee', 'brew', 'espresso', 'caffeine']):
+        return 'Coffee Maker'
+    elif any(word in text_lower for word in ['vacuum', 'clean', 'suction', 'dirt']):
+        return 'Vacuum'
+    elif any(word in text_lower for word in ['headphone', 'audio', 'sound', 'music']):
+        return 'Headphones'
+    else:
+        return 'Other'
+
+# Approach 2: LLM extraction
+def extract_category_llm(review_text):
+    """LLM-based category extraction"""
+    prompt = f"""What product category is this review about?
+Choose from: Coffee Maker, Vacuum, Headphones, Other
+
+Review: {review_text}
+
+Category:"""
+
+    # Simulated LLM response
+    # In practice, this would call the API
+    # For now, we'll simulate based on content
+    text_lower = review_text.lower()
+    if 'coffee' in text_lower or 'brew' in text_lower:
+        return 'Coffee Maker'
+    elif 'vacuum' in text_lower or 'clean' in text_lower:
+        return 'Vacuum'
+    elif 'headphone' in text_lower or 'sound' in text_lower:
+        return 'Headphones'
+    else:
+        return 'Other'
+
+# Test cases
+test_reviews = [
+    "This coffee maker brews excellent coffee.",  # Simple - both work
+    "Makes great espresso every morning.",  # Simple - both work
+    "The audio quality is amazing!",  # LLM better (understands audio → headphones)
+    "Keeps my floors spotless.",  # LLM better (spotless → cleaning → vacuum)
+    "Battery life could be better but the noise cancellation is top-notch."  # LLM much better
+]
+
+print("Category extraction comparison:\n")
+for review in test_reviews:
+    regex_cat = extract_category_regex(review)
+    llm_cat = extract_category_llm(review)
+    print(f"Review: {review}")
+    print(f"  Regex: {regex_cat}")
+    print(f"  LLM: {llm_cat}")
+    print()
+```
+
+The LLM shines when:
+- Keywords aren't explicit ("noise cancellation" → headphones)
+- Context matters ("spotless" → cleaning → vacuum)
+- Synonyms and paraphrasing ("audio quality" = sound)
+
+Regex wins when:
+- Keywords are explicit and consistent
+- Speed is critical
+- Cost must be zero
+
+### 8.3 Cost-Benefit Comparison Table
+
+```{python}
+comparison_data = {
+    'Approach': ['Regex/Keywords', 'Traditional ML', 'LLM (GPT-3.5)', 'LLM (GPT-4)'],
+    'Setup Cost': ['$0', '$500-5000', '$0', '$0'],
+    'Per-Item Cost': ['$0', '$0', '$0.0001', '$0.001'],
+    'Setup Time': ['1 hour', '1-4 weeks', '1-2 hours', '1-2 hours'],
+    'Accuracy (simple)': ['60-70%', '85-90%', '85-90%', '90-95%'],
+    'Accuracy (complex)': ['40-50%', '75-85%', '80-90%', '88-95%'],
+    'Scalability': ['Excellent', 'Excellent', 'Good', 'Good'],
+    'Flexibility': ['Poor', 'Poor', 'Excellent', 'Excellent']
+}
+
+comparison_df = pd.DataFrame(comparison_data)
+comparison_df
+```
+
+### 8.4 Hybrid Approaches
+
+Often, the best solution combines methods:
+
+```{python}
+def hybrid_extraction(review_text):
+    """
+    Hybrid approach: Use simple rules when possible, LLM for hard cases
+    """
+    # Step 1: Try simple keyword matching
+    simple_result = extract_category_regex(review_text)
+
+    # Step 2: Check confidence
+    # If the review explicitly mentions category keywords, trust regex
+    text_lower = review_text.lower()
+    explicit_mentions = sum([
+        any(word in text_lower for word in ['coffee', 'brew', 'espresso']),
+        any(word in text_lower for word in ['vacuum', 'suction']),
+        any(word in text_lower for word in ['headphone', 'audio'])
+    ])
+
+    if explicit_mentions > 0 and simple_result != 'Other':
+        # High confidence - use regex result
+        return {
+            'category': simple_result,
+            'method': 'regex',
+            'cost': 0
+        }
+    else:
+        # Low confidence - use LLM
+        llm_result = extract_category_llm(review_text)
+        return {
+            'category': llm_result,
+            'method': 'llm',
+            'cost': 0.0001
+        }
+
+# Test hybrid approach
+print("Hybrid approach results:\n")
+for review in test_reviews[:3]:
+    result = hybrid_extraction(review)
+    print(f"Review: {review}")
+    print(f"  Category: {result['category']} (via {result['method']})")
+    print(f"  Cost: ${result['cost']:.6f}\n")
+```
+
+This hybrid approach saves money by using free regex when confidence is high, falling back to LLM only when needed.
+
+::: {.callout-tip}
+**Hybrid Strategy Benefits:**
+- Use regex/keywords for 60-80% of cases (free, fast)
+- Use LLM for ambiguous 20-40% (accuracy boost where it matters)
+- Best of both worlds: low cost + high accuracy
+:::
+
+---
+
+## 9. Practical Considerations and Best Practices
+
+### 9.1 Rate Limiting and API Quotas
+
+APIs have limits. Handle them gracefully:
+
+```{python}
+import time
+from datetime import datetime
+
+def extract_with_rate_limiting(texts, extract_func, requests_per_minute=60):
+    """
+    Extract features with rate limiting to avoid API errors
+
+    Args:
+        texts: List of texts to process
+        extract_func: Function that extracts from one text
+        requests_per_minute: Max API calls per minute
+
+    Returns:
+        List of extracted features
+    """
+    results = []
+    delay = 60 / requests_per_minute  # Seconds between requests
+
+    for i, text in enumerate(texts):
+        # Extract
+        result = extract_func(text)
+        results.append(result)
+
+        # Progress update
+        if (i + 1) % 10 == 0:
+            print(f"Processed {i+1}/{len(texts)} texts...")
+
+        # Rate limit (except for last item)
+        if i < len(texts) - 1:
+            time.sleep(delay)
+
+    return results
+
+# Example usage (simulated)
+print("Processing with rate limiting:")
+print(f"Rate: 60 requests/minute (1 per second)")
+print(f"For 100 texts, this will take ~100 seconds\n")
+
+# In practice:
+# results = extract_with_rate_limiting(my_texts, extract_sentiment_robust, requests_per_minute=60)
+```
+
+### 9.2 Error Handling and Retries
+
+Networks fail. APIs timeout. Handle it:
+
+```{python}
+def extract_with_retry(text, extract_func, max_retries=3, backoff=2):
+    """
+    Extract with exponential backoff retry logic
+
+    Args:
+        text: Text to extract from
+        extract_func: Extraction function
+        max_retries: Maximum retry attempts
+        backoff: Backoff multiplier (2 = double wait time each retry)
+    """
+    wait_time = 1  # Start with 1 second wait
+
+    for attempt in range(max_retries):
+        try:
+            result = extract_func(text)
+            return result
+        except Exception as e:
+            if attempt == max_retries - 1:
+                # Last attempt failed
+                print(f"Failed after {max_retries} attempts: {e}")
+                return None
+            else:
+                # Retry with exponential backoff
+                print(f"Attempt {attempt + 1} failed, retrying in {wait_time}s...")
+                time.sleep(wait_time)
+                wait_time *= backoff
+
+    return None
+
+# Example usage
+print("Example retry behavior (simulated):")
+print("Attempt 1 fails → wait 1s")
+print("Attempt 2 fails → wait 2s")
+print("Attempt 3 succeeds → return result")
+```
+
+### 9.3 Caching Results to Avoid Reprocessing
+
+Never process the same text twice:
+
+```{python}
+class LLMCache:
+    """Simple cache for LLM extraction results"""
+
+    def __init__(self):
+        self.cache = {}
+
+    def get(self, text):
+        """Get cached result if available"""
+        # Use hash of text as key
+        key = hash(text)
+        return self.cache.get(key)
+
+    def set(self, text, result):
+        """Store result in cache"""
+        key = hash(text)
+        self.cache[key] = result
+
+    def extract_with_cache(self, text, extract_func):
+        """Extract with caching"""
+        # Check cache first
+        cached = self.get(text)
+        if cached is not None:
+            return cached
+
+        # Not in cache - extract and store
+        result = extract_func(text)
+        self.set(text, result)
+        return result
+
+# Usage example
+cache = LLMCache()
+
+texts_with_duplicates = [
+    "This is great!",
+    "This is terrible.",
+    "This is great!",  # Duplicate - will use cache
+    "This is okay.",
+    "This is great!"   # Duplicate - will use cache
+]
+
+print("Processing with cache:")
+for text in texts_with_duplicates:
+    # In practice, would call API
+    cached_result = cache.get(text)
+    if cached_result:
+        print(f"'{text}' → CACHED")
+    else:
+        # Simulate extraction
+        result = "positive"  # Simulated
+        cache.set(text, result)
+        print(f"'{text}' → EXTRACTED (API call)")
+```
+
+### 9.4 Logging and Monitoring
+
+Track your extractions for debugging:
+
+```{python}
+import logging
+from datetime import datetime
+
+# Set up logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+
+def extract_with_logging(text, extract_func):
+    """Extract with detailed logging"""
+    start_time = datetime.now()
+
+    logging.info(f"Starting extraction for text: {text[:50]}...")
+
+    try:
+        result = extract_func(text)
+
+        duration = (datetime.now() - start_time).total_seconds()
+        logging.info(f"Extraction successful in {duration:.2f}s: {result}")
+
+        return result
+
+    except Exception as e:
+        duration = (datetime.now() - start_time).total_seconds()
+        logging.error(f"Extraction failed after {duration:.2f}s: {e}")
+        return None
+
+# Example
+print("Extraction with logging:")
+# result = extract_with_logging("Test review", extract_sentiment_robust)
+```
+
+---
+
+## 10. Real-World Example: Complete Pipeline
+
+Let's put it all together with a complete, realistic example:
+
+```{python}
+# Scenario: Extract features from customer support tickets
+# Use those features to predict ticket priority
+
+# Sample support tickets
+tickets_data = {
+    'ticket_id': [1, 2, 3, 4, 5],
+    'ticket_text': [
+        "My account is locked and I can't access my billing information. This is urgent!",
+        "I have a question about your pricing plans. No rush.",
+        "The app keeps crashing every time I try to upload a file. Very frustrating!",
+        "Can you explain how the export feature works?",
+        "CRITICAL: Production server is down! Need immediate assistance!"
+    ],
+    'actual_priority': ['high', 'low', 'medium', 'low', 'critical']  # Ground truth
+}
+
+df_tickets = pd.DataFrame(tickets_data)
+
+# Step 1: Define extraction function
+def extract_ticket_features(ticket_text):
+    """
+    Extract features from support ticket
+    """
+    # In real implementation, this would call OpenAI API
+    # For this example, we'll simulate the extraction
+
+    # Simulated LLM extraction logic
+    text_lower = ticket_text.lower()
+
+    # Determine urgency
+    if any(word in text_lower for word in ['critical', 'urgent', 'down', 'broken']):
+        urgency = 'high'
+    elif any(word in text_lower for word in ['frustrating', 'issue', 'problem']):
+        urgency = 'medium'
+    else:
+        urgency = 'low'
+
+    # Determine category
+    if any(word in text_lower for word in ['billing', 'account', 'payment']):
+        category = 'Billing'
+    elif any(word in text_lower for word in ['crash', 'bug', 'error', 'down']):
+        category = 'Technical'
+    else:
+        category = 'General'
+
+    # Sentiment
+    if any(word in text_lower for word in ['critical', 'frustrating', 'broken']):
+        sentiment = 'negative'
+    else:
+        sentiment = 'neutral'
+
+    return {
+        'urgency': urgency,
+        'category': category,
+        'sentiment': sentiment,
+        'has_exclamation': '!' in ticket_text,
+        'text_length': len(ticket_text)
+    }
+
+# Step 2: Extract features for all tickets
+print("Extracting features from tickets...\n")
+extracted_features = []
+
+for text in df_tickets['ticket_text']:
+    features = extract_ticket_features(text)
+    extracted_features.append(features)
+
+df_features = pd.DataFrame(extracted_features)
+
+# Step 3: Combine with original data
+df_complete = pd.concat([df_tickets, df_features], axis=1)
+
+print("Extracted features:")
+print(df_complete[['ticket_id', 'urgency', 'category', 'sentiment']].head())
+
+# Step 4: Encode for ML
+le_urgency = LabelEncoder()
+le_category = LabelEncoder()
+le_sentiment = LabelEncoder()
+
+df_complete['urgency_encoded'] = le_urgency.fit_transform(df_complete['urgency'])
+df_complete['category_encoded'] = le_category.fit_transform(df_complete['category'])
+df_complete['sentiment_encoded'] = le_sentiment.fit_transform(df_complete['sentiment'])
+df_complete['has_exclamation_int'] = df_complete['has_exclamation'].astype(int)
+
+# Step 5: Train ML model
+feature_cols = ['urgency_encoded', 'category_encoded', 'sentiment_encoded',
+                'has_exclamation_int', 'text_length']
+
+X = df_complete[feature_cols]
+y = df_complete['actual_priority']
+
+# Note: In practice, you'd have more data and do train-test split
+# This is just a demonstration
+from sklearn.tree import DecisionTreeClassifier
+
+clf = DecisionTreeClassifier(max_depth=3, random_state=42)
+clf.fit(X, y)
+
+# Step 6: Make predictions
+df_complete['predicted_priority'] = clf.predict(X)
+
+# Step 7: Evaluate
+print("\n\nResults:")
+print(df_complete[['ticket_id', 'actual_priority', 'predicted_priority']])
+
+accuracy = (df_complete['actual_priority'] == df_complete['predicted_priority']).mean()
+print(f"\nAccuracy: {accuracy:.1%}")
+```
+
+This complete pipeline shows the real workflow:
+1. Define extraction prompt/function
+2. Extract features from text
+3. Validate and convert to DataFrame
+4. Encode categorical variables
+5. Train ML model on extracted features
+6. Evaluate performance
+
+In production, you'd add:
+- Error handling and retries
+- Rate limiting
+- Caching
+- Logging
+- Cost tracking
+- Quality monitoring
+
+But the core pattern remains the same: **text → LLM extraction → features → ML model → predictions**.
+
+---
+
+## Summary
+
+LLMs are powerful feature engineering tools that transform unstructured text into structured, ML-ready data. The key advantage is zero-shot learning—you can extract information without training data, just clear prompts. But they're not magic bullets.
+
+You've learned to write effective extraction prompts: clear task descriptions, specific output formats (JSON), few-shot examples when needed, and iterative refinement based on errors. You know how to parse and validate LLM responses, handle malformed JSON, check for invalid categories, and identify when extraction fails.
+
+Cost matters. GPT-3.5 costs $0.0005 per 1K tokens; GPT-4 costs 60x more. For simple extraction on large datasets, that difference is huge. Start with GPT-3.5, upgrade only if quality demands it. Calculate costs before processing thousands of texts. Compare LLM cost to alternatives—sometimes manual labeling or traditional ML is cheaper.
+
+Quality control is critical. Spot-check extractions manually. Calculate accuracy against ground truth. Identify systematic errors and refine prompts. Decide when quality is "good enough" based on task requirements. Perfect extraction isn't always necessary—remember that LLM features are inputs to ML models, and small errors might not hurt final performance.
+
+Know when to use LLMs versus alternatives. Simple keyword matching works for pattern detection. Traditional ML works when you have labeled data and need very fast inference. LLMs excel at context understanding, handling nuanced language, extracting categories without training, and zero-shot learning. Often, hybrid approaches work best: use simple rules when confident, fall back to LLM for hard cases.
+
+Integration with ML pipelines is straightforward: extract features, convert to DataFrame, encode categorical variables, train traditional ML models. The LLM doesn't replace your ML workflow—it enhances it by creating better features from text.
+
+LLMs are tools, not solutions. They cost money, make mistakes, and sometimes overkill. The skill isn't just using them—it's knowing when they add value, which model to choose, how to validate output, and how to integrate them into your data science workflow. Use your brain. That's what it's there for.
+
+---
+
+## Practice Exercises
+
+1. **Prompt Engineering:** Write three different prompts to extract sentiment from movie reviews. Test them on 10 reviews. Which prompt gives the most consistent results? Why?
+
+2. **Cost Analysis:** Calculate the cost to extract categories from 50,000 product descriptions using GPT-3.5 vs. GPT-4. Assume average description length of 150 characters, prompt of 60 tokens, response of 10 tokens.
+
+3. **Validation:** Extract job seniority levels (Entry/Mid/Senior) from 20 job postings. Manually label them yourself. Calculate your LLM's accuracy. Identify which extractions failed and why.
+
+4. **Complete Pipeline:** Build a pipeline that: (a) extracts sentiment and rating from customer reviews, (b) converts to DataFrame, (c) trains a classifier to predict if review is helpful (>10 votes), (d) evaluates performance.
+
+5. **Comparison:** Take a simple classification task (e.g., categorizing emails as work/personal/spam). Implement three approaches: (1) keyword matching, (2) LLM extraction, (3) hybrid. Compare accuracy and cost.
+
+6. **Quality Control:** Extract product categories from 100 product titles. Create a validation function that flags suspicious extractions (e.g., category not in predefined list). How many would need manual review?
+
+---
+
+## Additional Resources
+
+- [OpenAI API Documentation](https://platform.openai.com/docs/api-reference) - Complete API reference and guides
+- [Anthropic Claude API](https://docs.anthropic.com/) - Alternative LLM provider with good context windows
+- [Prompt Engineering Guide](https://www.promptingguide.ai/) - Comprehensive guide to writing effective prompts
+- [LangChain Documentation](https://python.langchain.com/) - Framework for building LLM applications (more advanced)
+- [OpenAI Cookbook](https://cookbook.openai.com/) - Practical examples and code snippets
+- [Token Counting Tool](https://platform.openai.com/tokenizer) - See how text converts to tokens
+- [Best Practices for Prompt Engineering](https://help.openai.com/en/articles/6654000-best-practices-for-prompt-engineering-with-openai-api) - Official OpenAI guide

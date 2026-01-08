@@ -1,0 +1,1748 @@
+---
+title: "Chapter 3: Classification Models"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    theme: cosmo
+jupyter: python3
+---
+
+## Chapter Resources {#ch3-resources}
+
+**Related Assignments:**
+
+- [Chapter 3 Homework](../../Assignments/Chapter%203%20-%20Classification/chapter-3-homework.qmd)
+
+---
+
+## Introduction {#ch3-intro}
+
+You've spent weeks learning regression—predicting continuous values like house prices or income. But what happens when you need to predict categories instead? Will this customer churn or stay? Is this email spam or legitimate? Does this patient have the disease or not?
+
+This is classification, and it's everywhere. Classification powers the spam filter in your email, the fraud detection on your credit card, the recommendation systems suggesting what you should watch next, and the medical diagnostics helping doctors identify diseases. If you've ever wondered "will this happen or not?" or "which category does this belong to?"—that's a classification problem.
+
+Just like with regression, there isn't one "best" classification algorithm. Logistic regression is fast and interpretable. Decision trees are easy to explain to non-technical stakeholders. Random forests are robust and powerful. Support vector machines handle high-dimensional data elegantly. k-Nearest neighbors is beautifully simple but computationally expensive. Each has strengths, weaknesses, and situations where it shines.
+
+And the evaluation is completely different from regression. You can't use R² or MSE. Instead, you'll need to navigate confusion matrices, ROC curves, precision-recall tradeoffs, and decide whether false positives or false negatives are more costly for your specific problem. A model that's 99% accurate might be completely useless if you're trying to detect a rare disease.
+
+This chapter will teach you not just how to fit classification models, but how to think like a data scientist choosing between them. You'll learn:
+
+- How five major classification algorithms work and when to use each
+- How to interpret confusion matrices and choose the right metrics
+- The precision-recall tradeoff and why it matters
+- How to handle imbalanced datasets (the most common real-world scenario)
+- How to visualize decision boundaries to understand what your model is actually doing
+- How to use ROC curves to compare model performance
+
+Let's jump in.
+
+---
+
+## 1. Machine Learning Paradigms: Supervised vs Unsupervised Learning {#ch3-1}
+
+Before we dive into specific classification algorithms, let's step back and understand a fundamental distinction in machine learning: supervised versus unsupervised learning. Understanding this paradigm will help you recognize when classification is the right approach and when other techniques might be more appropriate.
+
+### 1.1 Supervised Learning: Learning from Labels {#ch3-1-1}
+
+**Supervised learning** is what we've been doing throughout this course: you give the model input data (features) and the correct answers (labels/targets), and it learns to predict the right answer for new inputs.
+
+```{python}
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+
+# Load Spotify data (supervised classification example)
+spotify_df = pd.read_csv('../data/spotify.csv')
+
+# We have features (X) and a target (y)
+# Let's predict whether a song will be popular (binary classification)
+X = spotify_df[['danceability', 'energy', 'valence', 'tempo']]
+y = (spotify_df['popularity'] > 50).astype(int)  # 1 if popular, 0 if not
+
+print("Supervised learning setup:")
+print(f"Features (X) shape: {X.shape}")
+print(f"Target (y) shape: {y.shape}")
+print(f"Class distribution: {y.value_counts().to_dict()}")
+print("\nFirst few rows of features:")
+
+X.head()
+```
+
+```{python}
+print("\nCorresponding targets (1 = popular, 0 = not popular):")
+y.head()
+```
+
+The key to supervised learning is that we have labels. We know what the correct answer is for each training example. The model learns by comparing its predictions to the true labels and adjusting to get closer.
+
+::: {.callout-note}
+Both regression (from Chapter 2) and classification are supervised learning tasks. The difference is that regression predicts continuous values while classification predicts discrete categories. But both require labeled training data.
+:::
+
+### 1.2 Unsupervised Learning: Finding Patterns Without Labels {#ch3-1-2}
+
+**Unsupervised learning** is different: you only have input data (X), no labels (y). The model's job is to find patterns, structure, or groupings in the data on its own.
+
+For example, we can use unsupervised learning to find natural groupings of flowers based on their measurements. We don't tell the model what the groupings should be—it discovers them on its own. This is what clustering algorithms like KMeans do.
+
+```{python}
+from sklearn.cluster import KMeans
+from sklearn.datasets import load_iris
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Using Iris dataset, but ignoring the labels (species)
+# Can we find natural groupings of flowers based on their measurements?
+iris = load_iris(as_frame=True)
+iris_df = iris.frame
+
+X_unlabeled = iris_df[['petal length (cm)', 'petal width (cm)']]
+
+# K-Means clustering: find groups in the data
+kmeans = KMeans(n_clusters=3, random_state=1, n_init=10)
+clusters = kmeans.fit_predict(X_unlabeled)
+
+# Visualize the clusters
+plt.figure(figsize=(10, 6))
+plt.scatter(X_unlabeled['petal length (cm)'], X_unlabeled['petal width (cm)'],
+            c=clusters, cmap='viridis', alpha=0.6)
+plt.scatter(kmeans.cluster_centers_[:, 0], kmeans.cluster_centers_[:, 1],
+            c='red', marker='X', s=200, edgecolors='black', label='Centroids')
+plt.xlabel('Petal Length (cm)')
+plt.ylabel('Petal Width (cm)')
+plt.title('K-Means Clustering: Discovering Flower Groups (Unsupervised)')
+plt.legend()
+plt.show()
+```
+
+Notice what happened: we didn't tell the model which flowers were which species. We just said "find 3 groups" and it discovered natural clusters based on petal measurements alone.
+
+Common unsupervised learning tasks include:
+
+- **Clustering:** Grouping similar items together (customer segmentation, document clustering)
+- **Dimensionality Reduction:** Reducing many features to a few key ones (PCA, t-SNE for visualization)
+- **Anomaly Detection:** Finding unusual examples (fraud detection, manufacturing defects)
+
+### 1.3 When to Use Each Paradigm {#ch3-1-3}
+
+Use **supervised learning** when:
+
+- You have labeled data (you know the correct answers)
+- You want to predict something specific
+- You can define success (accuracy, error rate, etc.)
+
+Use **unsupervised learning** when:
+
+- You don't have labels (or getting labels is too expensive)
+- You want to explore data structure
+- You're looking for patterns you don't know exist yet
+
+::: {.callout-note}
+Most real-world applications use supervised learning, because prediction is usually the goal. Unsupervised learning is powerful for exploration and preprocessing, but harder to evaluate (how do you know if clusters are "good"?). Unsupervised learning is often used as an intermediate step to generate new features, which are then used in a supervised learning model.
+:::
+
+For the rest of this chapter, we'll focus on supervised classification, since that's where you'll spend most of your time as a data scientist.
+
+---
+
+## 2. Classification vs Regression: What's Different? {#ch3-2}
+
+### 2.1 The Fundamental Difference {#ch3-2-1}
+
+In regression, we predict a continuous value. In classification, we predict a category. Seems simple, but this fundamental difference changes everything about how we build, train, and evaluate models.
+
+```{python}
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+# Let's load a classification dataset - Titanic survival
+# This is a classic binary classification problem: survived or didn't survive
+titanic = pd.read_csv('../data/titanic.csv')
+
+# Look at the target variable
+print("Target variable (Survived) value counts:")
+print(titanic['Survived'].value_counts())
+print(f"\nProportion survived: {titanic['Survived'].mean():.2%}")
+```
+
+Instead of predicting a number on a continuous scale, we're predicting one of two discrete outcomes: 0 (didn't survive) or 1 (survived). This is **binary classification**—the most common type.
+
+### 2.2 Types of Classification Problems {#ch3-1-2}
+
+**Binary Classification:** Two possible outcomes (yes/no, spam/ham, fraud/legitimate)
+
+- Titanic survival
+- Email spam detection
+- Loan default prediction
+- Disease diagnosis
+
+**Multi-class Classification:** More than two categories
+
+- Iris flower species (setosa, versicolor, virginica)
+- Handwritten digit recognition (0-9)
+- Customer segment classification
+- Image classification (cat, dog, bird, etc.)
+
+Most of this chapter focuses on binary classification since it's simpler to visualize and understand. But the techniques extend naturally to multi-class problems.
+
+### 2.3 Why We Can't Use Linear Regression {#ch3-1-3}
+
+You might be tempted to use linear regression for classification. Just predict the category as a number, right? Let's see why that breaks:
+
+```{python}
+from sklearn.linear_model import LinearRegression, LogisticRegression
+import seaborn as sns
+
+# Prepare simple features
+titanic_clean = titanic[['Age', 'Survived', 'Pclass', 'Fare']].dropna()
+X = titanic_clean[['Age', 'Pclass', 'Fare']].values
+y = titanic_clean['Survived'].values
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Try linear regression (WRONG!)
+linear_model = LinearRegression()
+linear_model.fit(X_train, y_train)
+linear_pred = linear_model.predict(X_test)
+
+print('Predictions:')
+print(linear_pred[:5])
+
+print('Classes:')
+print(y_test[:5])
+```
+
+See the problem? Linear regression gives us predictions like 0.73 or -0.15 or 1.42. But we need 0 or 1! We could threshold at 0.5, but linear regression makes no guarantee that predictions will be between 0 and 1. It's using the wrong tool for the job.
+
+Classification models are designed to output probabilities (values between 0 and 1) or direct class predictions. That's why we need specialized algorithms.
+
+---
+
+## 3. Logistic Regression: The Foundation {#ch3-3}
+
+### 3.1 From Linear to Logistic {#ch3-2-1}
+
+Logistic regression might sound like a regression technique, but don't be fooled—it's pure classification. The name comes from its history: it takes linear regression and transforms it to work for classification.
+
+Here's the key insight: instead of predicting the outcome directly, logistic regression predicts the **probability** of the positive class. It does this by taking a linear combination of features (just like linear regression) and passing it through the **sigmoid function**:
+
+$$
+\text{probability} = \frac{1}{1 + e^{-z}}
+$$
+
+where $z$ is the linear combination: $z = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + ...$
+
+The sigmoid function has a beautiful property: it squashes any real number into the range (0, 1), making it perfect for probabilities.
+
+```{python}
+# Visualize the sigmoid function
+z = np.linspace(-10, 10, 100)
+sigmoid = 1 / (1 + np.exp(-z))
+
+plt.figure(figsize=(10, 6))
+plt.plot(z, sigmoid, 'b-', linewidth=2)
+plt.axhline(y=0.5, color='r', linestyle='--', alpha=0.5, label='Decision threshold (0.5)')
+plt.axvline(x=0, color='r', linestyle='--', alpha=0.5)
+plt.xlabel('z (linear combination of features)', fontsize=12)
+plt.ylabel('Probability of positive class', fontsize=12)
+plt.title('The Sigmoid Function: Turning Linear into Probability', fontsize=14)
+plt.grid(True, alpha=0.3)
+plt.legend()
+plt.show()
+```
+
+When $z = 0$, the probability is exactly 0.5. As $z$ increases, the probability approaches 1. As $z$ decreases, the probability approaches 0. The sigmoid smoothly transitions between these extremes.
+
+### 3.2 Fitting Logistic Regression {#ch3-2-2}
+
+Let's fit a logistic regression model to predict Titanic survival:
+
+```{python}
+# Fit logistic regression
+log_model = LogisticRegression(random_state=42, max_iter=1000)
+log_model.fit(X_train, y_train)
+
+# Get predictions - both probabilities and classes
+y_pred_proba = log_model.predict_proba(X_test)[:, 1]  # Probability of class 1
+y_pred_class = log_model.predict(X_test)  # Predicted class (0 or 1)
+
+# Show the difference
+comparison = pd.DataFrame({
+    'True': y_test,
+    'Prob_Survived': y_pred_proba,
+    'Predicted': y_pred_class
+})
+
+comparison.head(10)
+```
+
+Notice the two types of predictions:
+
+- **Probabilities** (from `predict_proba`): Values between 0 and 1 representing confidence
+- **Classes** (from `predict`): Hard 0/1 decisions using a threshold (default 0.5)
+
+If the probability is above 0.5, we predict class 1 (survived). Otherwise, class 0 (didn't survive). But you can adjust this threshold based on your problem—more on that later.
+
+How can we evaluate this model's performance? One simple way is to ask about the average probability for each different true class (i.e. average probabibility of survival for those who actually survived vs. those who didn't).
+
+```{python}
+# Calculate average probability for each true class
+avg_prob_survived = y_pred_proba[y_test == 1].mean()
+avg_prob_not_survived = y_pred_proba[y_test == 0].mean()
+
+print(f"Average probability for those who survived: {avg_prob_survived:.3f}")
+print(f"Average probability for those who didn't survive: {avg_prob_not_survived:.3f}")
+```
+
+This is good, but it fails to capture the variability in predictions. A better approach would be to look at the distribution of probabilities for each class.
+
+Let's visualize this:
+
+```{python}
+import seaborn as sns
+import pandas as pd
+
+plt.figure(figsize=(10, 6))
+sns.histplot(data=pd.DataFrame({'prob': y_pred_proba[y_test == 1], 'class': 'Survived'}), x='prob', alpha=0.7, label='Survived', bins=20, color='blue', stat='density')
+sns.histplot(data=pd.DataFrame({'prob': y_pred_proba[y_test == 0], 'class': 'Did not survive'}), x='prob', alpha=0.7, label='Did not survive', bins=20, color='red', stat='density')
+plt.xlabel('Predicted Probability of Survival')
+plt.ylabel('Density')
+plt.title('Distribution of Predicted Probabilities by True Outcome')
+plt.legend()
+plt.show()
+```
+
+We see that there are more people who survived with higher predicted probability of survival, and more people who died with lower predicted probability. This shows that our model is somewhat calibrated - it tends to give higher probabilities to those who actually survived and lower probabilities to those who didn't.
+
+We'll learn more advanced techniques later, but this is a good starting point.
+
+### 3.3 Interpreting Coefficients {#ch3-3-3}
+
+Just like linear regression, logistic regression has coefficients. But the interpretation is different. In particular, we're primarily concerned with the **odds ratio** of a coefficient, which is calculated as $e^{\beta}$ where $\beta$ is the coefficient. This tells us how the odds of the outcome change for a one-unit increase in the predictor.
+
+```{python}
+# Let's use more features to make interpretation interesting
+features = ['Pclass', 'Age', 'SibSp', 'Parch', 'Fare']
+titanic_features = titanic[features + ['Survived']].dropna()
+
+X_full = titanic_features[features].values
+y_full = titanic_features['Survived'].values
+
+X_train_full, X_test_full, y_train_full, y_test_full = train_test_split(
+    X_full, y_full, test_size=0.2, random_state=42
+)
+
+# Fit the model
+log_model_full = LogisticRegression(random_state=42, max_iter=1000)
+log_model_full.fit(X_train_full, y_train_full)
+
+# Display coefficients
+coef_df = pd.DataFrame({
+    'Feature': features,
+    'Coefficient': log_model_full.coef_[0],
+    'Odds_Ratio': np.exp(log_model_full.coef_[0])
+})
+
+coef_df
+```
+
+**Odds ratio** measures how much the odds of the outcome change for a one-unit increase in the predictor. An odds ratio greater than 1 indicates a positive association with the outcome, while an odds ratio less than 1 indicates a negative association.
+
+For example, if `Fare` has an odds ratio of 1.5, it means that for every one-unit increase in fare, the odds of survival increase by 50%. If `Pclass` has an odds ratio of 0.7, it means that for every one-unit increase in class (higher class number), the odds of survival decrease by 30%. Here we see that:
+
+- Increasing passenger class by 1 (e.g. 3rd class -> 2nd class) _decreased_ the predicted probability of survival by about 68% $(1-0.323 = 0.677)$.
+- Increasing the age by 1 year slightly decreased (~5%) the predicted probability of survival.
+- Increasing the number of parents/children in the family (`Parch`) increased the predicted probability of survival by a whopping 27%!
+
+::: {.callout-warning}
+Be careful about collinearity! Remember that last chapter we discussed how collinearity can lead to non-interpretable coefficients. Since logistic regression is simply performing linear regression under the hood, all those same caveats apply here. For example, it seems weird to say that people in higher passenger classes are _less likely_ to survive. What's probably going on is collinearity between `Pclass` and `Fare`, since both are essentially measuring the same thing (how much the ticket cost).
+:::
+
+---
+
+## 4. The Confusion Matrix: Understanding Errors {#ch3-4}
+
+### 4.1 What Is a Confusion Matrix? {#ch3-3-1}
+
+When you make predictions, you'll make mistakes. The confusion matrix breaks down exactly what kinds of mistakes you're making. It's a 2×2 table for binary classification:
+
+```{python}
+from sklearn.metrics import confusion_matrix, classification_report
+
+# Get predictions
+y_pred = log_model_full.predict(X_test_full)
+
+# Create confusion matrix
+cm = confusion_matrix(y_test_full, y_pred)
+
+# Visualize it
+plt.figure(figsize=(8, 6))
+sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', cbar=False,
+            xticklabels=['Not Survived', 'Survived'],
+            yticklabels=['Not Survived', 'Survived'])
+plt.title('Confusion Matrix', fontsize=14)
+plt.ylabel('True Label', fontsize=12)
+plt.xlabel('Predicted Label', fontsize=12)
+plt.show()
+
+print(f"\nTrue Negatives (TN): {cm[0, 0]} people died and we predicted they would die")
+print(f"False Positives (FP): {cm[0, 1]} people survived but we predicted they would die")
+print(f"False Negatives (FN): {cm[1, 0]} people died but we predicted they would survive")
+print(f"True Positives (TP): {cm[1, 1]} people survived and we predicted they would survive")
+```
+
+**The four quadrants:**
+
+- **True Negatives (TN)**: Correctly predicted "didn't survive"
+- **False Positives (FP)**: Predicted "survived" but actually didn't (Type I error)
+- **False Negatives (FN)**: Predicted "didn't survive" but actually did (Type II error)
+- **True Positives (TP)**: Correctly predicted "survived"
+
+Here we have shown the confusion matrix with the actual counts from our logistic regression model, such as 74 people, 13 people, etc. However, we're often more interested in understanding how well our model predicted the correct values. For example, of the people who actually survived, what percentage did we predict will and won't survive? In other words, we're normalizing along the rows so that each rows adds up to 100%.
+
+```{python}
+# Calculate row-wise percentages (normalize by actual positives)
+row_sums = cm.sum(axis=1)
+recall_precision = cm.astype(float) / row_sums.reshape(-1, 1)
+
+# Display as a confusion matrix, with numbers formatted as percentages
+plt.figure(figsize=(8, 6))
+sns.heatmap(recall_precision, annot=True, fmt='.0%', cmap='Blues', cbar=False,
+            xticklabels=['Not Survived', 'Survived'],
+            yticklabels=['Not Survived', 'Survived'])
+plt.title('Normalized Confusion Matrix (Row-wise)', fontsize=14)
+plt.ylabel('True Label', fontsize=12)
+plt.xlabel('Predicted Label', fontsize=12)
+plt.show()
+```
+
+Here we see that, of the people who actually died, 87% were correctly predicted as having died (True Negative rate), while 13% were incorrectly predicted as having survived (False Positive rate). Similarly, of the people who actually survived, 92% were correctly predicted as having survived (True Positive rate), while 8% were incorrectly predicted as having died (False Negative rate).
+
+::: {.callout-tip}
+Displaying the data normalized relative to the true values is typically more useful than looking at the raw numbers. When converting to percentages we see that our model did quite well predicting people who will die, but very poorly predicting people who will survive. This suggests our model may be biased towards predicting death, which could be important to consider for real-world applications.
+:::
+
+### 4.2 Computing Metrics from the Confusion Matrix {#ch3-3-2}
+
+All the important classification metrics come directly from these four numbers:
+
+**Accuracy**: What percentage of all predictions were correct?
+$$
+\text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}
+$$
+
+```{python}
+accuracy = (cm[0, 0] + cm[1, 1]) / cm.sum()
+print(f"Accuracy: {accuracy:.3f}")
+```
+
+**Precision**: When you predict positive, how often are you right?
+$$
+\text{Precision} = \frac{TP}{TP + FP}
+$$
+
+```{python}
+precision = cm[1, 1] / (cm[1, 1] + cm[0, 1])
+print(f"Precision: {precision:.3f}")
+```
+
+**Recall (Sensitivity)**: Of all actual positives, how many did you find?
+$$
+\text{Recall} = \frac{TP}{TP + FN}
+$$
+
+```{python}
+recall = cm[1, 1] / (cm[1, 1] + cm[1, 0])
+print(f"Recall: {recall:.3f}")
+```
+
+**F1 Score**: Harmonic mean of precision and recall
+$$
+\text{F1} = 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}
+$$
+
+```{python}
+f1 = 2 * (precision * recall) / (precision + recall)
+print(f"F1 Score: {f1:.3f}")
+```
+
+### 4.3 When Each Metric Matters {#ch3-3-3}
+
+Different problems care about different metrics:
+
+**Use Accuracy when:**
+
+- Classes are balanced
+- False positives and false negatives are equally costly
+- Example: Predicting coin flips (50/50 balanced, no asymmetric cost)
+
+**Use Precision when:**
+
+- False positives are very costly
+- You want to be confident when you predict positive
+- Example: Spam detection (marking legitimate email as spam is very annoying, but one or two spam emails slipping through is acceptable)
+
+**Use Recall when:**
+
+- False negatives are very costly
+- You want to catch all positive cases, even if it means some false alarms
+- Example: Disease screening (missing a sick patient with a life-threatening condition is much worse than telling a healthy patient that they are sick)
+
+**Use F1 Score when:**
+
+- You want a balance between precision and recall
+- Classes are imbalanced
+- Example: Fraud detection (imbalanced, and both FP and FN have significant consequences)
+
+::: {.callout-note}
+There's almost always a tradeoff between precision and recall. Increase one, and the other goes down. You need to decide which matters more for your specific problem.
+:::
+
+Let's see the full classification report:
+
+```{python}
+print(classification_report(y_test_full, y_pred,
+                          target_names=['Not Survived', 'Survived']))
+```
+
+This report shows precision, recall, and F1 for both classes, plus overall accuracy.
+
+---
+
+## 5. Decision Trees: Interpretable Non-Linear Classifiers {#ch3-5}
+
+### 5.1 How Decision Trees Work {#ch3-4-1}
+
+Decision trees make predictions by asking a series of yes/no questions about the features. They split the data recursively based on feature values, creating a tree structure.
+
+Here's the beautiful part: decision trees are incredibly interpretable. You can literally draw out the decision-making process and explain it to anyone.
+
+```{python}
+from sklearn.tree import DecisionTreeClassifier, plot_tree
+
+# Fit a simple decision tree
+tree_model = DecisionTreeClassifier(max_depth=3, random_state=42)
+tree_model.fit(X_train_full, y_train_full)
+
+# Visualize the tree
+plt.figure(figsize=(20, 10))
+plot_tree(tree_model, feature_names=features, class_names=['Not Survived', 'Survived'],
+          filled=True, fontsize=10, rounded=True)
+plt.title('Decision Tree for Titanic Survival', fontsize=16)
+plt.show()
+```
+
+Each box shows:
+
+- The question being asked (e.g., "Fare <= 26.27?")
+- The Gini impurity (measure of how mixed the classes are, discussed in the next section)
+- The number of samples reaching this node
+- The class distribution (number of zeros and ones)
+- The predicted class
+
+### 5.2 Splitting Criteria: Gini vs Entropy {#ch3-4-2}
+
+Decision trees decide where to split by maximizing information gain. The most common criteria is the Gini impurity.
+
+**Gini Impurity**: Measures how often a randomly chosen element would be incorrectly classified
+$$
+\text{Gini} = 1 - \sum_{i=1}^{C} p_i^2
+$$
+
+where $p_i$ is the proportion of samples in class $i$.
+
+::: {.callout-note}
+Another criteria you'll sometimes see is the Entropy, which is a measure of the amount of "disorder" or uncertainty. It is defined as
+$$
+\text{Entropy} = -\sum_{i=1}^{C} p_i \log_2(p_i)
+$$
+The actual values of Gini and entropy are often extremely similar, and are measuring similar things. Therefore, we'll focus on Gini impurity in this textbook.
+:::
+
+But what exactly is Gini computing? Let's look at the tree we just created. In the first node, we see that there are 308 samples with class 0 (survived) and 154 samples with class 1 (did not survive). The Gini impurity is computed as follows:
+$$
+\text{Gini} = 1 - \displaystyle\sum_{i=1}^2 p_i^2 = 1 - \left(\frac{308}{462}\right)^2 - \left(\frac{154}{462}\right)^2 = \frac{4}{9} = 0.444
+$$
+
+Notice that this is exactly the Gini imprutiy stated in that node in the tree. 
+
+In general, how should we think about the value for Gini impurity?
+
+Imagine that, in one of the nodes, there were 100 samples, and all of the samples were people who survived. Then the Gini impurity would be
+
+$$
+\text{Gini} = 1 - \displaystyle\sum_{i=0}^1 p_i^2 = 1 - \left(\frac{100}{100}\right)^2 - \left(\frac{0}{100}\right)^2 = 0
+$$
+
+Similarly, if all of the samples were people who did not survive, the Gini impurity would be
+
+$$
+\text{Gini} = 1 - \displaystyle\sum_{i=0}^1 p_i^2 = 1 - \left(\frac{0}{100}\right)^2 - \left(\frac{100}{100}\right)^2 = 0
+$$
+
+On the other hand, suppose there were a 50-50 split of the samples, with 50 samples of each class. Then the Gini impurity would be
+
+$$
+\text{Gini} = 1 - \displaystyle\sum_{i=0}^1 p_i^2 = 1 - \left(\frac{50}{100}\right)^2 - \left(\frac{50}{100}\right)^2 = \frac{1}{2} = 0.5
+$$
+
+Note how Gini impurity is small at the extremes (all samples have the same class), and bigger when the classes are more balanced. We can see this in the graph below, where the x-axis represents the proportion of class 1, and the y-axis represents the Gini impurity.
+
+```{python}
+import seaborn as sns
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+p = np.linspace(0, 1, 100, endpoint=True)
+gini = 1 - (p**2 + (1-p)**2)
+
+gini_df = pd.DataFrame({
+    'p': p,
+    'gini': gini
+})
+
+plt.figure(figsize=(10, 6))
+sns.lineplot(x='p', y='gini', data=gini_df)
+plt.xlabel('Proportion of Class 1')
+plt.ylabel('Gini Impurity')
+plt.title('Gini Impurity in a Binary Classification Problem')
+plt.show()
+```
+
+So, how is Gini impurity actually used to determine the splitting in decision trees? Our goal is to choose a split (i.e. a question) that best splits the data. For example, if we wanted to determine how well students will do in a class, asking whether they own a dog is a valid question, but won't give me any additional information. On the other hand, if we ask if they regularly attend tutoring, we will get a much better idea of their performance.
+
+In decision trees we use Gini impurity by calculating the Gini impurity for each possible split, and then choosing the split that has the smallest Gini impurity. This is because a smaller Gini impurity means that the split is better at separating the classes.
+
+### 5.3 Controlling Tree Depth: The Overfitting Problem {#ch3-4-3}
+
+Trees have a dangerous tendency: if you let them grow without limits, they'll memorize the training data.
+
+```{python}
+# Compare different tree depths
+depths = [1, 3, 5, 10, 20, None]  # None means no limit
+train_scores = []
+test_scores = []
+
+for depth in depths:
+    tree = DecisionTreeClassifier(max_depth=depth, random_state=42)
+    tree.fit(X_train_full, y_train_full)
+    train_scores.append(tree.score(X_train_full, y_train_full))
+    test_scores.append(tree.score(X_test_full, y_test_full))
+
+# Plot
+depth_labels = [str(d) if d is not None else 'Unlimited' for d in depths]
+plt.figure(figsize=(10, 6))
+plt.plot(depth_labels, train_scores, 'o-', label='Training Accuracy', linewidth=2)
+plt.plot(depth_labels, test_scores, 's-', label='Test Accuracy', linewidth=2)
+plt.xlabel('Maximum Tree Depth', fontsize=12)
+plt.ylabel('Accuracy', fontsize=12)
+plt.title('Tree Depth vs Performance: The Overfitting Story', fontsize=14)
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.show()
+```
+
+Classic overfitting! Training accuracy keeps increasing with depth, but test accuracy peaks and then plateaus or even decreases. The tree is memorizing noise in the training data.
+
+We can see this concretely by printing out one of the decision paths in the deep trees:
+
+```{python}
+# Print one of the decision paths in the deep trees
+tree = DecisionTreeClassifier(max_depth=20, random_state=42)
+tree.fit(X_train_full, y_train_full)
+
+sample_id = 0
+single_sample = X_test_full[sample_id].reshape(1, -1) # Reshape for single sample input
+
+# Get the decision path for the single sample
+node_indicator = tree.decision_path(single_sample)
+node_indices = node_indicator.indices[node_indicator.indptr[0]:node_indicator.indptr[1]]
+
+# Get tree structure information for interpreting the path
+children_left = tree.tree_.children_left
+children_right = tree.tree_.children_right
+feature = tree.tree_.feature
+threshold = tree.tree_.threshold
+feature_names = features
+
+print(f"Decision path for sample {sample_id}:")
+for node_id in node_indices:
+    if children_left[node_id] != children_right[node_id]:  # Check if it's a split node
+        feature_index = feature[node_id]
+        threshold_value = threshold[node_id]
+        sample_feature_value = single_sample[0, feature_index]
+
+        if sample_feature_value <= threshold_value:
+            decision = f"{feature_names[feature_index]} ({sample_feature_value:.2f}) <= {threshold_value:.2f}"
+        else:
+            decision = f"{feature_names[feature_index]} ({sample_feature_value:.2f}) > {threshold_value:.2f}"
+        print(f"  Node {node_id}: Split on {decision}")
+    else:  # It's a leaf node
+        print(f"  Node {node_id}: Leaf node reached (prediction: {tree.predict(single_sample)[0]})")
+```
+
+We start by asking reasonable seeming questions, but then asking more and more specific questions that seem unnecessary. For example, we ask if the persons age is:
+
+1. Over 5.5
+2. Less than 42.5
+3. Over 15
+4. Over 39.5
+
+Putting these together, we've asked if the person is between the ages of 39.5 and 42.5. That's unnecessarily specific; do we really believe that a person being exactly 40 or 41 years old is so important? Instead, what's happening is that our model is overfitting to the training data, and the results don't generalize to the test data.
+
+**Common hyperparameters to control overfitting:**
+
+- `max_depth`: Maximum depth of the tree
+- `min_samples_split`: Minimum samples required to split a node
+- `min_samples_leaf`: Minimum samples required at a leaf node
+- `max_features`: Number of features to consider for each split
+
+### 5.4 Feature Importance {#ch3-5-4}
+
+Trees can tell you which features are most important for making predictions:
+
+```{python}
+# Get feature importances
+tree_final = DecisionTreeClassifier(max_depth=5, random_state=42)
+tree_final.fit(X_train_full, y_train_full)
+
+importance_df = pd.DataFrame({
+    'Feature': features,
+    'Importance': tree_final.feature_importances_
+}).sort_values('Importance', ascending=False)
+
+# Plot
+plt.figure(figsize=(10, 6))
+plt.barh(importance_df['Feature'], importance_df['Importance'])
+plt.xlabel('Importance', fontsize=12)
+plt.ylabel('Feature', fontsize=12)
+plt.title('Feature Importance from Decision Tree', fontsize=14)
+plt.gca().invert_yaxis()
+plt.show()
+```
+
+Feature importance represents how much each feature contributes to reducing impurity across all splits. Higher values mean more important features.
+
+::: {.callout-note}
+Feature importance can be calculated a number of different ways. One way is to take a column, randomly shuffle the values, and see how the impurity changes. If the impurity decreases, then the feature is important. This is called **permutation feature importance**.
+
+For `DecisionTreeClassifier`, feature importance is calculated using **impurity decrease**. The impurity decrease is the difference in impurity before and after a split. The higher the impurity decrease, the more important the feature. For example, if a feature can be used to end up with nodes with small impurity, that means that feature can split the data into groups where one class is highly represented. Recall from above that impurity is a measure of how mixed up the classes are in a node. So if a feature can be used to end up with nodes with small impurity, that means that feature can split the data into groups where one class is highly represented. This is why the feature is important.
+:::
+
+::: {.callout-tip}
+Different models calculate feature importance differently. However, they're all trying to answer the same question: how much does this feature matter in terms of making predictions?
+
+Don't treat feature importance like a gold standard. It's a tool for understanding your model, but it's not a substitute for domain knowledge. Instead, you can often use feature importance to double-check your own understanding of the problem. If you believe a feature should be important, but it's not showing up in the feature importance, then why not? Is it a problem with the model/data, or a problem with your understanding?
+:::
+
+---
+
+## 6. Random Forests: Ensemble Power {#ch3-6}
+
+### 6.1 Why Ensembles Work {#ch3-5-1}
+
+Here's a powerful idea: what if instead of training one tree, we trained many trees and let them vote?
+
+Random Forests are one of the most successful examples. The key insight: many **weak learners** can combine to create a **strong learner**.
+
+::: {.callout-note}
+**Ensemble learning** is the idea of combining many weak learners to create a strong learner. The key insight is that many weak learners can combine to create a strong learner.
+
+By a **weak learner** we typically mean a very simple model, such as a decision tree with a depth of two. By a **strong learner** we typically mean a more complex model, such as a decision tree with a depth of ten.
+
+The idea is that one large _complex_ model may overfit to the training data, but many small _simple_ models can combine to create a strong learner that generalizes well to the test data.
+
+Random forests are one example of ensemble models, but we'll learn more. Ensemble models are typically the gold standard in classical machine learning.
+:::
+
+**How Random Forests work:**
+
+1. Create many decision trees (e.g., 100 trees)
+2. For each tree:
+   - Sample a random subset of the data (bootstrapping)
+   - At each split, only consider a random subset of features
+3. Make predictions by majority vote (classification), or by averaging probabilities (regression)
+
+The randomness in both samples and features ensures that trees are different from each other. After all, if we took all rows and all columns, each weak learner would likely be exactly the same. By sampling a random subset of the data and features, we ensure that each tree is different from the others. 
+
+When weak learners disagree, it's often because they're focusing on different aspects of the data. When they agree, you can be more confident.
+
+### 6.2 Fitting a Random Forest {#ch3-5-2}
+
+```{python}
+from sklearn.ensemble import RandomForestClassifier
+
+# Fit random forest
+rf_model = RandomForestClassifier(n_estimators=50, max_depth=5, random_state=42)
+rf_model.fit(X_train_full, y_train_full)
+
+# Compare to single tree
+tree_comparison = DecisionTreeClassifier(max_depth=5, random_state=42)
+tree_comparison.fit(X_train_full, y_train_full)
+
+print("Single Decision Tree:")
+print(f"  Training Accuracy: {tree_comparison.score(X_train_full, y_train_full):.3f}")
+print(f"  Test Accuracy: {tree_comparison.score(X_test_full, y_test_full):.3f}")
+
+print("\nRandom Forest (50 trees):")
+print(f"  Training Accuracy: {rf_model.score(X_train_full, y_train_full):.3f}")
+print(f"  Test Accuracy: {rf_model.score(X_test_full, y_test_full):.3f}")
+```
+
+Random forests typically achieve better generalization than single trees. The ensemble reduces overfitting through diversity.
+
+::: {.callout-tip}
+Random forests are most useful for complex data with many columns, and with complex relationships between columns. For simple data with few columns, a single decision tree is often sufficient.
+:::
+
+::: {.callout-warning}
+You may feel like "if one tree is good, then more trees are better!" This is true to an extent, but it comes with a tradeoff. When you train an ensemble model such as a random forest, you're training many models. Each model takes time to train, and each model uses memory and compute time. Imagine training a single tree which takes ten seconds to train. 
+
+Now imagine training 50 trees, which would take 500 seconds to train, or nearly ten minutes! Combine this with hyperparameter tuning such as through a grid search, and you could easily be looking at an hour or more of training time. If the improvement in performance is large this may be worth it. But if your data is simple enough to get by with a simpler model, you can save hours of compute by going with a simpler model.
+:::
+
+### 6.3 Feature Importance in Random Forests {#ch3-5-3}
+
+Random forests also provide feature importances, but they're generally more reliable than single trees because they average across many trees:
+
+```{python}
+# Get feature importances from both models
+tree_importance = pd.DataFrame({
+    'Feature': features,
+    'Decision Tree': tree_comparison.feature_importances_,
+    'Random Forest': rf_model.feature_importances_
+})
+
+# Melt the dataframe for plotting
+importance_melted = tree_importance.melt(
+    id_vars='Feature',
+    var_name='Model',
+    value_name='Importance'
+)
+
+# Sort by average importance across both models
+avg_importance = tree_importance.set_index('Feature').mean(axis=1).sort_values(ascending=False)
+importance_melted['Feature'] = pd.Categorical(
+    importance_melted['Feature'],
+    categories=avg_importance.index,
+    ordered=True
+)
+
+# Create dodged bar chart
+plt.figure(figsize=(10, 6))
+sns.barplot(data=importance_melted, x='Importance', y='Feature', hue='Model', palette='Set2')
+plt.xlabel('Importance', fontsize=12)
+plt.ylabel('Feature', fontsize=12)
+plt.title('Feature Importance: Decision Tree vs Random Forest', fontsize=14)
+plt.legend(title='Model', fontsize=10)
+plt.tight_layout()
+plt.show()
+```
+
+Random forest importances tend to be more stable because they're averaged across many trees with different random subsets of data and features.
+
+### 6.4 Hyperparameter Tuning {#ch3-6-4}
+
+Random forests have several important hyperparameters:
+
+```{python}
+# Test different numbers of trees
+n_trees_list = [25, 50, 75, 100, 150, 200]
+scores = []
+
+for n_trees in n_trees_list:
+    rf = RandomForestClassifier(n_estimators=n_trees, random_state=42)
+    rf.fit(X_train_full, y_train_full)
+    scores.append(rf.score(X_test_full, y_test_full))
+
+plt.figure(figsize=(10, 6))
+plt.plot(n_trees_list, scores, 'o-', linewidth=2, markersize=8)
+plt.xlabel('Number of Trees', fontsize=12)
+plt.ylabel('Test Accuracy', fontsize=12)
+plt.title('Random Forest Performance vs Number of Trees', fontsize=14)
+plt.grid(True, alpha=0.3)
+plt.show()
+```
+
+Performance typically improves with more trees, but you get diminishing returns. After a certain point (often 100-500 trees), adding more trees barely helps (or even leads to overfitting)but makes training slower. Use hyperparameter tuning to find the right number of trees. A typically starting point is 50 to 100 trees.
+
+::: {.callout-tip}
+Random forests are often a great default choice for classification. They're robust, handle non-linear relationships, require minimal hyperparameter tuning, and rarely overfit badly. When in doubt, try a random forest!
+:::
+
+---
+
+## 7. Support Vector Machines: Maximum Margin Classifiers {#ch3-7}
+
+### 7.1 The Margin Concept {#ch3-7-1}
+
+Support Vector Machines (SVMs) have a beautiful geometric intuition: find the decision boundary that maximizes the distance to the nearest points from each class.
+
+Think of it like this: if you're drawing a line to separate two groups of points, you want it to be as far as possible from both groups. This gives you more confidence that future points will be classified correctly.
+
+The "support vectors" are the points closest to the decision boundary—these are the critical points that define where the boundary goes.
+
+```{python}
+from sklearn.svm import SVC
+
+# Fit SVM with linear kernel
+svm_linear = SVC(kernel='linear', random_state=42)
+svm_linear.fit(X_train_full, y_train_full)
+
+print(f"SVM Linear Kernel Accuracy: {svm_linear.score(X_test_full, y_test_full):.3f}")
+print(f"Number of support vectors: {len(svm_linear.support_)}")
+```
+
+### 7.2 The Kernel Trick {#ch3-7-2}
+
+Here's where SVMs get really powerful: the **kernel trick**. By using different kernel functions, SVMs can create non-linear decision boundaries while still solving a linear problem in a higher-dimensional space.
+
+**Common kernels:**
+
+- **Linear**: Creates straight boundaries (like logistic regression)
+- **RBF (Radial Basis Function)**: Creates circular/curved boundaries
+- **Polynomial**: Creates polynomial curves as boundaries
+
+```{python}
+# Compare different kernels
+kernels = ['linear', 'rbf', 'poly']
+svm_models = {}
+
+for kernel in kernels:
+    svm = SVC(kernel=kernel, random_state=42)
+    svm.fit(X_train_full, y_train_full)
+    svm_models[kernel] = svm
+    print(f"{kernel:8s} kernel - Test Accuracy: {svm.score(X_test_full, y_test_full):.3f}")
+```
+
+### 6.3 Visualizing SVM Decision Boundaries {#ch3-6-3}
+
+Let's see how different kernels create different boundaries. We'll use California housing data, where different regions of the state have vastly different housing prices—a perfect example of non-linear geographic clustering:
+
+```{python}
+# Load California housing data
+from sklearn.datasets import fetch_california_housing
+from sklearn.preprocessing import StandardScaler
+
+california = fetch_california_housing(as_frame=True)
+ca_df = california.frame
+
+# Create binary classification: expensive (>$3) vs affordable (<=$3) houses
+# Median house value is in $100,000s, so 3 = $300,000
+ca_df['expensive'] = (ca_df['MedHouseVal'] > 3.0).astype(int)
+
+# Use longitude and median house value for visualization
+# Different parts of California have very different price patterns
+X_viz = ca_df[['Latitude', 'MedHouseVal']].values
+y_viz = ca_df['expensive'].values
+
+# Sample for faster visualization (full dataset is 20k+ points)
+np.random.seed(42)
+sample_idx = np.random.choice(len(X_viz), size=2000, replace=False)
+X_viz_raw = X_viz[sample_idx]
+y_viz = y_viz[sample_idx]
+
+# Scale features for SVM (IMPORTANT: SVMs are sensitive to feature scales)
+scaler = StandardScaler()
+X_viz = scaler.fit_transform(X_viz_raw)
+
+expensive = y_viz == 1
+
+# Create a mesh for plotting decision boundaries (in scaled space)
+lon_range = np.linspace(X_viz[:, 0].min(), X_viz[:, 0].max(), 100)
+price_range = np.linspace(X_viz[:, 1].min(), X_viz[:, 1].max(), 100)
+lon_mesh, price_mesh = np.meshgrid(lon_range, price_range)
+mesh_points = np.c_[lon_mesh.ravel(), price_mesh.ravel()]
+
+# Fit SVMs with different kernels on scaled data
+svm_linear_viz = SVC(kernel='linear', random_state=42)
+svm_rbf_viz = SVC(kernel='rbf', gamma='auto', random_state=42)
+
+svm_linear_viz.fit(X_viz, y_viz)
+svm_rbf_viz.fit(X_viz, y_viz)
+
+# Create predictions on mesh
+mesh_linear = svm_linear_viz.predict(mesh_points).reshape(lon_mesh.shape)
+mesh_rbf = svm_rbf_viz.predict(mesh_points).reshape(lon_mesh.shape)
+
+# Plot both
+fig, axes = plt.subplots(1, 2, figsize=(16, 6))
+
+for ax, mesh_pred, title in zip(axes, [mesh_linear, mesh_rbf],
+                                 ['SVM - Linear Kernel', 'SVM - RBF Kernel']):
+    ax.contourf(lon_mesh, price_mesh, mesh_pred, levels=1, cmap='RdYlGn', alpha=0.4)
+    ax.scatter(X_viz[expensive, 0], X_viz[expensive, 1], c='darkgreen', marker='o',
+               s=20, edgecolors='black', alpha=0.5, label='Expensive (>$300k)')
+    ax.scatter(X_viz[~expensive, 0], X_viz[~expensive, 1], c='darkred', marker='x',
+               s=20, alpha=0.5, label='Affordable (≤$300k)')
+    ax.set_xlabel('Latitude', fontsize=12)
+    ax.set_ylabel('Median House Value ($100k)', fontsize=12)
+    ax.set_title(title, fontsize=14)
+    ax.legend()
+    ax.grid(True, alpha=0.2)
+
+plt.tight_layout()
+plt.show()
+```
+
+See the difference? The linear kernel creates a straight boundary—it tries to separate expensive from affordable homes with a single line. But the RBF kernel creates smooth, curved boundaries that adapt to the geographic clustering of housing prices.
+
+Notice how the RBF kernel captures the reality that certain geographic regions (coastal areas, Bay Area) command higher prices regardless of other factors. The curved decision boundary wraps around these high-value clusters much more naturally than a straight line ever could.
+
+### 7.4 When to Use SVMs {#ch3-7-4}
+
+**Strengths:**
+
+- Effective in high-dimensional spaces
+- Memory efficient (only stores support vectors)
+- Flexible with different kernels
+- Works well with clear margin of separation
+
+**Weaknesses:**
+
+- Slow to train on large datasets (doesn't scale well beyond ~10,000 samples)
+- Requires feature scaling (sensitive to feature magnitudes)
+- Choosing the right kernel and hyperparameters can be tricky
+- Less interpretable than trees or logistic regression
+
+::: {.callout-warning}
+Always scale your features before using SVMs! They're very sensitive to feature magnitudes. Use `StandardScaler` or `MinMaxScaler` from scikit-learn.
+:::
+
+---
+
+## 8. k-Nearest Neighbors: Simple but Powerful {#ch3-8}
+
+### 8.1 The k-NN Algorithm {#ch3-7-1}
+
+k-Nearest Neighbors might be the simplest classification algorithm: to classify a new point, find the k closest training points and let them vote.
+
+That's it. No training phase. No learning parameters. Just store the data and compute distances when you need to make predictions.
+
+```{python}
+from sklearn.neighbors import KNeighborsClassifier
+
+# Fit k-NN with k=5
+knn = KNeighborsClassifier(n_neighbors=5)
+knn.fit(X_train_full, y_train_full)
+
+print(f"k-NN (k=5) Test Accuracy: {knn.score(X_test_full, y_test_full):.3f}")
+```
+
+::: {.callout-warning}
+KNN models sound like they should be simple. You simply find the k closest training points and let them vote. But in practice, they can be devilishly complex. For example, how do you measure "closeness"? In some data that may be simple, such as closeness in position or time. But what about data on students? What do we mean by the "closest students"? Closest in age? Same/similar major? Same/similar year in college? Are all of these equally important? Is one more important than another? How about closeness in courses taken? When should we consider two courses "close"?
+
+All of these questions are enormously important in building effective KNN models, but they don't have easy answers. KNN models, more than many others, require extensive testing to determine what works best.
+:::
+
+### 8.2 Choosing k: The Bias-Variance Tradeoff Again {#ch3-7-2}
+
+The value of k controls the bias-variance tradeoff:
+
+- **Small k (e.g., k=1)**: Very flexible, low bias, high variance (overfitting)
+- **Large k (e.g., k=100)**: Smoother boundaries, high bias, low variance (underfitting)
+
+```{python}
+# Test different values of k
+k_values = [1, 3, 5, 10, 20, 50, 100]
+train_scores_knn = []
+test_scores_knn = []
+
+for k in k_values:
+    knn = KNeighborsClassifier(n_neighbors=k)
+    knn.fit(X_train_full, y_train_full)
+    train_scores_knn.append(knn.score(X_train_full, y_train_full))
+    test_scores_knn.append(knn.score(X_test_full, y_test_full))
+
+plt.figure(figsize=(10, 6))
+plt.plot(k_values, train_scores_knn, 'o-', label='Training Accuracy', linewidth=2)
+plt.plot(k_values, test_scores_knn, 's-', label='Test Accuracy', linewidth=2)
+plt.xlabel('k (number of neighbors)', fontsize=12)
+plt.ylabel('Accuracy', fontsize=12)
+plt.title('k-NN: Choosing k', fontsize=14)
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.show()
+```
+
+Notice the pattern: small k gives high training accuracy but may overfit. Moderate k (often 3-10) tends to work best, but hyperparameter tuning is needed to determine the best choice.
+
+### 8.3 Distance Metrics: How Do We Measure "Closeness"? {#ch3-8-3}
+
+The entire k-NN algorithm hinges on one question: how do you measure which points are "closest"? This isn't just a technical detail—it fundamentally changes how your model behaves. Scikit-learn supports several distance metrics, and choosing the right one can dramatically affect performance.
+
+**The most common distance metrics:**
+
+1. **Euclidean distance** (default): The straight-line distance between two points
+   $$d(x, y) = \sqrt{\sum_{i=1}^{n} (x_i - y_i)^2}$$
+
+2. **Manhattan distance**: Sum of absolute differences (think of it as the number of city blocks between two locations, you can only walk horizontally or vertically)
+   $$d(x, y) = \sum_{i=1}^{n} |x_i - y_i|$$
+
+3. **Minkowski distance**: A mixture between Euclidean and Manhattan (p=1 is Manhattan, p=2 is Euclidean, but you can set p to any positive real number)
+   $$d(x, y) = \left(\sum_{i=1}^{n} |x_i - y_i|^p\right)^{1/p}$$
+
+4. **Cosine distance**: Measures angle between vectors (ignores the length of the vectors, and only cares about how far apart the directions they point are)
+   $$d(x, y) = 1 - \frac{x \cdot y}{||x|| \cdot ||y||}$$
+
+5. **Hamming distance**: Checks whether two values are equal or not, and computes the average number of features where two samples are equal
+   $$d(x, y) = \frac{1}{n}\sum_{i=1}^{n} \mathbb{1}(x_i \neq y_i)$$
+   where $\mathbb{1}(x_i \neq y_i)$ equals 1 if $x_i \neq y_i$ and 0 otherwise.
+
+Let's see how different metrics perform on our Titanic data:
+
+```{python}
+from sklearn.neighbors import KNeighborsClassifier
+
+# Test different distance metrics
+metrics = ['euclidean', 'manhattan', 'minkowski', 'cosine', 'hamming']
+metric_scores = {}
+
+for metric in metrics:
+    # Some metrics need additional parameters
+    if metric == 'minkowski':
+        knn = KNeighborsClassifier(n_neighbors=5, metric=metric, p=3)
+    else:
+        knn = KNeighborsClassifier(n_neighbors=5, metric=metric)
+
+    knn.fit(X_train_full, y_train_full)
+    train_score = knn.score(X_train_full, y_train_full)
+    test_score = knn.score(X_test_full, y_test_full)
+    metric_scores[metric] = {'train': train_score, 'test': test_score}
+
+    # print(f"{metric:12s} - Train: {train_score:.3f}, Test: {test_score:.3f}")
+
+# Plot the metric and train/test score
+plt.figure(figsize=(10, 6))
+plt.plot(metrics, [scores['train'] for scores in metric_scores.values()], 'o-', label='Training Accuracy', linewidth=2)
+plt.plot(metrics, [scores['test'] for scores in metric_scores.values()], 's-', label='Test Accuracy', linewidth=2)
+plt.xlabel('Distance Metric', fontsize=12)
+plt.ylabel('Accuracy', fontsize=12)
+plt.title('k-NN: Choosing Distance Metric', fontsize=14)
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.show()
+```
+
+Different metrics can give meaningfully different results! But which should you use?
+
+**When to use each metric:**
+
+**Euclidean distance** (the default) works well when:
+
+- All features have similar scales and units
+- You care about the actual geometric distance
+- Features are continuous numeric values
+- Example: Geographic coordinates (latitude/longitude), physical measurements
+
+**Manhattan distance** works well when:
+
+- Features represent different units that shouldn't be combined quadratically
+- You have grid-like data (think city blocks, not "as the crow flies")
+- You want to reduce the influence of outliers (no squaring!)
+- Example: Recommender systems, routing/navigation problems
+
+**Cosine distance** works well when:
+
+- You care about direction/orientation, not magnitude
+- Data is high-dimensional and sparse
+- Feature scales vary wildly
+- Example: Text data (word counts), recommendation systems with user ratings
+
+**Hamming distance** works well when:
+
+- You have categorical or binary features
+- All features are equally important (no scaling needed)
+- You want to count how many features differ, not by how much
+- Example: DNA sequences, binary feature vectors, categorical data (after one-hot encoding)
+
+::: {.callout-note}
+Hamming distance treats all feature differences equally. If Feature A differs by 0.1 and Feature B differs by 10, Hamming sees both as "different." It's perfect for categorical data where "different is different" regardless of magnitude, but not ideal for continuous numeric features where the size of the difference matters.
+:::
+
+Let's visualize how these different metrics create different neighborhoods. We'll use a simple 2D example:
+
+```{python}
+from sklearn.neighbors import NearestNeighbors
+
+# Create a simple 2D point to query
+query_point = np.array([[2.0, 3.0]])
+
+# Create some sample points
+np.random.seed(42)
+sample_points = np.random.rand(20, 2) * 5
+
+# Find 5 nearest neighbors using different metrics
+fig, axes = plt.subplots(1, 3, figsize=(18, 5))
+
+for ax, metric in zip(axes, ['euclidean', 'manhattan', 'cosine']):
+    # Find neighbors
+    nbrs = NearestNeighbors(n_neighbors=5, metric=metric)
+    nbrs.fit(sample_points)
+    distances, indices = nbrs.kneighbors(query_point)
+
+    # Plot
+    ax.scatter(sample_points[:, 0], sample_points[:, 1], c='lightgray',
+               s=100, alpha=0.6, label='Other points')
+    ax.scatter(sample_points[indices[0], 0], sample_points[indices[0], 1],
+               c='blue', s=100, edgecolors='black', linewidth=2, label='5 nearest neighbors')
+    ax.scatter(query_point[0, 0], query_point[0, 1], c='red', s=200,
+               marker='*', edgecolors='black', linewidth=2, label='Query point')
+
+    # Draw lines to nearest neighbors
+    for idx in indices[0]:
+        ax.plot([query_point[0, 0], sample_points[idx, 0]],
+                [query_point[0, 1], sample_points[idx, 1]],
+                'b--', alpha=0.3, linewidth=1)
+
+    ax.set_title(f'{metric.capitalize()} Distance', fontsize=14)
+    ax.set_xlabel('Feature 1', fontsize=12)
+    ax.set_ylabel('Feature 2', fontsize=12)
+    ax.legend(fontsize=10)
+    ax.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+```
+
+See how the same query point has different nearest neighbors depending on the metric? Euclidean forms circular neighborhoods, Manhattan forms diamond-shaped neighborhoods, and cosine focuses on angular similarity.
+
+### 8.4 Mixing Metrics: Different Features Need Different Distances {#ch3-7-4}
+
+Here's a critical insight that's often overlooked: **real datasets have different types of features, and each type needs its own distance metric**.
+
+Think about internet service provider (ISP) customer data and predicting churn:
+
+- **Internet Service**: Categorical (DSL, Fiber optic, No internet). We want to know if two customers have the same service type—not treat "DSL" as somehow numerically between "No internet" and "Fiber optic"
+- **Contract type**: Categorical (Month-to-month, One year, Two year). Either the same or different.
+- **Gender**: Categorical (Male, Female). Same or different.
+- **Monthly Charges**: Continuous numeric variable. A customer paying $50/month is more similar to one paying $55 than to one paying $100.
+- **Tenure**: Continuous numeric variable. The actual difference in months matters.
+
+The problem? When you call `KNeighborsClassifier(metric='euclidean')`, it treats ALL features the same way! It computes Euclidean distance on internet service type and contract (treating categorical values as if they were numbers) just like it does on monthly charges and tenure.
+
+**The solution: Create a custom distance metric that treats different feature types appropriately.**
+
+For example, you could define a custom distance function that:
+
+- Uses **Hamming distance** (equality check) for categorical features (Internet Service, Contract, Gender)
+- Uses **Euclidean distance** for continuous features (Monthly Charges, Tenure)
+
+These can be difficult to implement by hand, so working together with an AI coding assistant is the way to go.
+
+::: {.callout-note}
+**Why does this matter?**
+
+Imagine comparing two ISP customers:
+- Customer A: DSL, Month-to-month contract, Male, $50/month, 12 months tenure
+- Customer B: Fiber optic, Month-to-month contract, Male, $52/month, 14 months tenure
+
+With pure Euclidean distance, if internet service is encoded as DSL=0 and Fiber optic=1, the difference in service type contributes "1" to the distance calculation, just like a $1/month price difference. But internet service type is categorical! Having DSL vs Fiber optic is a fundamental categorical difference—not a numeric one.
+
+With the mixed metric, we recognize that internet service differs (Hamming distance = 1), contract and gender are the same (Hamming distance = 0 for each), and then we properly compute Euclidean distance for the continuous features (monthly charges, tenure) where the magnitude of difference actually matters.
+:::
+
+::: {.callout-warning}
+**When building custom distance metrics:**
+
+1. **Identify feature types first**: Which are categorical? Which are continuous?
+2. **Scale continuous features**: Use StandardScaler before computing distances
+3. **Don't scale categorical features**: They represent discrete categories, not magnitudes
+4. **Test your metric**: Does it give sensible distances for sample pairs?
+5. **Weight carefully**: You might want to weight categorical and continuous distances differently
+
+The custom metric approach requires more work, but it's often worth it for datasets with mixed feature types!
+:::
+
+::: {.callout-tip}
+**How to choose a distance metric:**
+
+1. **Start with Euclidean** (the default) - it works well in most cases
+2. **Try Hamming** if you have categorical features that have no obvious ordering
+3. **Try Manhattan** if you have outliers or features on very different scales
+4. **Try Cosine** if your data is high-dimensional or sparse (like text data)
+5. **Use cross-validation** to compare metrics on your specific dataset
+6. **Always scale your features** before using distance-based methods!
+
+The "best" metric depends on your data and problem. Don't just accept the default—experiment and use validation performance to guide your choice.
+:::
+
+::: {.callout-warning}
+**Feature scaling is critical for k-NN!** If one feature ranges from 0-1 and another ranges from 0-1000, the second feature will dominate the distance calculation. Always use `StandardScaler` or `MinMaxScaler` before fitting k-NN models.
+
+```python
+from sklearn.preprocessing import StandardScaler
+
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+knn = KNeighborsClassifier(n_neighbors=5)
+knn.fit(X_train_scaled, y_train)
+```
+:::
+
+### 8.5 When to Use k-NN {#ch3-7-5}
+
+**Strengths:**
+
+- Simple to understand and implement
+- No training phase (though this is also a weakness)
+- Naturally handles multi-class problems
+- Can capture complex patterns
+
+**Weaknesses:**
+
+- Slow prediction (has to compute distances to all training points)
+- Memory intensive (stores all training data)
+- Requires feature scaling
+- Choosing k can be tricky
+- Determining appropriate distance metric can be complex
+
+---
+
+## 9. ROC Curves and AUC: Comparing Models {#ch3-9}
+
+### 9.1 The ROC Curve {#ch3-9-1}
+
+So far we've been using a fixed threshold (0.5) to convert probabilities to class predictions. But what if we tried different thresholds?
+
+The **ROC curve** (Receiver Operating Characteristic) shows model performance across all possible thresholds. It plots:
+
+- **True Positive Rate (TPR)** = Recall = TP / (TP + FN)
+- **False Positive Rate (FPR)** = FP / (FP + TN)
+
+```{python}
+from sklearn.metrics import roc_curve, roc_auc_score
+
+# Get probability predictions from logistic regression
+y_proba_log = log_model_full.predict_proba(X_test_full)[:, 1]
+
+# Compute ROC curve
+fpr, tpr, thresholds = roc_curve(y_test_full, y_proba_log)
+
+# Compute AUC (Area Under the Curve)
+auc = roc_auc_score(y_test_full, y_proba_log)
+
+# Plot
+plt.figure(figsize=(8, 8))
+plt.plot(fpr, tpr, 'b-', linewidth=2, label=f'Logistic Regression (AUC = {auc:.3f})')
+plt.plot([0, 1], [0, 1], 'r--', linewidth=2, label='Random Classifier (AUC = 0.5)')
+plt.xlabel('False Positive Rate', fontsize=12)
+plt.ylabel('True Positive Rate (Recall)', fontsize=12)
+plt.title('ROC Curve', fontsize=14)
+plt.legend(fontsize=11)
+plt.grid(True, alpha=0.3)
+plt.show()
+```
+
+**Interpreting the ROC curve:**
+
+- The diagonal line represents a random classifier (flip a coin)
+- The closer your curve sticks to the top-left corner, the better
+- AUC (Area Under the Curve) summarizes performance in one number
+- AUC = 1.0: Perfect classifier
+- AUC = 0.5: Random guessing
+- AUC < 0.5: Worse than random (you're predicting backwards!)
+
+::: {.callout-note}
+Why is an ROC curve "sticking to the top-left corner" a good thing? The top-left corner means we have essentially zero false positives, and high true positives. 
+:::
+
+### 9.2 Comparing Multiple Models with ROC {#ch3-8-2}
+
+Let's compare all our models on the same ROC plot:
+
+```{python}
+# Get probabilities from all models
+models_for_roc = {
+    'Logistic Regression': log_model_full,
+    'Decision Tree': tree_final,
+    'Random Forest': rf_model,
+    'SVM (RBF)': SVC(kernel='rbf', probability=True, random_state=42).fit(X_train_full, y_train_full),
+    'k-NN': knn
+}
+
+plt.figure(figsize=(10, 8))
+
+for name, model in models_for_roc.items():
+    if hasattr(model, "predict_proba"):
+        y_proba = model.predict_proba(X_test_full)[:, 1]
+    else:
+        # SVM without probability=True would fail here
+        y_proba = model.predict_proba(X_test_full)[:, 1]
+
+    fpr, tpr, _ = roc_curve(y_test_full, y_proba)
+    auc = roc_auc_score(y_test_full, y_proba)
+    plt.plot(fpr, tpr, linewidth=2, label=f'{name} (AUC = {auc:.3f})')
+
+plt.plot([0, 1], [0, 1], 'k--', linewidth=1, label='Random (AUC = 0.5)')
+plt.xlabel('False Positive Rate', fontsize=12)
+plt.ylabel('True Positive Rate', fontsize=12)
+plt.title('ROC Curves: Model Comparison', fontsize=14)
+plt.legend(fontsize=10)
+plt.grid(True, alpha=0.3)
+plt.show()
+```
+
+This visualization makes it easy to compare models at a glance. The model with the highest AUC is typically performing best across all thresholds.
+
+### 9.3 When to Use ROC/AUC {#ch3-8-3}
+
+**Use ROC/AUC when:**
+
+- You want threshold-independent evaluation
+- Classes are relatively balanced
+- You care about ranking (who's more likely to be positive?)
+
+**Don't use ROC/AUC when:**
+
+- Classes are severely imbalanced
+- You have a specific threshold constraint
+- You care more about absolute performance at one threshold
+
+---
+
+## 10. Class Imbalance: The Real-World Problem {#ch3-10}
+
+### 10.1 Why Class Imbalance Matters {#ch3-9-1}
+
+The truth is, most real-world classification problems have imbalanced classes. Fraud detection? Maybe 0.1% of transactions are fraud. Disease diagnosis? Most patients who show up a a hospital don't have a specific disease. Email spam? While we all get spam, that's not the majority of our email.
+
+Class imbalance breaks naive approaches. For example, suppose we had data where 1% of the people had a given rare disease. If we built a model that predicted everyone as not having the disease, we would be 99% accurate. But that's not a very useful model!
+
+### 10.2 Detecting Class Imbalance {#ch3-9-2}
+
+Always check class balance before building models. Let's look at a real example: predicting whether a song on Spotify will become a "viral hit" (popularity score above 80). Most songs don't go viral, so this is naturally imbalanced:
+
+```{python}
+# Load Spotify data and create an imbalanced classification problem
+spotify_df = pd.read_csv('../data/spotify.csv')
+
+# Create binary target: viral hit (popularity > 80) vs not
+spotify_df['viral_hit'] = (spotify_df['popularity'] > 80).astype(int)
+
+# Select numeric features for our model
+spotify_features = ['danceability', 'energy', 'loudness', 'speechiness',
+                    'acousticness', 'instrumentalness', 'liveness', 'valence', 'tempo']
+
+# Drop rows with missing values
+spotify_clean = spotify_df[spotify_features + ['viral_hit']].dropna()
+
+X_imbalanced = spotify_clean[spotify_features].values
+y_imbalanced = spotify_clean['viral_hit'].values
+
+# Split imbalanced data
+X_train_imb, X_test_imb, y_train_imb, y_test_imb = train_test_split(
+    X_imbalanced, y_imbalanced, test_size=0.2, random_state=42
+)
+
+print(f"Loaded Spotify dataset with {len(y_imbalanced)} songs")
+print(f"Viral hits (popularity > 90): {y_imbalanced.sum()}")
+print(f"Regular songs: {(y_imbalanced == 0).sum()}")
+```
+
+Now let's check the class balance:
+
+```{python}
+# Check balance with seaborn
+def check_class_balance(y, name="Dataset"):
+    counts = pd.Series(y).value_counts()
+    df = pd.DataFrame({'Class': ['Class 0', 'Class 1'], 'Count': counts})
+    sns.barplot(x='Class', y='Count', data=df)
+    plt.title(name)
+    plt.show()
+
+check_class_balance(y_imbalanced, "Spotify Viral Hit Dataset - Highly imbalanced")
+check_class_balance(y_full, "Titanic Dataset - Fairly balanced")
+```
+
+**Rules of thumb:**
+
+- Ratio < 2:1 → Probably not a problem
+- Ratio 2:1 to 10:1 → Moderate imbalance, be careful with metrics
+- Ratio > 10:1 → Severe imbalance, definitely needs special handling
+
+### 10.3 Handling Class Imbalance: Class Weights {#ch3-9-3}
+
+One simple approach: tell the model to weight the minority class more heavily during training. Many models have the ability to assign weights to different classes, using the `class_weight` parameter with a value of `'balanced'`.
+
+First, let's fit a "naive" model that ignores the imbalance:
+
+```{python}
+# Fit a naive model (ignores imbalance)
+naive_model = LogisticRegression(random_state=42, max_iter=1000)
+naive_model.fit(X_train_imb, y_train_imb)
+
+y_pred_naive = naive_model.predict(X_test_imb)
+conf_mat = confusion_matrix(y_test_imb, y_pred_naive)
+
+# Plot normalized confusion matrix (normalize by row)
+plt.figure(figsize=(5, 5))
+conf_mat_norm = conf_mat.astype('float') / conf_mat.sum(axis=1, keepdims=True)
+sns.heatmap(conf_mat_norm, annot=True, fmt='.2f', cmap='Blues',
+            xticklabels=['Not Viral', 'Viral'],
+            yticklabels=['Not Viral', 'Viral'])
+plt.xlabel('Predicted')
+plt.ylabel('True')
+plt.title('Naive Model Confusion Matrix')
+plt.show()
+```
+
+Notice how every single song is predicted as being not popular. That's because the model gets "better" predictions by predicting the majority class (not viral) for every song.
+
+Now let's compare with a model that uses class weights:
+
+```{python}
+# Fit with class weights
+weighted_model = LogisticRegression(class_weight='balanced', random_state=42, max_iter=1000)
+weighted_model.fit(X_train_imb, y_train_imb)
+
+y_pred_weighted = weighted_model.predict(X_test_imb)
+
+# Plot normalized confusion matrix (normalize by row)
+plt.figure(figsize=(5, 5))
+conf_mat_weighted = confusion_matrix(y_test_imb, y_pred_weighted)
+conf_mat_weighted_norm = conf_mat_weighted.astype('float') / conf_mat_weighted.sum(axis=1, keepdims=True)
+sns.heatmap(conf_mat_weighted_norm, annot=True, fmt='.2f', cmap='Blues',
+            xticklabels=['Not Viral', 'Viral'],
+            yticklabels=['Not Viral', 'Viral'])
+plt.xlabel('Predicted')
+plt.ylabel('True')
+plt.title('Model with balanced class weights Confusion Matrix')
+plt.show()
+```
+
+The `class_weight='balanced'` parameter automatically weights classes inversely proportional to their frequency. This forces the model to pay more attention to minority class errors, and results in a fairly strong model with good precision and recall.
+
+### 10.4 Handling Class Imbalance: Resampling {#ch3-9-4}
+
+Another approach: change the data itself so that it's balanced.
+
+**Undersampling**: Remove examples from majority class
+
+**Oversampling**: Duplicate examples from minority class
+
+**SMOTE** (Synthetic Minority Over-sampling Technique): Create synthetic minority class examples
+
+```{python}
+from imblearn.over_sampling import SMOTE
+from imblearn.under_sampling import RandomUnderSampler
+
+# Apply SMOTE
+smote = SMOTE(random_state=42)
+X_train_smote, y_train_smote = smote.fit_resample(X_train_imb, y_train_imb)
+
+print("Original training set:")
+check_class_balance(y_train_imb, "Before SMOTE")
+
+print("\nAfter SMOTE:")
+check_class_balance(y_train_smote, "After SMOTE")
+
+# Train on balanced data
+smote_model = LogisticRegression(random_state=42, max_iter=1000)
+smote_model.fit(X_train_smote, y_train_smote)
+
+# Evaluate on original imbalanced test set
+y_pred_smote = smote_model.predict(X_test_imb)
+
+print("\nModel trained on SMOTE data:")
+conf_mat_smote = confusion_matrix(y_test_imb, y_pred_smote)
+conf_mat_smote_norm = conf_mat_smote.astype('float') / conf_mat_smote.sum(axis=1, keepdims=True)
+plt.figure(figsize=(5, 5))
+sns.heatmap(conf_mat_smote_norm, annot=True, fmt='.2f', cmap='Blues',
+            xticklabels=['Not Viral', 'Viral'],
+            yticklabels=['Not Viral', 'Viral'])
+plt.xlabel('Predicted')
+plt.ylabel('True')
+plt.title('SMOTE Model Confusion Matrix')
+plt.show()
+```
+
+::: {.callout-warning}
+When using resampling techniques like SMOTE, only resample the training data! Never resample the test set—you want to evaluate on the natural class distribution.
+:::
+
+### 10.5 Choosing Metrics for Imbalanced Data {#ch3-9-5}
+
+With imbalanced data, accuracy is almost always misleading. Use:
+
+- **Precision**: When false positives are costly
+- **Recall**: When false negatives are costly
+- **F1 Score**: When you want a balance
+- **AUC-ROC**: Threshold-independent, but can be optimistic with severe imbalance
+
+---
+
+## 11. Comparing All Models: A Practical Guide {#ch3-10}
+
+### 11.1 Model Selection Framework {#ch3-10-1}
+
+With so many classification algorithms, how do you choose? Here's a practical framework:
+
+**Start with logistic regression if:**
+
+- You need interpretability (coefficients matter)
+- You want fast training and prediction
+- You suspect linear decision boundaries
+- You have limited data
+
+**Use decision trees if:**
+
+- You need maximum interpretability (show the tree to stakeholders)
+- Features are on different scales (trees don't need scaling)
+- You have non-linear relationships
+- You're okay with potential overfitting
+
+**Use random forests if:**
+
+- You want robust performance without much tuning
+- You have enough data (hundreds or thousands of samples)
+- You don't need interpretability
+- You want feature importance estimates
+
+**Use SVMs if:**
+
+- You have high-dimensional data (many features)
+- You have clear margin of separation
+- You're willing to spend time tuning hyperparameters
+- Dataset is not too large (< 10,000 samples)
+
+**Use k-NN if:**
+
+- You have small datasets
+- You don't need fast predictions
+- You have low-to-moderate dimensions
+- Decision boundaries are very irregular
+
+### 11.2 Complete Model Comparison {#ch3-10-2}
+
+Let's do a comprehensive comparison:
+
+```{python}
+from sklearn.model_selection import cross_val_score
+
+# Define models
+comparison_models = {
+    'Logistic Regression': LogisticRegression(random_state=42, max_iter=1000),
+    'Decision Tree': DecisionTreeClassifier(max_depth=5, random_state=42),
+    'Random Forest': RandomForestClassifier(n_estimators=100, max_depth=10, random_state=42),
+    'SVM (RBF)': SVC(kernel='rbf', probability=True, random_state=42),
+    'k-NN (k=5)': KNeighborsClassifier(n_neighbors=5)
+}
+
+# Compare on Titanic data using cross-validation
+results = []
+
+for name, model in comparison_models.items():
+    # Cross-validation scores
+    cv_scores = cross_val_score(model, X_full, y_full, cv=5, scoring='accuracy')
+
+    # Fit and evaluate
+    model.fit(X_train_full, y_train_full)
+    y_pred_comp = model.predict(X_test_full)
+
+    # Compute metrics
+    from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+
+    results.append({
+        'Model': name,
+        'CV Accuracy (mean)': cv_scores.mean(),
+        'CV Accuracy (std)': cv_scores.std(),
+        'Test Accuracy': accuracy_score(y_test_full, y_pred_comp),
+        'Precision': precision_score(y_test_full, y_pred_comp),
+        'Recall': recall_score(y_test_full, y_pred_comp),
+        'F1 Score': f1_score(y_test_full, y_pred_comp)
+    })
+
+results_df = pd.DataFrame(results).set_index('Model')
+results_df
+```
+
+### 11.3 Visualizing Model Performance {#ch3-10-3}
+
+```{python}
+# Plot comparison
+metrics = ['Test Accuracy', 'Precision', 'Recall', 'F1 Score']
+results_df[metrics].plot(kind='bar', figsize=(12, 6), rot=45)
+plt.ylabel('Score', fontsize=12)
+plt.title('Model Comparison Across Metrics', fontsize=14)
+plt.legend(loc='lower right')
+plt.ylim(0.5, 1.0)
+plt.grid(True, alpha=0.3, axis='y')
+plt.tight_layout()
+plt.show()
+```
+
+### 11.4 The Importance of Context {#ch3-10-4}
+
+There's no single "best" model. The right choice depends on:
+
+1. **Problem requirements**: Speed? Interpretability? Accuracy?
+2. **Data characteristics**: Size? Dimensionality? Imbalance?
+3. **Computational resources**: Training time? Prediction time? Memory?
+4. **Business context**: Cost of errors? Regulatory requirements?
+
+A model with 90% accuracy might be useless if it misses the 10% that actually matters. A model with 75% accuracy might be perfect if it catches the critical cases.
+
+---
+
+## Summary {#ch3-summary}
+
+You've learned the fundamentals of classification and explored five major approaches. Let's recap the key insights.
+
+**Classification is fundamentally different from regression.** You're predicting categories, not continuous values. This changes everything: the algorithms, the evaluation metrics, the challenges you'll face. Linear regression is the wrong tool. You need classifiers designed to output probabilities or discrete predictions.
+
+**Each algorithm has a sweet spot.** Logistic regression for speed and interpretability with linear boundaries. Decision trees for maximum explainability. Random forests for robust performance without much tuning. SVMs for high-dimensional data with clear margins. k-NN for small datasets with complex local patterns. There's no universal best—context matters.
+
+**The confusion matrix is your diagnostic tool.** True positives, false positives, true negatives, false negatives—these four numbers tell you exactly where your model succeeds and fails. Every metric (accuracy, precision, recall, F1) derives from them. Master confusion matrices and you can navigate any classification problem.
+
+**Accuracy alone is almost always insufficient.** Especially with imbalanced data, accuracy can be completely misleading. You need to understand precision (when I predict positive, am I usually right?) and recall (of all actual positives, how many do I catch?). The tradeoff between them depends on your specific problem's costs. Medical diagnosis? Maximize recall. Spam detection? Maybe maximize precision. There's no one-size-fits-all answer.
+
+**ROC curves let you compare models across all thresholds.** Instead of committing to 0.5 as your decision threshold, ROC curves show performance across all possible thresholds. AUC summarizes this in one number. Higher is better.
+
+**Class imbalance is the norm, not the exception.** Fraud detection, disease diagnosis, rare event prediction—most interesting real-world problems have imbalanced classes. Naive models will just predict the majority class and claim victory with high accuracy. You need to detect imbalance (check value counts!), use appropriate metrics (forget accuracy, use F1 or AUC), and handle it properly (class weights, SMOTE, or other resampling techniques).
+
+**Visualization helps build intuition.** Decision boundaries, ROC curves, confusion matrix heatmaps—these aren't just pretty pictures. They help you understand what your model is actually doing. A model might have great accuracy but terrible decision boundaries. Visualization helps you see problems that metrics alone might hide.
+
+Classification is a core data science skill. You'll use it constantly: predicting customer churn, detecting fraud, diagnosing diseases, filtering spam, recommending products, identifying images. The algorithms you've learned here are the foundation. Master them, understand their tradeoffs, and you'll be equipped to tackle real classification problems.
+
+Use your brain. That's what it's there for.
+
+---
+
+## Practice Exercises {#ch3-practice}
+
+1. **Build and Compare Classifiers**: Using the Titanic dataset (or another binary classification dataset), fit all five classifier types (Logistic Regression, Decision Tree, Random Forest, SVM, k-NN). Create confusion matrices for each and compare their precision, recall, and F1 scores. Which performs best? Why do you think that is?
+
+2. **ROC Curve Comparison**: Using the same dataset from Exercise 1, plot ROC curves for all five models on the same figure. Which model has the highest AUC? Does this match the model with the best accuracy? Why or why not?
+
+3. **Hyperparameter Tuning**: Take a Decision Tree classifier and experiment with different values of `max_depth` (try 1, 3, 5, 10, 20, None). Plot training and test accuracy vs depth. At what depth does overfitting become apparent? How can you tell?
+
+4. **Feature Importance Analysis**: Fit a Random Forest on a classification dataset with multiple features. Extract and visualize feature importances. Which features are most predictive? Now remove the top feature and retrain. How much does performance drop?
+
+5. **Class Imbalance Challenge**: Create an imbalanced dataset (90% class 0, 10% class 1) using `make_classification`. Fit a naive logistic regression and check its confusion matrix. Then try three approaches to handle the imbalance: class weights, random oversampling, and SMOTE. Which works best? Use F1 score to compare.
+
+6. **Threshold Tuning**: Using logistic regression with `predict_proba()`, manually try different classification thresholds (0.3, 0.5, 0.7, 0.9). For each threshold, compute precision and recall. Plot precision vs recall as you vary the threshold. Explain the tradeoff you observe.
+
+---
+
+## Additional Resources {#ch3-additional-resources}
+
+- [Scikit-learn Classification Documentation](https://scikit-learn.org/stable/supervised_learning.html#supervised-learning) - Official docs for all classifiers
+- [Understanding the ROC Curve](https://developers.google.com/machine-learning/crash-course/classification/roc-and-auc) - Google's ML crash course on ROC/AUC
+- [Imbalanced-learn Documentation](https://imbalanced-learn.org/) - Handling imbalanced datasets with Python
+- [Confusion Matrix Guide](https://www.dataschool.io/simple-guide-to-confusion-matrix-terminology/) - Clear explanation of TP, FP, TN, FN
+- [Precision vs Recall](https://towardsdatascience.com/precision-vs-recall-386cf9f89488) - When to optimize for which metric
+- [Random Forests Explained](https://www.stat.berkeley.edu/~breiman/RandomForests/cc_home.htm) - Original paper by Leo Breiman (creator of random forests)
+- [SVM Visualization](https://www.youtube.com/watch?v=efR1C6CvhmE) - StatQuest video explaining SVMs visually

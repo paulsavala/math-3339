@@ -1,0 +1,3 @@
+include-before-body: _includes/activity-download-banner.html
+resources:
+  - "**/*.ipynb"

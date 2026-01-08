@@ -1,0 +1,16 @@
+<div class="activity-download-banner" role="note">
+  <a class="activity-download-banner__link" id="activity-download-link" href="#">
+    Download Jupyter notebook (.ipynb)
+  </a>
+</div>
+<script>
+  (function () {
+    const link = document.getElementById("activity-download-link");
+    if (!link) return;
+    const path = window.location.pathname;
+    if (!path || !path.endsWith(".html")) return;
+    const ipynbPath = path.replace(/\.html$/, ".ipynb");
+    link.href = ipynbPath;
+    link.setAttribute("download", ipynbPath.split("/").pop());
+  })();
+</script>

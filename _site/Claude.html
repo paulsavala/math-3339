@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>claude – MATH 3339: Introduction to Data Science with LLMs</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-ff63373b1067ca6f91cf1456aa1f00a2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles/textbook-nav.css">
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+
+
+
+
+<section id="math-3339---introduction-to-data-science---ai-assisted-redesign" class="level1">
+<h1>MATH 3339 - Introduction to Data Science - AI-assisted redesign</h1>
+<section id="course-philosophy" class="level2">
+<h2 class="anchored" data-anchor-id="course-philosophy">Course Philosophy</h2>
+<p>This course emphasizes conceptual understanding and practical application over implementation details. Students will develop the analytical thinking needed to select appropriate models, recognize when assumptions are violated, and critically evaluate model performance. While AI coding assistants are powerful tools, this course ensures students build the foundational knowledge to use them effectively and debug their output.</p>
+</section>
+<section id="agentic-planning" class="level2">
+<h2 class="anchored" data-anchor-id="agentic-planning">Agentic Planning</h2>
+<p>When developing this course, Claude should follow the following guidelines:</p>
+<ol type="1">
+<li>Utilize the existing folder Claude-planning by creating Markdown files to keep track of progress. Claude should keep one file per topic, and each file should have a clear title and a clear description of the topic. Each file should outline specifically what is being taught, which parts are done “by hand” (either programming or mathematically) and which parts are done with AI coding assistants. Claude should describe the in-class activities and homework which will enforce learning these topics.</li>
+<li>When designing a lesson and/or topic, Claude should refer back to the existing Claude-planning folder to ensure consistency and avoid redundancy. In addition, when possible, Claude should try to build on previous lessons and topics to create a cohesive and progressive learning experience. This should be transparent to the learner, with lessons refering back to previous lessons and topics whenever possible.</li>
+</ol>
+</section>
+<section id="assignment-templates" class="level2">
+<h2 class="anchored" data-anchor-id="assignment-templates">Assignment Templates</h2>
+<p>When creating homework assignments or quizzes, Claude must follow the templates defined in the Templates/ folder:</p>
+<section id="homework-assignments" class="level3">
+<h3 class="anchored" data-anchor-id="homework-assignments">Homework Assignments</h3>
+<p><strong>Template Location:</strong> <code>Templates/homework-template.md</code></p>
+<p><strong>Key Requirements:</strong></p>
+<ol type="1">
+<li><p><strong>Two-Part Structure:</strong></p>
+<ul>
+<li><strong>Part A: By Hand (40-45 points)</strong> - 10 questions without AI assistance to build foundational skills</li>
+<li><strong>Part B: With AI Assistance (55-60 points)</strong> - 10 questions using AI coding assistants to scale analysis</li>
+<li>Total: 100 points across 20 questions</li>
+</ul></li>
+<li><p><strong>Part A Focus (By Hand):</strong></p>
+<ul>
+<li>Basic implementation of techniques/models</li>
+<li>Evaluation and interpretation of results</li>
+<li>Writing helper functions to demonstrate understanding</li>
+<li>Explaining concepts in own words</li>
+<li>Creating simple visualizations</li>
+<li>Question range: 3-5 points each</li>
+</ul></li>
+<li><p><strong>Part B Focus (AI-Assisted):</strong></p>
+<ul>
+<li>Hyperparameter tuning at scale</li>
+<li>Comparing 5+ models/approaches simultaneously</li>
+<li>Building automation pipelines</li>
+<li>Cross-validation and robustness testing</li>
+<li>Final comprehensive analysis with executive summary</li>
+<li>Question range: 5-7 points each</li>
+<li><strong>MUST require students to submit their AI prompts used</strong></li>
+</ul></li>
+<li><p><strong>Required Sections:</strong></p>
+<ul>
+<li>Instructions (including dataset descriptions)</li>
+<li>Part A questions (1-10)</li>
+<li>Part B questions (11-20)</li>
+<li>Submission Guidelines</li>
+<li>Grading Rubric</li>
+<li>Tips for Success (separate subsections for Part A, Part B, and General)</li>
+</ul></li>
+<li><p><strong>Required Deliverables for Part B:</strong></p>
+<ul>
+<li>Code (AI-generated but student-verified)</li>
+<li>Outputs (visualizations, tables, results)</li>
+<li>Written interpretation (student’s own analysis)</li>
+<li><strong>The prompt(s) used with AI assistant</strong></li>
+</ul></li>
+<li><p><strong>Tips Section Must End With:</strong></p>
+<ul>
+<li>“Use your brain. That’s what it’s there for.”</li>
+</ul></li>
+</ol>
+</section>
+<section id="quizzes" class="level3">
+<h3 class="anchored" data-anchor-id="quizzes">Quizzes</h3>
+<p><strong>Template Location:</strong> <code>Templates/quiz-template.md</code></p>
+<p><strong>Key Requirements:</strong></p>
+<ol type="1">
+<li><p><strong>Two-Section Structure:</strong></p>
+<ul>
+<li><strong>Section A: Conceptual Questions (~50% of points)</strong> - Testing understanding without a computer</li>
+<li><strong>Section B: Code Writing (~50% of points)</strong> - Writing code by hand</li>
+<li>Total: Typically 25-50 points</li>
+<li>Time: 30-45 minutes</li>
+</ul></li>
+<li><p><strong>Section A Focus (Conceptual):</strong></p>
+<ul>
+<li>Scenario identification (classification vs regression, problem types)</li>
+<li>Metric interpretation and trade-off reasoning</li>
+<li>Model selection justification</li>
+<li>Conceptual explanations</li>
+<li>Problem diagnosis</li>
+<li>Question range: 2-4 points each</li>
+<li>6-8 questions total</li>
+</ul></li>
+<li><p><strong>Section B Focus (Code Writing):</strong></p>
+<ul>
+<li>Data manipulation (load, filter, split)</li>
+<li>Model instantiation with parameters</li>
+<li>Fit/predict workflow</li>
+<li>Metric calculation</li>
+<li>Simple function writing</li>
+<li>Question range: 2-4 points each</li>
+<li>5-7 questions total</li>
+<li><strong>Must include assumption section listing all imports</strong></li>
+</ul></li>
+<li><p><strong>Required Elements:</strong></p>
+<ul>
+<li>Instructions (time, format, note about partial credit)</li>
+<li>Section A questions</li>
+<li>Assumption section before Section B (listing imports and available variables)</li>
+<li>Section B questions</li>
+<li>Grading Rubric with statement: “Minor syntax errors will not be heavily penalized. Focus is on correct logic and understanding of the workflow.”</li>
+</ul></li>
+<li><p><strong>Code Writing Philosophy:</strong></p>
+<ul>
+<li>Syntax perfection NOT required</li>
+<li>Focus on logic and correct approach</li>
+<li>Grading: 70-80% for correct logic, 20-30% for syntax</li>
+<li>Questions must be realistic to write by hand</li>
+</ul></li>
+</ol>
+</section>
+<section id="textbook-chapters" class="level3">
+<h3 class="anchored" data-anchor-id="textbook-chapters">Textbook Chapters</h3>
+<p><strong>Template Location:</strong> <code>Templates/textbook-chapter-template.md</code></p>
+<p><strong>Key Requirements:</strong></p>
+<ol type="1">
+<li><p><strong>Structure:</strong></p>
+<ul>
+<li>Front matter (YAML with title, format settings)</li>
+<li>Module Resources section linking to homework and quiz</li>
+<li>Introduction (3-5 engaging paragraphs)</li>
+<li>8-10 major sections covering core topics</li>
+<li>Summary (synthesizing key concepts)</li>
+<li>Practice Exercises (4-6 exercises)</li>
+<li>Additional Resources</li>
+</ul></li>
+<li><p><strong>Code Examples:</strong></p>
+<ul>
+<li>Include code every 2-3 paragraphs maximum</li>
+<li>Use executable Python code with proper imports</li>
+<li>Build complexity gradually throughout the chapter</li>
+<li>Explain what code does and why it matters</li>
+<li>Use realistic datasets and examples</li>
+</ul></li>
+<li><p><strong>Images and Visualizations:</strong></p>
+<ul>
+<li>Include 2-3 images/diagrams per chapter</li>
+<li>Create <code>images/</code> subfolder in module folder</li>
+<li>Create <code>placeholder-info.md</code> describing needed images</li>
+<li>Use relative paths: <code>![Description](images/filename.png)</code></li>
+</ul></li>
+<li><p><strong>Writing Style:</strong></p>
+<ul>
+<li>Conversational and casual tone</li>
+<li>Use probing questions rather than direct statements</li>
+<li>Maximum 2-3 paragraphs before showing code</li>
+<li>Start with intuition, then formalize</li>
+<li>Connect to what students already know</li>
+<li>End summary with: “Use your brain. That’s what it’s there for.”</li>
+</ul></li>
+<li><p><strong>Quarto-Specific Requirements:</strong></p>
+<ul>
+<li>Use <code>{python}</code> for executable code blocks (not standard markdown code blocks)</li>
+<li>Include <code>jupyter: python3</code> in YAML front matter</li>
+<li>Set <code>code-fold: false</code> to show all code by default</li>
+<li>Use callout boxes for tips, notes, and warnings:
+<ul>
+<li><code>::: {.callout-tip}</code> for helpful tips</li>
+<li><code>::: {.callout-note}</code> for important information</li>
+<li><code>::: {.callout-warning}</code> for cautions</li>
+</ul></li>
+</ul></li>
+</ol>
+</section>
+<section id="using-the-templates" class="level3">
+<h3 class="anchored" data-anchor-id="using-the-templates">Using the Templates</h3>
+<p>When asked to create homework, quiz, or textbook chapter for a module:</p>
+<ol type="1">
+<li><strong>Read the appropriate template</strong> from <code>Templates/homework-template.md</code>, <code>Templates/quiz-template.md</code>, or <code>Templates/textbook-chapter-template.md</code></li>
+<li><strong>Review the module-specific adaptations</strong> section in the template</li>
+<li><strong>Follow the structure exactly</strong> - do not deviate from point distributions, section organization, or required elements</li>
+<li><strong>Refer to content-overview.md</strong> to understand:
+<ul>
+<li>Core topics for the module</li>
+<li>What should be done by-hand vs with AI</li>
+<li>Learning objectives</li>
+<li>Assessment focus</li>
+</ul></li>
+<li><strong>Create or update the Claude-planning file</strong> for the module first, then generate content</li>
+<li><strong>Ensure content aligns</strong> with the “Topics Done By-Hand” and “Topics Done With AI” from content-overview.md</li>
+</ol>
+</section>
+</section>
+<section id="tech-stack" class="level2">
+<h2 class="anchored" data-anchor-id="tech-stack">Tech Stack</h2>
+<ol type="1">
+<li>Lessons will be written as Quarto Markdown documents, with the programming language used being Python 3.12.</li>
+<li>Students will use the Gemini CLI as the primary AI coding assistant. The primary model will be Flash 2.5, which means code generation skills are limited. Because of this, the text should encourage students to work on small components at a time, rather than prompting the model to build entire applications all at once.</li>
+<li>Students will host their work on Github.</li>
+<li>Python packages used include:
+<ul>
+<li>Pandas</li>
+<li>NumPy</li>
+<li>Seaborn</li>
+<li>Scikit-learn</li>
+<li>PyTorch</li>
+<li>Streamlit</li>
+<li>Huggingface</li>
+</ul></li>
+</ol>
+</section>
+<section id="style-guidelines" class="level2">
+<h2 class="anchored" data-anchor-id="style-guidelines">Style Guidelines</h2>
+<section id="general-writing-style" class="level3">
+<h3 class="anchored" data-anchor-id="general-writing-style">General Writing Style</h3>
+<p>The professor writes in a casual, conversational manner that emphasizes understanding over formality. Key characteristics:</p>
+<p><strong>Tone and Voice:</strong></p>
+<ul>
+<li>Write as if talking directly to students</li>
+<li>Use probing questions to guide thinking rather than directly stating answers</li>
+<li>Avoid overly formal academic language</li>
+<li>Be direct and honest about challenges and complexities</li>
+<li>Show enthusiasm for the subject matter</li>
+</ul>
+<p><strong>Common Phrases and Patterns:</strong></p>
+<ul>
+<li>“Let’s jump in” / “Let’s start with…”</li>
+<li>“Here’s the thing…” / “Here’s what’s happening…”</li>
+<li>“But wait—why does that work?”</li>
+<li>“Don’t worry about X right now, just…”</li>
+<li>“See what happened?” / “Notice what’s going on here?”</li>
+<li>“Use your brain. That’s what it’s there for.” (ending phrase)</li>
+</ul>
+<p><strong>Example of the Professor’s Writing Style:</strong></p>
+<pre><code>"Linear regression is perhaps the most important idea in machine learning. Once you understand the ins-and-outs of linear regression you can understand most other machine learning models as well. This is because the ideas developed for machine learning were first perfected on linear regression and then applied to other models. Let's jump in.
+
+Linear regression (LR) is what you have probably referred to as "line of best fit". It is a line meant to fit the data "as well as possible". I put that last phrase in quotes, because what exactly do we mean by a "best fit"? We will formulate this mathematically in the next section.
+
+With that out of the way, we now turn to our next question: why do we care about linear regression? Linear regression is extremely important because it allows us to make predictions. Up until this point we have only explored and described the past by looking at datasets which (necessarily) had data about the past. However, the point of data science is largely to make predictions about the future using data from the past. This works because a line doesn't care what data we plug in. We can plug in data from the past in order to verify and explain past performance. But we can also plug in future numbers (dates, pricing changes, expected changes to our products, etc.) and see what the model returns.
+
+Let's start with a simple example. Don't worry about the code right now, just look at the graphs. We will work again with our data/boston.csv dataset, describing the median home value in various neighborhoods in Boston.
+
+In blue is the actual measurements of poverty and home value for all neighborhoods. In red is the predicted value using the line of best fit. We can see that the regression line seems to fit the data fairly well, at least in all except the far left and right ends.
+
+One interesting thing to note is that the regression line generally seems too high. For example, if we draw the same graph, but only keep poverty values between 5% and 20% we get the following:
+
+Why is that? The reason is that the regression line is heavily affected by outliers. So the neighborhoods with low crime and high home value are throwing off the line and "dragging it up." In general, you want the following four things to be true before using LR for making predictions:
+
+1. The data should be approximately linear
+
+2. The observations should be independent (so the crime rate and median home value in one neighborhood should be independent of other neighborhoods)
+
+3. The variance between the measurements should be approximately the same throughout the graph (the graph is more or less spread out the same amount in different areas)
+
+4. The points should be approximately normally distributed around the regression line.
+
+None of these four are perfectly satisfied. However, that doesn't mean you can't use LR. It just means that you need to be careful when making predictions. Don't just make a regression line and say "see, this predicts the future!" Use your brain, that's what it's there for."</code></pre>
+</section>
+<section id="textbook-chapter-writing-guidelines" class="level3">
+<h3 class="anchored" data-anchor-id="textbook-chapter-writing-guidelines">Textbook Chapter Writing Guidelines</h3>
+<p><strong>Conceptual Explanations:</strong></p>
+<ul>
+<li>Start with intuition and concrete examples before formalizing</li>
+<li>Use analogies and real-world scenarios to ground abstract concepts</li>
+<li>Ask guiding questions that lead students to understanding</li>
+<li>Build complexity gradually—simple cases first, then complications</li>
+<li>Connect new concepts to what students already know</li>
+<li>Explain the “why” before diving into the “how”</li>
+</ul>
+<p><strong>Code Demonstrations:</strong></p>
+<ul>
+<li>Include code examples every 2-3 paragraphs maximum</li>
+<li>Never show code without explaining what it does and why it matters</li>
+<li>Build code examples incrementally (don’t dump large blocks)</li>
+<li>Use realistic datasets that students can relate to</li>
+<li>Comment code to explain reasoning, not just mechanics</li>
+<li>Show output or visualizations when relevant</li>
+<li>Follow this pattern:
+<ol type="1">
+<li>Brief intro to what you’re demonstrating</li>
+<li>Show the code</li>
+<li>Explain what happened and why</li>
+<li>Connect to the bigger picture</li>
+</ol></li>
+</ul>
+<p><strong>Code Formatting for Quarto:</strong></p>
+<ul>
+<li>Use <code>{python}</code> for executable code blocks: <code>```{python}</code></li>
+<li>Use regular markdown code blocks only for non-executable examples</li>
+<li>Add <code>#| error: true</code> to code blocks that intentionally raise errors</li>
+<li>Use <code>#| echo: true</code> (default) to show code</li>
+<li>Use <code>#| output: true</code> to display output</li>
+</ul>
+<p><strong>Examples and Datasets:</strong></p>
+<ul>
+<li>Use consistent, realistic datasets throughout a chapter</li>
+<li>California housing data (from Module 1) is the primary dataset</li>
+<li>Include real-world context for all examples</li>
+<li>Make examples build on each other when possible</li>
+<li>Show both successes and failures (what not to do)</li>
+</ul>
+<p><strong>Visual Elements:</strong></p>
+<ul>
+<li>Include 2-3 images/diagrams per chapter minimum</li>
+<li>Create <code>images/</code> subfolder with <code>placeholder-info.md</code></li>
+<li>Use callout boxes for important points:
+<ul>
+<li><code>::: {.callout-tip}</code> for helpful tips and best practices</li>
+<li><code>::: {.callout-note}</code> for important information students must remember</li>
+<li><code>::: {.callout-warning}</code> for common mistakes and cautions</li>
+</ul></li>
+<li>Use concrete visualizations to explain abstract concepts</li>
+</ul>
+<p><strong>Section Flow:</strong></p>
+<ul>
+<li>Each major section should have a clear narrative arc</li>
+<li>Start sections with context: why does this matter?</li>
+<li>End sections with synthesis: what did we learn?</li>
+<li>Use transitions to connect sections logically</li>
+<li>Reference earlier content when building on it</li>
+<li>Preview upcoming content when it’s relevant</li>
+</ul>
+<p><strong>Practical Examples:</strong></p>
+<ul>
+<li>Always ground theory in practice</li>
+<li>Show real scenarios where the concept matters</li>
+<li>Include “what could go wrong” examples</li>
+<li>Demonstrate debugging and problem-solving approaches</li>
+<li>Connect to real data science workflows</li>
+</ul>
+<p><strong>Ending Every Chapter:</strong></p>
+<ul>
+<li>Summary must synthesize, not just list topics</li>
+<li>Emphasize key takeaways and connections</li>
+<li>Always end with: “Use your brain. That’s what it’s there for.”</li>
+</ul>
+<p><strong>Writing Theoretical Concepts:</strong></p>
+<p>When explaining theoretical or conceptual material (like ML theory, loss functions, optimization, etc.):</p>
+<ul>
+<li><strong>Start with the practical problem</strong> before introducing theory
+<ul>
+<li>Example: “Models fail. They overfit. They underfit. Understanding what’s going on ‘under the hood’ helps you recognize these problems…”</li>
+<li>Lead with why this matters in practice, then explain the theory</li>
+</ul></li>
+<li><strong>Use concrete, visual examples first</strong>
+<ul>
+<li>Show actual code and visualizations before equations</li>
+<li>Let students see the concept in action before formalizing it</li>
+<li>Example: Demonstrate gradient descent with a simple quadratic function and visualization before explaining the algorithm</li>
+</ul></li>
+<li><strong>Explain concepts in plain English</strong>
+<ul>
+<li>“Cross-entropy heavily penalizes confident wrong predictions”</li>
+<li>“The gradient is the slope of the loss with respect to parameters”</li>
+<li>Avoid jargon or explain it immediately when used</li>
+</ul></li>
+<li><strong>Use analogies and metaphors</strong>
+<ul>
+<li>“Think of it as navigating a landscape where height represents loss, and you’re trying to find the lowest valley”</li>
+<li>“Bias: fitting a straight line to clearly curved data”</li>
+<li>“Variance: fitting a wiggly line that goes through every single training point”</li>
+</ul></li>
+<li><strong>Break down mathematical concepts step-by-step</strong>
+<ul>
+<li>Introduce notation gradually</li>
+<li>Explain what each symbol means in context</li>
+<li>Show the formula, then explain it in words</li>
+<li>Example: Show cross-entropy formula, then explain “this heavily penalizes confident wrong predictions”</li>
+</ul></li>
+<li><strong>Use callout boxes strategically</strong>
+<ul>
+<li><code>::: {.callout-note}</code> for connecting concepts (“Cross-entropy is just the log-likelihood for binary classification”)</li>
+<li><code>::: {.callout-warning}</code> for common misconceptions or pitfalls</li>
+<li><code>::: {.callout-tip}</code> for practical advice about when/how to use concepts</li>
+</ul></li>
+<li><strong>Connect theory back to practice repeatedly</strong>
+<ul>
+<li>“In practice, you rarely need to implement loss functions yourself—scikit-learn handles it”</li>
+<li>“Understanding what they’re doing helps you choose the right one and diagnose problems”</li>
+<li>Always answer “why does this matter for my work?”</li>
+</ul></li>
+<li><strong>Use contrasts and comparisons</strong>
+<ul>
+<li>“MSE: Penalizes large errors heavily (good when outliers are costly)”</li>
+<li>“MAE: Treats all errors equally (good when outliers shouldn’t dominate)”</li>
+<li>Side-by-side visualizations showing different approaches</li>
+</ul></li>
+<li><strong>Emphasize intuition over rigor</strong>
+<ul>
+<li>Get the concept across first, worry about edge cases later</li>
+<li>“The idea is beautifully simple: calculate the gradient, take a step downhill, repeat”</li>
+<li>Don’t get bogged down in mathematical proofs</li>
+</ul></li>
+<li><strong>Use progressive disclosure</strong>
+<ul>
+<li>Start with 1D examples before moving to higher dimensions</li>
+<li>“In one dimension, the gradient is simply the derivative. In higher dimensions…”</li>
+<li>Build from simple → complex gradually</li>
+</ul></li>
+<li><strong>Frame concepts as tools, not just theory</strong>
+<ul>
+<li>“Loss functions define what ‘good’ means”</li>
+<li>“The bias-variance tradeoff is your guide for choosing model complexity”</li>
+<li>Present concepts as practical tools students will use</li>
+</ul></li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="technical-guidelines" class="level2">
+<h2 class="anchored" data-anchor-id="technical-guidelines">Technical Guidelines</h2>
+<p>When writing code examples in textbook chapters and assignments, follow these package-specific best practices to ensure code is clear, correct, and pedagogically sound.</p>
+<section id="pandas" class="level3">
+<h3 class="anchored" data-anchor-id="pandas">Pandas</h3>
+<p><strong>DataFrame Display:</strong></p>
+<ul>
+<li><strong>Never use <code>print()</code> for DataFrames</strong> - Instead, put the DataFrame (or <code>df.head()</code>) as the last line of the cell to use Jupyter’s rich display</li>
+<li><strong>Always use <code>.head()</code> to show DataFrames</strong> - This prevents overwhelming output and teaches good practices</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># BAD: Using print()</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(housing_df)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># GOOD: Let Jupyter display it</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>housing_df.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>DataFrame Creation:</strong></p>
+<ul>
+<li><strong>Never subset data when creating DataFrames</strong> - Create the full DataFrame first, then display a subset</li>
+<li>This prevents confusing students about what’s actually in the DataFrame</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># BAD: Subsetting during creation</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>comparison <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Actual'</span>: y_test.head(<span class="dv">10</span>),</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Predicted'</span>: predictions[:<span class="dv">10</span>]</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>comparison</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># GOOD: Full DataFrame, then show subset</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>comparison <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Actual'</span>: y_test,</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Predicted'</span>: predictions</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>comparison.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Column Selection:</strong></p>
+<ul>
+<li>Always demonstrate both single-column (Series) and multi-column (DataFrame) selection</li>
+<li>Emphasize that double brackets <code>[[]]</code> for multiple columns are just a list inside brackets</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Single column (returns Series)</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>house_values <span class="op">=</span> housing_df[<span class="st">'median_house_value'</span>]</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Multiple columns (returns DataFrame)</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>subset <span class="op">=</span> housing_df[[<span class="st">'median_house_value'</span>, <span class="st">'ocean_proximity'</span>]]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Chaining Operations:</strong></p>
+<ul>
+<li>Break complex chains across multiple lines for readability</li>
+<li>Add comments explaining each step</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># GOOD: Clear, multi-line chaining</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> (housing_df</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>          .dropna()  <span class="co"># Remove missing values</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>          .groupby(<span class="st">'ocean_proximity'</span>)  <span class="co"># Group by location</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>          .agg({<span class="st">'median_house_value'</span>: <span class="st">'mean'</span>}))  <span class="co"># Calculate means</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="scikit-learn" class="level3">
+<h3 class="anchored" data-anchor-id="scikit-learn">Scikit-learn</h3>
+<p><strong>Train-Test Split:</strong></p>
+<ul>
+<li><strong>Always set <code>random_state</code></strong> for reproducibility</li>
+<li>Always split data BEFORE any other operations</li>
+<li>Use meaningful variable names: <code>X_train, X_test, y_train, y_test</code></li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># GOOD: Always set random_state</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    X, y,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    test_size<span class="op">=</span><span class="fl">0.2</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    random_state<span class="op">=</span><span class="dv">42</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Model Workflow:</strong></p>
+<ul>
+<li>Always follow the same pattern: instantiate → fit → predict → evaluate</li>
+<li>Show the complete workflow in early examples</li>
+<li>Use consistent variable names: <code>model</code>, <code>predictions</code>, <code>y_pred</code></li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The standard pattern</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> LinearRegression()  <span class="co"># 1. Instantiate</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>model.fit(X_train, y_train)  <span class="co"># 2. Fit</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> model.predict(X_test)  <span class="co"># 3. Predict</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>score <span class="op">=</span> model.score(X_test, y_test)  <span class="co"># 4. Evaluate</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Feature Scaling:</strong></p>
+<ul>
+<li><strong>Always fit scaler on training data only</strong>, then transform both train and test</li>
+<li>Never fit on the full dataset or test set</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># GOOD: Fit on train, transform both</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>scaler <span class="op">=</span> StandardScaler()</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>X_train_scaled <span class="op">=</span> scaler.fit_transform(X_train)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>X_test_scaled <span class="op">=</span> scaler.transform(X_test)  <span class="co"># Only transform, don't fit</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co"># BAD: Fitting on test data</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># X_test_scaled = scaler.fit_transform(X_test)  # DON'T DO THIS</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Model Comparison:</strong></p>
+<ul>
+<li>When comparing models, use consistent train/val/test splits</li>
+<li>Store results in a DataFrame for easy comparison</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># GOOD: Systematic comparison</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> []</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, model <span class="kw">in</span> models.items():</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    model.fit(X_train, y_train)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    score <span class="op">=</span> model.score(X_test, y_test)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    results.append({<span class="st">'Model'</span>: name, <span class="st">'Score'</span>: score})</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>results_df <span class="op">=</span> pd.DataFrame(results)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>results_df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="matplotlibseaborn" class="level3">
+<h3 class="anchored" data-anchor-id="matplotlibseaborn">Matplotlib/Seaborn</h3>
+<p><strong>Figure Display:</strong></p>
+<ul>
+<li>Always use <code>plt.show()</code> to display figures in Quarto documents</li>
+<li>Set figure size explicitly with <code>plt.figure(figsize=(width, height))</code></li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># GOOD: Explicit figure size and show</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(data<span class="op">=</span>housing_df, x<span class="op">=</span><span class="st">'median_income'</span>, y<span class="op">=</span><span class="st">'median_house_value'</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'House Value vs. Median Income'</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Median Income (in $10k)'</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Median House Value ($)'</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Labels and Titles:</strong></p>
+<ul>
+<li><strong>Always include title, xlabel, and ylabel</strong></li>
+<li>Use descriptive labels with units</li>
+<li>Make figures self-explanatory</li>
+</ul>
+<p><strong>Color Usage:</strong></p>
+<ul>
+<li>Use colorblind-friendly palettes: <code>'Set2'</code>, <code>'colorblind'</code>, <code>'husl'</code></li>
+<li>Never rely solely on red-green distinctions</li>
+</ul>
+</section>
+<section id="numpy" class="level3">
+<h3 class="anchored" data-anchor-id="numpy">NumPy</h3>
+<p><strong>Random State:</strong></p>
+<ul>
+<li>Always set <code>np.random.seed()</code> for reproducibility in examples</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># GOOD: Set seed for reproducibility</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">42</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>random_values <span class="op">=</span> np.random.randn(<span class="dv">100</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Array Creation:</strong></p>
+<ul>
+<li>Use <code>np.array()</code> for small examples, but prefer Pandas for tabular data</li>
+<li>Show array shape and dtype when relevant</li>
+</ul>
+</section>
+<section id="general-python" class="level3">
+<h3 class="anchored" data-anchor-id="general-python">General Python</h3>
+<p><strong>Variable Naming:</strong></p>
+<ul>
+<li>Use descriptive variable names: <code>housing_df</code>, <code>X_train</code>, <code>y_pred</code></li>
+<li>Follow conventions: <code>X</code> (features), <code>y</code> (target), <code>df</code> (DataFrame)</li>
+<li>Avoid single letters except in mathematical contexts or brief examples</li>
+</ul>
+<p><strong>Comments:</strong></p>
+<ul>
+<li>Comment the “why”, not the “what”</li>
+<li>Use comments to explain reasoning and decisions</li>
+<li>Add comments for code that students will modify or extend</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># GOOD: Explains reasoning</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Use median instead of mean to avoid influence of outliers</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>median_bedrooms <span class="op">=</span> housing_df[<span class="st">'total_bedrooms'</span>].median()</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co"># BAD: States the obvious</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate median</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>median_bedrooms <span class="op">=</span> housing_df[<span class="st">'total_bedrooms'</span>].median()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Error Handling:</strong></p>
+<ul>
+<li>Use <code>#| error: true</code> in Quarto code blocks that intentionally raise errors</li>
+<li>Show errors when teaching debugging or demonstrating common mistakes</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| error: true</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co"># This will raise an error to demonstrate the problem</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="dv">2</span> <span class="op">&gt;</span> <span class="dv">3</span>, <span class="st">"This assertion will fail"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="code-organization-in-chapters" class="level3">
+<h3 class="anchored" data-anchor-id="code-organization-in-chapters">Code Organization in Chapters</h3>
+<p><strong>Progressive Complexity:</strong></p>
+<ul>
+<li>Start with simplest working example</li>
+<li>Add complexity gradually</li>
+<li>Show complete workflow first, then optimize</li>
+</ul>
+<p><strong>Reusable Patterns:</strong></p>
+<ul>
+<li>Establish patterns early and reuse them</li>
+<li>Highlight when you’re using a pattern seen before</li>
+<li>Make patterns explicit: “This is the same workflow we used for…”</li>
+</ul>
+<p><strong>Avoid:</strong></p>
+<ul>
+<li>Magic numbers without explanation</li>
+<li>Unexplained imports (always show imports)</li>
+<li>Copy-pasted code without variation</li>
+<li>Examples that don’t run or produce errors unintentionally</li>
+<li>Deprecated functions or outdated syntax</li>
+</ul>
+
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/paulsavala\.github\.io\/math-3339-intro-data-science-with-llms\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

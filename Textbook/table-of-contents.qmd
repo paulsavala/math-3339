@@ -1,0 +1,13 @@
+---
+title: "Textbook Table of Contents"
+format: html
+---
+
+- [Chapter 1: Exploratory Data Analysis](Chapter%201%20-%20EDA/chapter-1-eda.qmd)
+
+- [Chapter 2: Regression](Chapter-2-Regression/chapter-2-regression.qmd)
+
+- [Chapter 3: Classification](Chapter-3-Classification/chapter-3-classification.qmd)
+
+- [Chapter 4: LLMs & Feature Engineering](Chapter-4-LLMs-Feature-Engineering/chapter-4-llms-feature-engineering.qmd)
+
