@@ -11,7 +11,7 @@ format:
 ## Links
 
 - [Textbook](Textbook/table-of-contents.qmd)
-- [Course Website (this page)](https://paulsavala.github.io/math-3339-intro-data-science-with-llms/)
+- [Course Website (this page)](https://paulsavala.github.io/math-3339/)
 
 ---
 
@@ -28,7 +28,7 @@ format:
 
 | Date | Topic | Textbook | In-class Activity |
 |------|-------|---------|------------------|
-| Mon, Jan 12 | Course intro, What is EDA?, AI coding assistants |  |  |
+| Mon, Jan 12 | Course intro, What is EDA?, AI coding assistants |  | [Link](https://docs.google.com/presentation/d/1KUEpKTWWH6G0qiXUSEFjeUmGzl6b2dsyebWrtqshQiI/edit?usp=sharing) |
 | Wed, Jan 14 | Writing effective prompts, when to use AI vs by hand | Section 1 | [Link](In-class%20activities/Chapter%201/1.1%20-%20Setup%20and%20Prompting.html) |
 | Fri, Jan 16 | Quiz 1a | | |
 | Wed, Jan 21 | Pandas basics: loading data, selecting/filtering, dat cleaning | Section 2 | [Link](In-class%20activities/Chapter%201/1.2%20-%20EDA%20First%20Look.ipynb) |

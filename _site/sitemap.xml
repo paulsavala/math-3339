@@ -1,191 +1,127 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/Claude.html</loc>
+    <loc>https://paulsavala.github.io/math-3339/Claude.html</loc>
     <lastmod>2026-01-06T16:09:54.975Z</lastmod>
   </url>
   <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/Templates/homework-template.html</loc>
+    <loc>https://paulsavala.github.io/math-3339/Templates/homework-template.html</loc>
     <lastmod>2026-01-06T16:09:54.980Z</lastmod>
   </url>
   <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/Templates/quiz-template.html</loc>
+    <loc>https://paulsavala.github.io/math-3339/Templates/quiz-template.html</loc>
     <lastmod>2026-01-08T17:06:27.461Z</lastmod>
   </url>
   <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/In-class activities/Chapter 2/2.4 - Residual Analysis.html</loc>
+    <loc>https://paulsavala.github.io/math-3339/In-class activities/Chapter 2/2.4 - Residual Analysis.html</loc>
     <lastmod>2026-01-08T15:03:47.285Z</lastmod>
   </url>
   <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/In-class activities/Chapter 2/2.2 - Linear Regression.html</loc>
+    <loc>https://paulsavala.github.io/math-3339/In-class activities/Chapter 2/2.2 - Linear Regression.html</loc>
     <lastmod>2026-01-08T15:03:22.070Z</lastmod>
   </url>
   <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/In-class activities/Chapter 2/2.3 - Evaluation Metrics.html</loc>
+    <loc>https://paulsavala.github.io/math-3339/In-class activities/Chapter 2/2.3 - Evaluation Metrics.html</loc>
     <lastmod>2026-01-08T15:03:35.753Z</lastmod>
   </url>
   <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/In-class activities/Chapter 2/2.6 - Multicollinearity.html</loc>
+    <loc>https://paulsavala.github.io/math-3339/In-class activities/Chapter 2/2.6 - Multicollinearity.html</loc>
     <lastmod>2026-01-08T15:04:24.252Z</lastmod>
   </url>
   <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/In-class activities/Chapter 1/1.3 - Statistical Summaries.html</loc>
+    <loc>https://paulsavala.github.io/math-3339/In-class activities/Chapter 1/1.3 - Statistical Summaries.html</loc>
     <lastmod>2026-01-08T14:51:03.482Z</lastmod>
   </url>
   <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/In-class activities/Chapter 1/1.4-1.5 - Visualization and Testing.html</loc>
+    <loc>https://paulsavala.github.io/math-3339/In-class activities/Chapter 1/1.4-1.5 - Visualization and Testing.html</loc>
     <lastmod>2026-01-08T14:51:10.290Z</lastmod>
   </url>
   <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/In-class activities/Chapter 1/1.2 - EDA First Look.html</loc>
+    <loc>https://paulsavala.github.io/math-3339/In-class activities/Chapter 1/1.2 - EDA First Look.html</loc>
     <lastmod>2026-01-08T14:50:55.426Z</lastmod>
   </url>
   <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/Assignments/Chapter 1 - EDA/chapter-1-quiz-1b.html</loc>
-    <lastmod>2026-01-08T16:36:07.191Z</lastmod>
-  </url>
-  <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/Assignments/Chapter 1 - EDA/chapter-1-quiz-1a.html</loc>
-    <lastmod>2026-01-08T16:15:52.832Z</lastmod>
-  </url>
-  <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/Assignments/Chapter 1 - EDA/chapter-1-quiz-1b-ai.html</loc>
-    <lastmod>2026-01-08T16:35:32.826Z</lastmod>
-  </url>
-  <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/Assignments/Chapter 4 - LLMs Feature Engineering/chapter-4-quiz.html</loc>
-    <lastmod>2026-01-06T17:16:33.732Z</lastmod>
-  </url>
-  <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/Assignments/Chapter 4 - LLMs Feature Engineering/chapter-4-quiz-4b.html</loc>
-    <lastmod>2026-01-06T17:16:33.729Z</lastmod>
-  </url>
-  <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/Assignments/Chapter 2 - Regression/chapter-2-quiz-2d.html</loc>
-    <lastmod>2026-01-06T17:16:33.702Z</lastmod>
-  </url>
-  <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/Assignments/Chapter 2 - Regression/chapter-2-quiz-2b.html</loc>
-    <lastmod>2026-01-06T17:16:33.694Z</lastmod>
-  </url>
-  <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/Assignments/Chapter 3 - Classification/chapter-3-homework.html</loc>
-    <lastmod>2026-01-06T17:16:33.709Z</lastmod>
-  </url>
-  <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/Assignments/Chapter 3 - Classification/chapter-3-quiz-3b.html</loc>
-    <lastmod>2026-01-06T17:16:33.716Z</lastmod>
-  </url>
-  <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/Textbook/Chapter-4-LLMs-Feature-Engineering/chapter-4-llms-feature-engineering.html</loc>
-    <lastmod>2026-01-08T17:09:11.929Z</lastmod>
-  </url>
-  <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/Textbook/Chapter-2-Regression/images/placeholder-info.html</loc>
-    <lastmod>2026-01-06T17:16:33.791Z</lastmod>
-  </url>
-  <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/Textbook/table-of-contents.html</loc>
-    <lastmod>2026-01-08T17:17:49.978Z</lastmod>
-  </url>
-  <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/Textbook/Chapter-3-Classification/images/placeholder-info.html</loc>
-    <lastmod>2026-01-06T17:16:33.814Z</lastmod>
-  </url>
-  <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/Textbook/Chapter 1 - EDA/images/placeholder-info.html</loc>
-    <lastmod>2026-01-06T16:09:54.994Z</lastmod>
-  </url>
-  <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/Textbook/Chapter 1 - EDA/chapter-1-eda.html</loc>
-    <lastmod>2026-01-08T18:39:35.972Z</lastmod>
-  </url>
-  <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/Textbook/Chapter-3-Classification/chapter-3-classification.html</loc>
-    <lastmod>2026-01-08T17:08:28.181Z</lastmod>
-  </url>
-  <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/Textbook/Chapter-2-Regression/chapter-2-regression.html</loc>
-    <lastmod>2026-01-08T17:07:58.548Z</lastmod>
-  </url>
-  <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/Textbook/Chapter-4-LLMs-Feature-Engineering/images/placeholder-info.html</loc>
-    <lastmod>2026-01-06T17:16:33.821Z</lastmod>
-  </url>
-  <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/Assignments/Chapter 3 - Classification/chapter-3-quiz-3a.html</loc>
-    <lastmod>2026-01-06T17:16:33.712Z</lastmod>
-  </url>
-  <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/Assignments/Chapter 3 - Classification/chapter-3-quiz-3c.html</loc>
-    <lastmod>2026-01-06T17:16:33.719Z</lastmod>
-  </url>
-  <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/Assignments/Chapter 2 - Regression/chapter-2-quiz-2a.html</loc>
-    <lastmod>2026-01-07T15:06:03.667Z</lastmod>
-  </url>
-  <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/Assignments/Chapter 2 - Regression/chapter-2-quiz-2c.html</loc>
-    <lastmod>2026-01-06T17:16:33.698Z</lastmod>
-  </url>
-  <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/Assignments/Chapter 2 - Regression/chapter-2-homework.html</loc>
+    <loc>https://paulsavala.github.io/math-3339/Assignments/Chapter 2 - Regression/chapter-2-homework.html</loc>
     <lastmod>2026-01-06T17:16:33.691Z</lastmod>
   </url>
   <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/Assignments/Chapter 4 - LLMs Feature Engineering/chapter-4-quiz-4a.html</loc>
-    <lastmod>2026-01-08T17:04:54.924Z</lastmod>
+    <loc>https://paulsavala.github.io/math-3339/Textbook/Chapter-4-LLMs-Feature-Engineering/chapter-4-llms-feature-engineering.html</loc>
+    <lastmod>2026-01-08T17:09:11.929Z</lastmod>
   </url>
   <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/Assignments/Chapter 1 - EDA/chapter-1-quiz-1c-ai.html</loc>
-    <lastmod>2026-01-08T17:07:08.286Z</lastmod>
+    <loc>https://paulsavala.github.io/math-3339/Textbook/Chapter-2-Regression/images/placeholder-info.html</loc>
+    <lastmod>2026-01-06T17:16:33.791Z</lastmod>
   </url>
   <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/Assignments/Chapter 1 - EDA/chapter-1-homework.html</loc>
+    <loc>https://paulsavala.github.io/math-3339/Textbook/table-of-contents.html</loc>
+    <lastmod>2026-01-08T17:17:49.978Z</lastmod>
+  </url>
+  <url>
+    <loc>https://paulsavala.github.io/math-3339/Textbook/Chapter-3-Classification/images/placeholder-info.html</loc>
+    <lastmod>2026-01-06T17:16:33.814Z</lastmod>
+  </url>
+  <url>
+    <loc>https://paulsavala.github.io/math-3339/Textbook/Chapter 1 - EDA/images/placeholder-info.html</loc>
+    <lastmod>2026-01-06T16:09:54.994Z</lastmod>
+  </url>
+  <url>
+    <loc>https://paulsavala.github.io/math-3339/Textbook/Chapter 1 - EDA/chapter-1-eda.html</loc>
+    <lastmod>2026-01-08T18:39:35.972Z</lastmod>
+  </url>
+  <url>
+    <loc>https://paulsavala.github.io/math-3339/Textbook/Chapter-3-Classification/chapter-3-classification.html</loc>
+    <lastmod>2026-01-08T17:08:28.181Z</lastmod>
+  </url>
+  <url>
+    <loc>https://paulsavala.github.io/math-3339/Textbook/Chapter-2-Regression/chapter-2-regression.html</loc>
+    <lastmod>2026-01-08T17:07:58.548Z</lastmod>
+  </url>
+  <url>
+    <loc>https://paulsavala.github.io/math-3339/Textbook/Chapter-4-LLMs-Feature-Engineering/images/placeholder-info.html</loc>
+    <lastmod>2026-01-06T17:16:33.821Z</lastmod>
+  </url>
+  <url>
+    <loc>https://paulsavala.github.io/math-3339/Assignments/Chapter 3 - Classification/chapter-3-homework.html</loc>
+    <lastmod>2026-01-06T17:16:33.709Z</lastmod>
+  </url>
+  <url>
+    <loc>https://paulsavala.github.io/math-3339/Assignments/Chapter 1 - EDA/chapter-1-homework.html</loc>
     <lastmod>2026-01-06T17:50:16.568Z</lastmod>
   </url>
   <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/Assignments/Chapter 1 - EDA/chapter-1-quiz-1c.html</loc>
-    <lastmod>2026-01-08T16:35:58.077Z</lastmod>
-  </url>
-  <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/Assignments/Chapter 1 - EDA/chapter-1-quiz-1a-ai.html</loc>
-    <lastmod>2026-01-08T16:25:37.289Z</lastmod>
-  </url>
-  <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/In-class activities/Chapter 1/1.1 - Setup and Prompting.html</loc>
+    <loc>https://paulsavala.github.io/math-3339/In-class activities/Chapter 1/1.1 - Setup and Prompting.html</loc>
     <lastmod>2026-01-08T01:42:59.217Z</lastmod>
   </url>
   <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/In-class activities/Chapter 1/1.6-1.7 - Iterative EDA.html</loc>
+    <loc>https://paulsavala.github.io/math-3339/In-class activities/Chapter 1/1.6-1.7 - Iterative EDA.html</loc>
     <lastmod>2026-01-08T14:57:25.666Z</lastmod>
   </url>
   <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/In-class activities/Chapter 2/2.7 - Regularization.html</loc>
+    <loc>https://paulsavala.github.io/math-3339/In-class activities/Chapter 2/2.7 - Regularization.html</loc>
     <lastmod>2026-01-08T15:04:20.961Z</lastmod>
   </url>
   <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/In-class activities/Chapter 2/2.1 - Train Test Split.html</loc>
+    <loc>https://paulsavala.github.io/math-3339/In-class activities/Chapter 2/2.1 - Train Test Split.html</loc>
     <lastmod>2026-01-08T14:57:43.073Z</lastmod>
   </url>
   <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/In-class activities/Chapter 2/2.8-2.9 - Elastic Net.html</loc>
+    <loc>https://paulsavala.github.io/math-3339/In-class activities/Chapter 2/2.8-2.9 - Elastic Net.html</loc>
     <lastmod>2026-01-08T15:04:49.569Z</lastmod>
   </url>
   <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/In-class activities/Chapter 2/2.5 - Polynomial Regression.html</loc>
+    <loc>https://paulsavala.github.io/math-3339/In-class activities/Chapter 2/2.5 - Polynomial Regression.html</loc>
     <lastmod>2026-01-08T15:03:58.822Z</lastmod>
   </url>
   <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/index.html</loc>
-    <lastmod>2026-01-08T18:22:15.918Z</lastmod>
+    <loc>https://paulsavala.github.io/math-3339/index.html</loc>
+    <lastmod>2026-01-08T19:10:04.297Z</lastmod>
   </url>
   <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/Templates/textbook-chapter-template.html</loc>
+    <loc>https://paulsavala.github.io/math-3339/Templates/textbook-chapter-template.html</loc>
     <lastmod>2026-01-06T16:09:54.987Z</lastmod>
   </url>
   <url>
-    <loc>https://paulsavala.github.io/math-3339-intro-data-science-with-llms/AGENTS.html</loc>
+    <loc>https://paulsavala.github.io/math-3339/AGENTS.html</loc>
     <lastmod>2026-01-06T17:16:33.678Z</lastmod>
   </url>
 </urlset>

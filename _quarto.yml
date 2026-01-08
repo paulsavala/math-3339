@@ -1,9 +1,9 @@
 project:
-  title: "MATH 3339: Introduction to Data Science with LLMs"
+  title: "MATH 3339: Introduction to Data Science"
   type: website
 
 website:
-  site-url: https://paulsavala.github.io/math-3339-intro-data-science-with-llms/
+  site-url: https://paulsavala.github.io/math-3339/
 
 format:
   html:
