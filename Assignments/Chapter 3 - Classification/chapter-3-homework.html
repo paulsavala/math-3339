@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Module 5 Homework: Classification Models – MATH 3339: Introduction to Data Science</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-0b37c64f34216b628666a8dac638b53b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles/textbook-nav.css">
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-search-results"></div>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#instructions" id="toc-instructions" class="nav-link active" data-scroll-target="#instructions">Instructions</a>
+  <ul class="collapse">
+  <li><a href="#datasets" id="toc-datasets" class="nav-link" data-scroll-target="#datasets">Datasets</a></li>
+  </ul></li>
+  <li><a href="#part-a-by-hand-no-ai-assistance" id="toc-part-a-by-hand-no-ai-assistance" class="nav-link" data-scroll-target="#part-a-by-hand-no-ai-assistance">Part A: By Hand (No AI Assistance)</a>
+  <ul class="collapse">
+  <li><a href="#question-1-4-points" id="toc-question-1-4-points" class="nav-link" data-scroll-target="#question-1-4-points">Question 1 (4 points)</a></li>
+  <li><a href="#question-2-5-points" id="toc-question-2-5-points" class="nav-link" data-scroll-target="#question-2-5-points">Question 2 (5 points)</a></li>
+  <li><a href="#question-3-5-points" id="toc-question-3-5-points" class="nav-link" data-scroll-target="#question-3-5-points">Question 3 (5 points)</a></li>
+  <li><a href="#question-4-4-points" id="toc-question-4-4-points" class="nav-link" data-scroll-target="#question-4-4-points">Question 4 (4 points)</a></li>
+  <li><a href="#question-5-5-points" id="toc-question-5-5-points" class="nav-link" data-scroll-target="#question-5-5-points">Question 5 (5 points)</a></li>
+  <li><a href="#question-6-4-points" id="toc-question-6-4-points" class="nav-link" data-scroll-target="#question-6-4-points">Question 6 (4 points)</a></li>
+  <li><a href="#question-7-5-points" id="toc-question-7-5-points" class="nav-link" data-scroll-target="#question-7-5-points">Question 7 (5 points)</a></li>
+  <li><a href="#question-8-4-points" id="toc-question-8-4-points" class="nav-link" data-scroll-target="#question-8-4-points">Question 8 (4 points)</a></li>
+  <li><a href="#question-9-5-points" id="toc-question-9-5-points" class="nav-link" data-scroll-target="#question-9-5-points">Question 9 (5 points)</a></li>
+  <li><a href="#question-10-4-points" id="toc-question-10-4-points" class="nav-link" data-scroll-target="#question-10-4-points">Question 10 (4 points)</a></li>
+  </ul></li>
+  <li><a href="#part-b-with-ai-assistance" id="toc-part-b-with-ai-assistance" class="nav-link" data-scroll-target="#part-b-with-ai-assistance">Part B: With AI Assistance</a>
+  <ul class="collapse">
+  <li><a href="#question-11-5-points" id="toc-question-11-5-points" class="nav-link" data-scroll-target="#question-11-5-points">Question 11 (5 points)</a></li>
+  <li><a href="#question-12-6-points" id="toc-question-12-6-points" class="nav-link" data-scroll-target="#question-12-6-points">Question 12 (6 points)</a></li>
+  <li><a href="#question-13-6-points" id="toc-question-13-6-points" class="nav-link" data-scroll-target="#question-13-6-points">Question 13 (6 points)</a></li>
+  <li><a href="#question-14-6-points" id="toc-question-14-6-points" class="nav-link" data-scroll-target="#question-14-6-points">Question 14 (6 points)</a></li>
+  <li><a href="#question-15-5-points" id="toc-question-15-5-points" class="nav-link" data-scroll-target="#question-15-5-points">Question 15 (5 points)</a></li>
+  <li><a href="#question-16-6-points" id="toc-question-16-6-points" class="nav-link" data-scroll-target="#question-16-6-points">Question 16 (6 points)</a></li>
+  <li><a href="#question-17-6-points" id="toc-question-17-6-points" class="nav-link" data-scroll-target="#question-17-6-points">Question 17 (6 points)</a></li>
+  <li><a href="#question-18-6-points" id="toc-question-18-6-points" class="nav-link" data-scroll-target="#question-18-6-points">Question 18 (6 points)</a></li>
+  <li><a href="#question-19-12-points" id="toc-question-19-12-points" class="nav-link" data-scroll-target="#question-19-12-points">Question 19 (12 points)</a></li>
+  </ul></li>
+  <li><a href="#submission-guidelines" id="toc-submission-guidelines" class="nav-link" data-scroll-target="#submission-guidelines">Submission Guidelines</a></li>
+  <li><a href="#grading-rubric" id="toc-grading-rubric" class="nav-link" data-scroll-target="#grading-rubric">Grading Rubric</a></li>
+  <li><a href="#tips-for-success" id="toc-tips-for-success" class="nav-link" data-scroll-target="#tips-for-success">Tips for Success</a>
+  <ul class="collapse">
+  <li><a href="#for-part-a" id="toc-for-part-a" class="nav-link" data-scroll-target="#for-part-a">For Part A:</a></li>
+  <li><a href="#for-part-b" id="toc-for-part-b" class="nav-link" data-scroll-target="#for-part-b">For Part B:</a></li>
+  <li><a href="#general" id="toc-general" class="nav-link" data-scroll-target="#general">General:</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Module 5 Homework: Classification Models</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="instructions" class="level2">
+<h2 class="anchored" data-anchor-id="instructions">Instructions</h2>
+<p><strong>Due Date:</strong> [To be assigned by instructor]</p>
+<p>This homework is divided into two parts. Part A should be completed <strong>without AI assistance</strong> to build your foundational understanding of classification models, metrics, and evaluation. Part B should be completed <strong>with AI assistance</strong> (like Gemini CLI) to practice comprehensive model comparison and hyperparameter tuning at scale.</p>
+<p>For all questions, submit:</p>
+<ol type="1">
+<li>Your code (in a <code>.py</code> file or Jupyter notebook)</li>
+<li>All visualizations generated</li>
+<li>Written answers to interpretation questions (can be in markdown or comments)</li>
+<li>For Part B: Include the prompts you used with the AI assistant</li>
+</ol>
+<section id="datasets" class="level3">
+<h3 class="anchored" data-anchor-id="datasets">Datasets</h3>
+<p>You’ll be working with three datasets:</p>
+<p><strong>Dataset 1:</strong> <code>titanic.csv</code> - Titanic passenger survival data with columns:</p>
+<ul>
+<li><code>Survived</code>: Whether passenger survived (0=No, 1=Yes) (TARGET)</li>
+<li><code>Pclass</code>: Passenger class (1, 2, or 3)</li>
+<li><code>Sex</code>: Passenger sex</li>
+<li><code>Age</code>: Passenger age</li>
+<li><code>SibSp</code>: Number of siblings/spouses aboard</li>
+<li><code>Parch</code>: Number of parents/children aboard</li>
+<li><code>Fare</code>: Ticket fare</li>
+<li><code>Embarked</code>: Port of embarkation (C, Q, S)</li>
+</ul>
+<p><strong>Dataset 2:</strong> <code>spotify.csv</code> - Spotify song data with columns:</p>
+<ul>
+<li><code>popularity</code>: Song popularity score (0-100)</li>
+<li><code>danceability</code>, <code>energy</code>, <code>loudness</code>, <code>speechiness</code>, <code>acousticness</code>, <code>instrumentalness</code>, <code>liveness</code>, <code>valence</code>, <code>tempo</code>: Audio features</li>
+</ul>
+<p>You will create a binary target: viral_hit = popularity &gt; 80</p>
+<p><strong>Dataset 3:</strong> <code>isp_customers.csv</code> - Internet service provider customer data with columns:</p>
+<ul>
+<li><code>Churn</code>: Whether customer churned (TARGET)</li>
+<li><code>gender</code>, <code>SeniorCitizen</code>, <code>Partner</code>, <code>Dependents</code>: Demographics</li>
+<li><code>tenure</code>: Months with company</li>
+<li><code>PhoneService</code>, <code>InternetService</code>, <code>Contract</code>: Service details</li>
+<li><code>MonthlyCharges</code>, <code>TotalCharges</code>: Billing information</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="part-a-by-hand-no-ai-assistance" class="level2">
+<h2 class="anchored" data-anchor-id="part-a-by-hand-no-ai-assistance">Part A: By Hand (No AI Assistance)</h2>
+<p>Complete questions 1-10 without using AI coding assistants. The goal is to build your foundational understanding of classification models and metrics.</p>
+<section id="question-1-4-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-1-4-points">Question 1 (4 points)</h3>
+<p>Load the <code>titanic.csv</code> dataset and prepare it for classification:</p>
+<ol type="a">
+<li><p>Drop rows with missing values in <code>Age</code>, <code>Fare</code>, and <code>Survived</code></p></li>
+<li><p>Create feature matrix X using: <code>Pclass</code>, <code>Age</code>, <code>SibSp</code>, <code>Parch</code>, <code>Fare</code></p></li>
+<li><p>Create target vector y using <code>Survived</code></p></li>
+<li><p>Split into train/test sets (80/20, random_state=42)</p></li>
+<li><p>How many passengers are in each class (survived vs not survived) in the training set? Is this balanced or imbalanced?</p></li>
+</ol>
+<hr>
+</section>
+<section id="question-2-5-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-2-5-points">Question 2 (5 points)</h3>
+<p>Fit a Logistic Regression model on the Titanic data:</p>
+<ol type="a">
+<li><p>Fit the model on X_train and y_train</p></li>
+<li><p>Get predictions on X_test</p></li>
+<li><p>Create and display a confusion matrix</p></li>
+<li><p>Calculate accuracy, precision, recall, and F1 score manually from the confusion matrix values</p></li>
+<li><p>Verify your calculations match sklearn’s metric functions</p></li>
+</ol>
+<hr>
+</section>
+<section id="question-3-5-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-3-5-points">Question 3 (5 points)</h3>
+<p>Interpret the logistic regression results:</p>
+<ol type="a">
+<li><p>Extract the coefficients and create a DataFrame showing feature names and their coefficients</p></li>
+<li><p>Calculate the odds ratio for each feature (exp of coefficient)</p></li>
+<li><p>Which feature has the strongest positive association with survival? Strongest negative?</p></li>
+<li><p>Interpret the Pclass coefficient in plain language: “For each unit increase in passenger class…”</p></li>
+<li><p>Why should we be careful interpreting these coefficients?</p></li>
+</ol>
+<hr>
+</section>
+<section id="question-4-4-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-4-4-points">Question 4 (4 points)</h3>
+<p>Fit a Decision Tree classifier on the Titanic data:</p>
+<ol type="a">
+<li><p>Fit a tree with max_depth=3</p></li>
+<li><p>Calculate training and test accuracy</p></li>
+<li><p>Extract and plot feature importances as a horizontal bar chart</p></li>
+<li><p>Which feature does the decision tree consider most important? Does this match the logistic regression coefficients?</p></li>
+</ol>
+<hr>
+</section>
+<section id="question-5-5-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-5-5-points">Question 5 (5 points)</h3>
+<p>Investigate the bias-variance tradeoff with decision trees:</p>
+<ol type="a">
+<li><p>Fit decision trees with max_depth values: [1, 2, 3, 5, 7, 10, 15, 20, None]</p></li>
+<li><p>For each, calculate training and test accuracy</p></li>
+<li><p>Plot both accuracies vs.&nbsp;max_depth on the same graph</p></li>
+<li><p>At what depth does overfitting become apparent?</p></li>
+<li><p>What max_depth would you choose for this dataset? Why?</p></li>
+</ol>
+<hr>
+</section>
+<section id="question-6-4-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-6-4-points">Question 6 (4 points)</h3>
+<p>Fit a Random Forest classifier:</p>
+<ol type="a">
+<li><p>Fit with n_estimators=100, max_depth=5, random_state=42</p></li>
+<li><p>Compare its test accuracy to the single decision tree with max_depth=5</p></li>
+<li><p>Extract feature importances from both models and compare them</p></li>
+<li><p>Why might the feature importances differ between a single tree and a random forest?</p></li>
+</ol>
+<hr>
+</section>
+<section id="question-7-5-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-7-5-points">Question 7 (5 points)</h3>
+<p>Fit a k-Nearest Neighbors classifier:</p>
+<ol type="a">
+<li><p>Scale the features using StandardScaler (fit on train, transform both)</p></li>
+<li><p>Fit k-NN with k=5 on the scaled data</p></li>
+<li><p>Calculate test accuracy</p></li>
+<li><p>Test k values [1, 3, 5, 7, 10, 15, 20] and plot test accuracy vs.&nbsp;k</p></li>
+<li><p>What k value gives the best performance? What happens at very small and very large k?</p></li>
+</ol>
+<hr>
+</section>
+<section id="question-8-4-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-8-4-points">Question 8 (4 points)</h3>
+<p>Create an ROC curve for the logistic regression model:</p>
+<ol type="a">
+<li><p>Get probability predictions for the positive class</p></li>
+<li><p>Calculate FPR and TPR using roc_curve</p></li>
+<li><p>Calculate the AUC score</p></li>
+<li><p>Plot the ROC curve with the diagonal reference line and display AUC in the legend</p></li>
+</ol>
+<hr>
+</section>
+<section id="question-9-5-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-9-5-points">Question 9 (5 points)</h3>
+<p>Compare multiple classifiers:</p>
+<ol type="a">
+<li><p>Fit Logistic Regression, Decision Tree (depth=5), Random Forest (100 trees), and k-NN (k=5, scaled)</p></li>
+<li><p>Calculate test accuracy for each</p></li>
+<li><p>Create a bar chart comparing accuracies</p></li>
+<li><p>Get ROC curves for all models that provide predict_proba and plot them on the same axes</p></li>
+<li><p>Based on both accuracy and AUC, which model performs best?</p></li>
+</ol>
+<hr>
+</section>
+<section id="question-10-4-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-10-4-points">Question 10 (4 points)</h3>
+<p>Explain in your own words (3-4 sentences each):</p>
+<ol type="a">
+<li><p>When would you choose precision as your primary metric? Give a real-world example.</p></li>
+<li><p>When would you choose recall as your primary metric? Give a real-world example.</p></li>
+<li><p>What is the F1 score and when is it useful?</p></li>
+<li><p>Why is accuracy often misleading for imbalanced datasets?</p></li>
+</ol>
+<hr>
+</section>
+</section>
+<section id="part-b-with-ai-assistance" class="level2">
+<h2 class="anchored" data-anchor-id="part-b-with-ai-assistance">Part B: With AI Assistance</h2>
+<p>For questions 11-20, you should use an AI coding assistant (like Gemini CLI) to help you perform comprehensive classification analysis. The goal is to practice systematic model comparison and handling real-world challenges.</p>
+<p><strong>Important:</strong> For each question, save the prompt(s) you used with the AI assistant. Part of your grade will be based on the quality of your prompts.</p>
+<hr>
+<section id="question-11-5-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-11-5-points">Question 11 (5 points)</h3>
+<p>Use AI to perform comprehensive hyperparameter tuning for a Decision Tree on the Titanic dataset.</p>
+<p>Test combinations of: - max_depth: [2, 3, 5, 7, 10, 15] - min_samples_split: [2, 5, 10, 20] - min_samples_leaf: [1, 2, 5, 10]</p>
+<p>Your code should:</p>
+<ul>
+<li>Use GridSearchCV with 5-fold cross-validation</li>
+<li>Find the best hyperparameter combination</li>
+<li>Display the top 5 parameter combinations</li>
+<li>Fit the best model and evaluate on test set</li>
+</ul>
+<p><strong>Deliverables:</strong></p>
+<ul>
+<li>Code</li>
+<li>Best parameters and test accuracy</li>
+<li>Written interpretation (3-4 sentences)</li>
+<li>Your AI prompt(s)</li>
+</ul>
+<hr>
+</section>
+<section id="question-12-6-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-12-6-points">Question 12 (6 points)</h3>
+<p>Prompt AI to create a comprehensive model comparison on the Titanic dataset.</p>
+<p>Compare these classifiers: - Logistic Regression - Decision Tree (tuned) - Random Forest (tuned) - SVM with RBF kernel - k-NN (tuned)</p>
+<p>Your code should:</p>
+<ul>
+<li>Use GridSearchCV to tune each model</li>
+<li>Create a comparison table with accuracy, precision, recall, F1, and AUC</li>
+<li>Plot all ROC curves on the same graph</li>
+<li>Create a heatmap of the comparison metrics</li>
+</ul>
+<p>Write a paragraph recommending which model to use and why.</p>
+<p><strong>Deliverables:</strong></p>
+<ul>
+<li>Code</li>
+<li>Comparison table and visualizations</li>
+<li>ROC curve comparison plot</li>
+<li>Written recommendation (5-6 sentences)</li>
+<li>Your AI prompt(s)</li>
+</ul>
+<hr>
+</section>
+<section id="question-13-6-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-13-6-points">Question 13 (6 points)</h3>
+<p>Use AI to analyze class imbalance in the Spotify dataset.</p>
+<p>Create a binary classification target: viral_hit = popularity &gt; 80</p>
+<p>Your code should:</p>
+<ul>
+<li>Show the class distribution</li>
+<li>Fit a baseline model (Logistic Regression) without handling imbalance</li>
+<li>Apply three strategies: class_weight=‘balanced’, SMOTE, random undersampling</li>
+<li>Compare performance using precision, recall, F1, and AUC for each strategy</li>
+<li>Create confusion matrices for each approach</li>
+</ul>
+<p>Which strategy works best for identifying viral hits?</p>
+<p><strong>Deliverables:</strong></p>
+<ul>
+<li>Code</li>
+<li>Class distribution visualization</li>
+<li>Performance comparison table</li>
+<li>Confusion matrices for each approach</li>
+<li>Written analysis (5-6 sentences)</li>
+<li>Your AI prompt(s)</li>
+</ul>
+<hr>
+</section>
+<section id="question-14-6-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-14-6-points">Question 14 (6 points)</h3>
+<p>Prompt AI to visualize decision boundaries for different classifiers.</p>
+<p>Using the Titanic dataset with only <code>Age</code> and <code>Fare</code> as features:</p>
+<ul>
+<li>Create decision boundary plots for:
+<ul>
+<li>Logistic Regression</li>
+<li>Decision Tree (depth=3)</li>
+<li>Decision Tree (depth=10)</li>
+<li>Random Forest</li>
+<li>SVM (linear kernel)</li>
+<li>SVM (RBF kernel)</li>
+<li>k-NN (k=3)</li>
+<li>k-NN (k=20)</li>
+</ul></li>
+</ul>
+<p>Arrange all 8 plots in a 2x4 grid with consistent axis limits and color schemes.</p>
+<p>How do the decision boundaries differ? Which creates the most complex boundaries?</p>
+<p><strong>Deliverables:</strong></p>
+<ul>
+<li>Code</li>
+<li>Decision boundary visualization (2x4 grid)</li>
+<li>Written comparison (4-5 sentences)</li>
+<li>Your AI prompt(s)</li>
+</ul>
+<hr>
+</section>
+<section id="question-15-5-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-15-5-points">Question 15 (5 points)</h3>
+<p>Use AI to analyze feature importance across different models.</p>
+<p>Using the Titanic dataset (all numeric features):</p>
+<ul>
+<li>Extract feature importances from:
+<ul>
+<li>Logistic Regression (absolute coefficients)</li>
+<li>Decision Tree</li>
+<li>Random Forest</li>
+<li>Permutation importance for k-NN and SVM</li>
+</ul></li>
+<li>Create a heatmap showing feature importance rankings across all models</li>
+</ul>
+<p>Which features are consistently important? Which differ between models?</p>
+<p><strong>Deliverables:</strong></p>
+<ul>
+<li>Code</li>
+<li>Feature importance heatmap</li>
+<li>Written analysis (3-4 sentences)</li>
+<li>Your AI prompt(s)</li>
+</ul>
+<hr>
+</section>
+<section id="question-16-6-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-16-6-points">Question 16 (6 points)</h3>
+<p>Prompt AI to perform cross-dataset model evaluation.</p>
+<p>Train models on the Titanic dataset and ISP customer dataset (predicting churn):</p>
+<ul>
+<li>For each dataset, tune and fit: Logistic Regression, Random Forest, k-NN</li>
+<li>Compare how well each model type performs across the two datasets</li>
+<li>Create a comparison table showing model performance on each dataset</li>
+</ul>
+<p>Do the same model types perform best on both datasets? Why or why not?</p>
+<p><strong>Deliverables:</strong></p>
+<ul>
+<li>Code for both datasets</li>
+<li>Cross-dataset comparison table</li>
+<li>Written analysis (5-6 sentences)</li>
+<li>Your AI prompt(s)</li>
+</ul>
+<hr>
+</section>
+<section id="question-17-6-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-17-6-points">Question 17 (6 points)</h3>
+<p>Prompt AI to create an ensemble voting classifier.</p>
+<p>Using the Titanic dataset:</p>
+<ul>
+<li>Create a VotingClassifier combining:
+<ul>
+<li>Logistic Regression</li>
+<li>Random Forest</li>
+<li>SVM (with probability=True)</li>
+</ul></li>
+<li>Use both ‘hard’ and ‘soft’ voting</li>
+<li>Compare the ensemble to individual models</li>
+</ul>
+<p>Does the ensemble outperform the best individual model?</p>
+<p><strong>Deliverables:</strong></p>
+<ul>
+<li>Code</li>
+<li>Performance comparison table</li>
+<li>Written analysis (4-5 sentences)</li>
+<li>Your AI prompt(s)</li>
+</ul>
+<hr>
+</section>
+<section id="question-18-6-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-18-6-points">Question 18 (6 points)</h3>
+<p>Use AI to analyze k-NN with different distance metrics.</p>
+<p>Using the ISP customer dataset (with a mix of categorical and numerical features):</p>
+<ul>
+<li>Test distance metrics: euclidean, manhattan, cosine</li>
+<li>For categorical features, use appropriate encoding</li>
+<li>Compare performance across metrics</li>
+<li>Analyze which metric works best for this mixed-type data</li>
+</ul>
+<p>How does the choice of distance metric affect performance?</p>
+<p><strong>Deliverables:</strong></p>
+<ul>
+<li>Code</li>
+<li>Performance comparison table</li>
+<li>Written analysis (4-5 sentences)</li>
+<li>Your AI prompt(s)</li>
+</ul>
+<hr>
+</section>
+<section id="question-19-12-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-19-12-points">Question 19 (12 points)</h3>
+<p>For this final question, ask AI to help you conduct a <strong>complete classification analysis</strong> from start to finish on the ISP customer dataset (predicting churn).</p>
+<p>Your analysis should include:</p>
+<ol type="1">
+<li><strong>Exploratory Data Analysis:</strong>
+<ul>
+<li>Summary statistics</li>
+<li>Class distribution</li>
+<li>Feature distributions by target class</li>
+<li>Correlation analysis</li>
+</ul></li>
+<li><strong>Data Preparation:</strong>
+<ul>
+<li>Handle missing values</li>
+<li>Encode categorical variables</li>
+<li>Feature scaling (where appropriate)</li>
+<li>Train/validation/test split (60/20/20)</li>
+</ul></li>
+<li><strong>Model Development:</strong>
+<ul>
+<li>Fit multiple models: Logistic Regression, Decision Tree, Random Forest, SVM, k-NN</li>
+<li>Hyperparameter tuning using validation set</li>
+<li>Handle class imbalance appropriately</li>
+</ul></li>
+<li><strong>Model Evaluation:</strong>
+<ul>
+<li>Compare all models using appropriate metrics (given potential imbalance)</li>
+<li>ROC curves for all models</li>
+<li>Select best model based on business context (what matters more: finding churners or not falsely flagging loyal customers?)</li>
+</ul></li>
+<li><strong>Final Model:</strong>
+<ul>
+<li>Evaluate on test set (only once!)</li>
+<li>Feature importance analysis</li>
+<li>Create confusion matrix with business interpretation</li>
+</ul></li>
+</ol>
+<p>Write a 1-page executive summary (300-400 words) that explains:</p>
+<ul>
+<li>The business problem (customer churn prediction)</li>
+<li>Data characteristics and challenges</li>
+<li>Models tested and evaluation approach</li>
+<li>How the best model was selected</li>
+<li>Performance on test set</li>
+<li>Key features predicting churn</li>
+<li>Business recommendations</li>
+</ul>
+<p><strong>Deliverables:</strong></p>
+<ul>
+<li>Complete analysis code (well-commented)</li>
+<li>All visualizations (EDA, ROC curves, confusion matrices)</li>
+<li>Executive summary</li>
+<li>Your AI prompt(s)</li>
+<li>Reflection: What classification-specific challenges did you encounter that you wouldn’t face in regression?</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="submission-guidelines" class="level2">
+<h2 class="anchored" data-anchor-id="submission-guidelines">Submission Guidelines</h2>
+<p>Submit a ZIP file containing:</p>
+<ol type="1">
+<li><strong>Code files:</strong> All <code>.py</code> files or Jupyter notebooks</li>
+<li><strong>Visualizations folder:</strong> All plots and charts generated</li>
+<li><strong>Written responses:</strong> A single document (PDF or Markdown) with all your written answers, interpretations, and AI prompts used</li>
+<li><strong>Data:</strong> Include the datasets if you made any modifications</li>
+</ol>
+<hr>
+</section>
+<section id="grading-rubric" class="level2">
+<h2 class="anchored" data-anchor-id="grading-rubric">Grading Rubric</h2>
+<p><strong>Part A: By Hand (45 points)</strong></p>
+<ul>
+<li>Code correctness and implementation: 25 points</li>
+<li>Proper understanding of classification metrics and models: 12 points</li>
+<li>Written interpretations and explanations: 8 points</li>
+</ul>
+<p><strong>Part B: AI-Assisted (55 points)</strong></p>
+<ul>
+<li>Code functionality and correctness: 25 points</li>
+<li>Quality and specificity of AI prompts: 14 points</li>
+<li>Visualizations (ROC curves, confusion matrices, comparisons): 10 points</li>
+<li>Written interpretations and insights: 6 points</li>
+</ul>
+<p><strong>Total: 100 points</strong></p>
+<hr>
+</section>
+<section id="tips-for-success" class="level2">
+<h2 class="anchored" data-anchor-id="tips-for-success">Tips for Success</h2>
+<section id="for-part-a" class="level3">
+<h3 class="anchored" data-anchor-id="for-part-a">For Part A:</h3>
+<ul>
+<li>Always check class balance before fitting models</li>
+<li>Remember: precision = “of those I predicted positive, how many were correct?”</li>
+<li>Remember: recall = “of those that were actually positive, how many did I find?”</li>
+<li>Decision tree depth controls overfitting—start shallow</li>
+<li>k-NN requires scaling; trees do not</li>
+<li>When comparing models, use multiple metrics, not just accuracy</li>
+</ul>
+</section>
+<section id="for-part-b" class="level3">
+<h3 class="anchored" data-anchor-id="for-part-b">For Part B:</h3>
+<ul>
+<li>Ask AI to test many hyperparameter combinations systematically</li>
+<li>Request ROC curves for all models on the same plot for easy comparison</li>
+<li>When dealing with imbalance, always compare multiple strategies</li>
+<li>Ask for decision boundary visualizations to understand model behavior</li>
+<li>Request confusion matrices normalized by row (actual class) for better interpretation</li>
+</ul>
+</section>
+<section id="general" class="level3">
+<h3 class="anchored" data-anchor-id="general">General:</h3>
+<ul>
+<li>Accuracy can be misleading—always check class balance first</li>
+<li>Think about the business context when choosing metrics</li>
+<li>ROC/AUC is great for model comparison but doesn’t tell the whole story</li>
+<li>Feature importance from different models may disagree—that’s okay</li>
+<li>Use your brain. That’s what it’s there for.</li>
+</ul>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/paulsavala\.github\.io\/math-3339\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
