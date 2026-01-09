@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Module 4 Homework: Regression Models – MATH 3339: Introduction to Data Science</title>
+<title>Chapter 2 Homework: Regression Models – MATH 3339: Introduction to Data Science</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,10 +20,45 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
@@ -67,6 +102,9 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
 
 <link rel="stylesheet" href="../../styles/textbook-nav.css">
@@ -115,13 +153,6 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#question-20-7-points" id="toc-question-20-7-points" class="nav-link" data-scroll-target="#question-20-7-points">Question 20 (7 points)</a></li>
   </ul></li>
   <li><a href="#submission-guidelines" id="toc-submission-guidelines" class="nav-link" data-scroll-target="#submission-guidelines">Submission Guidelines</a></li>
-  <li><a href="#grading-rubric" id="toc-grading-rubric" class="nav-link" data-scroll-target="#grading-rubric">Grading Rubric</a></li>
-  <li><a href="#tips-for-success" id="toc-tips-for-success" class="nav-link" data-scroll-target="#tips-for-success">Tips for Success</a>
-  <ul class="collapse">
-  <li><a href="#for-part-a" id="toc-for-part-a" class="nav-link" data-scroll-target="#for-part-a">For Part A:</a></li>
-  <li><a href="#for-part-b" id="toc-for-part-b" class="nav-link" data-scroll-target="#for-part-b">For Part B:</a></li>
-  <li><a href="#general" id="toc-general" class="nav-link" data-scroll-target="#general">General:</a></li>
-  </ul></li>
   </ul>
 </nav>
     </div>
@@ -130,7 +161,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Module 4 Homework: Regression Models</h1>
+<h1 class="title">Chapter 2 Homework: Regression Models</h1>
 </div>
 
 
@@ -168,6 +199,100 @@ ul.task-list li input[type="checkbox"] {
 <li>Target: <code>MedHouseVal</code> (median house value in $100,000s)</li>
 <li>Features: <code>MedInc</code>, <code>HouseAge</code>, <code>AveRooms</code>, <code>AveBedrms</code>, <code>Population</code>, <code>AveOccup</code>, <code>Latitude</code>, <code>Longitude</code></li>
 </ul>
+<p>Use the following code to load the dataset into a DataFrame named <code>housing_df</code>:</p>
+<div id="8f941641" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> fetch_california_housing</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>housing <span class="op">=</span> fetch_california_housing(as_frame<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>housing_df <span class="op">=</span> housing.frame</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>housing_df.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">MedInc</th>
+<th data-quarto-table-cell-role="th">HouseAge</th>
+<th data-quarto-table-cell-role="th">AveRooms</th>
+<th data-quarto-table-cell-role="th">AveBedrms</th>
+<th data-quarto-table-cell-role="th">Population</th>
+<th data-quarto-table-cell-role="th">AveOccup</th>
+<th data-quarto-table-cell-role="th">Latitude</th>
+<th data-quarto-table-cell-role="th">Longitude</th>
+<th data-quarto-table-cell-role="th">MedHouseVal</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>8.3252</td>
+<td>41.0</td>
+<td>6.984127</td>
+<td>1.023810</td>
+<td>322.0</td>
+<td>2.555556</td>
+<td>37.88</td>
+<td>-122.23</td>
+<td>4.526</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>8.3014</td>
+<td>21.0</td>
+<td>6.238137</td>
+<td>0.971880</td>
+<td>2401.0</td>
+<td>2.109842</td>
+<td>37.86</td>
+<td>-122.22</td>
+<td>3.585</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>7.2574</td>
+<td>52.0</td>
+<td>8.288136</td>
+<td>1.073446</td>
+<td>496.0</td>
+<td>2.802260</td>
+<td>37.85</td>
+<td>-122.24</td>
+<td>3.521</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>5.6431</td>
+<td>52.0</td>
+<td>5.817352</td>
+<td>1.073059</td>
+<td>558.0</td>
+<td>2.547945</td>
+<td>37.85</td>
+<td>-122.25</td>
+<td>3.413</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>3.8462</td>
+<td>52.0</td>
+<td>6.281853</td>
+<td>1.081081</td>
+<td>565.0</td>
+<td>2.181467</td>
+<td>37.85</td>
+<td>-122.25</td>
+<td>3.422</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
 <p><strong>Dataset 2:</strong> Advertising Dataset (ISLR)</p>
 <ul>
 <li>Direct download: https://www.statlearning.com/s/Advertising.csv</li>
@@ -180,6 +305,70 @@ ul.task-list li input[type="checkbox"] {
 </ul></li>
 <li>Note: The file includes an <code>Unnamed: 0</code> index column. Drop it after loading.</li>
 </ul>
+<p>Use the following code to load the dataset into a DataFrame named <code>advertising_df</code>:</p>
+<div id="82e29d57" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>advertising_url <span class="op">=</span> <span class="st">"https://www.statlearning.com/s/Advertising.csv"</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>advertising_df <span class="op">=</span> pd.read_csv(advertising_url)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>advertising_df <span class="op">=</span> advertising_df.drop(columns<span class="op">=</span>[<span class="st">"Unnamed: 0"</span>])</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>advertising_df.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="2">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">TV</th>
+<th data-quarto-table-cell-role="th">radio</th>
+<th data-quarto-table-cell-role="th">newspaper</th>
+<th data-quarto-table-cell-role="th">sales</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>230.1</td>
+<td>37.8</td>
+<td>69.2</td>
+<td>22.1</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>44.5</td>
+<td>39.3</td>
+<td>45.1</td>
+<td>10.4</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>17.2</td>
+<td>45.9</td>
+<td>69.3</td>
+<td>9.3</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>151.5</td>
+<td>41.3</td>
+<td>58.5</td>
+<td>18.5</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>180.8</td>
+<td>10.8</td>
+<td>58.4</td>
+<td>12.9</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
 <p><strong>Dataset 3:</strong> Bike Sharing Dataset (UCI)</p>
 <ul>
 <li>Source: https://archive.ics.uci.edu/ml/datasets/bike+sharing+dataset</li>
@@ -187,7 +376,17 @@ ul.task-list li input[type="checkbox"] {
 <li>Target: <code>cnt</code> (total rentals)</li>
 <li>Key features: <code>temp</code>, <code>atemp</code> (highly correlated), <code>hum</code>, <code>windspeed</code>, <code>season</code>, <code>workingday</code></li>
 <li>Note: <code>instant</code> and <code>dteday</code> are identifiers and should be dropped before modeling.</li>
+<li>Download the dataset from: https://archive.ics.uci.edu/dataset/275/bike+sharing+dataset</li>
 </ul>
+<p>Use the following code to load the dataset into a DataFrame named <code>bikes_df</code>:</p>
+<div id="88ffef3c" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Once you have the data downloaded, CHANGE THE CODE BELOW to point to where you have the file saved</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># bikes_df = pd.read_csv("day.csv")</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># bikes_df = bikes_df.drop(columns=["instant", "dteday"])</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># bikes_df.head()</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 <hr>
 </section>
 </section>
@@ -609,60 +808,8 @@ ul.task-list li input[type="checkbox"] {
 <li><strong>Written responses:</strong> A single document (PDF or Markdown) with all your written answers, interpretations, and AI prompts used</li>
 <li><strong>Data:</strong> Include the datasets if you made any modifications</li>
 </ol>
-<hr>
-</section>
-<section id="grading-rubric" class="level2">
-<h2 class="anchored" data-anchor-id="grading-rubric">Grading Rubric</h2>
-<p><strong>Part A: By Hand (45 points)</strong></p>
-<ul>
-<li>Code correctness and implementation: 25 points</li>
-<li>Proper understanding of diagnostics and regularization: 12 points</li>
-<li>Written interpretations and explanations: 8 points</li>
-</ul>
-<p><strong>Part B: AI-Assisted (55 points)</strong></p>
-<ul>
-<li>Code functionality and correctness: 25 points</li>
-<li>Quality and specificity of AI prompts: 14 points</li>
-<li>Visualizations and diagnostic quality: 10 points</li>
-<li>Written interpretations and insights: 6 points</li>
-</ul>
-<p><strong>Total: 100 points</strong></p>
-<hr>
-</section>
-<section id="tips-for-success" class="level2">
-<h2 class="anchored" data-anchor-id="tips-for-success">Tips for Success</h2>
-<section id="for-part-a" class="level3">
-<h3 class="anchored" data-anchor-id="for-part-a">For Part A:</h3>
-<ul>
-<li>Draw residual plots carefully and look for patterns</li>
-<li>When computing metrics by hand, work with small subsets first to verify</li>
-<li>Regularization coefficients shrink toward zero—compare magnitudes across models</li>
-<li>Understanding assumptions is crucial—violating them can make predictions unreliable</li>
-<li>Polynomial features can capture non-linear relationships but risk overfitting</li>
-</ul>
-</section>
-<section id="for-part-b" class="level3">
-<h3 class="anchored" data-anchor-id="for-part-b">For Part B:</h3>
-<ul>
-<li>Request diagnostic plots that check all assumptions systematically</li>
-<li>Ask for log-scale plots when testing many alpha values</li>
-<li>Request coefficient path plots to understand feature selection</li>
-<li>Ask for side-by-side comparisons to see regularization effects clearly</li>
-<li>When testing polynomials, visualize the fitted curves to see overfitting</li>
-</ul>
-</section>
-<section id="general" class="level3">
-<h3 class="anchored" data-anchor-id="general">General:</h3>
-<ul>
-<li>Start early—comprehensive diagnostics take time to interpret</li>
-<li>Focus on understanding why regularization helps, not just applying it</li>
-<li>Use residual plots as your primary diagnostic tool</li>
-<li>Connect regularization back to bias-variance tradeoff from Module 3</li>
-<li>Use your brain. That’s what it’s there for.</li>
-</ul>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
