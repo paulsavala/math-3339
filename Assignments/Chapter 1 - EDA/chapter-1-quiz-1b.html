@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>agents – MATH 3339: Introduction to Data Science</title>
+<title>Quiz 1b: Pandas Fundamentals – MATH 3339: Introduction to Data Science with LLMs</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,23 +23,23 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-ff63373b1067ca6f91cf1456aa1f00a2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -69,74 +69,139 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
 
-<link rel="stylesheet" href="styles/textbook-nav.css">
+<link rel="stylesheet" href="../../styles/textbook-nav.css">
 </head>
 
-<body class="fullcontent quarto-light">
+<body class="quarto-light">
 
 <div id="quarto-search-results"></div>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#instructions" id="toc-instructions" class="nav-link active" data-scroll-target="#instructions">Instructions</a></li>
+  <li><a href="#section-a-conceptual-questions" id="toc-section-a-conceptual-questions" class="nav-link" data-scroll-target="#section-a-conceptual-questions">Section A: Conceptual Questions</a>
+  <ul class="collapse">
+  <li><a href="#question-1-2-points" id="toc-question-1-2-points" class="nav-link" data-scroll-target="#question-1-2-points">Question 1 (2 points)</a></li>
+  <li><a href="#question-2-2-points" id="toc-question-2-2-points" class="nav-link" data-scroll-target="#question-2-2-points">Question 2 (2 points)</a></li>
+  </ul></li>
+  <li><a href="#section-b-code-writing" id="toc-section-b-code-writing" class="nav-link" data-scroll-target="#section-b-code-writing">Section B: Code Writing</a>
+  <ul class="collapse">
+  <li><a href="#question-1-2-points-1" id="toc-question-1-2-points-1" class="nav-link" data-scroll-target="#question-1-2-points-1">Question 1 (2 points)</a></li>
+  <li><a href="#question-2-2-points-1" id="toc-question-2-2-points-1" class="nav-link" data-scroll-target="#question-2-2-points-1">Question 2 (2 points)</a></li>
+  <li><a href="#question-3-2-points" id="toc-question-3-2-points" class="nav-link" data-scroll-target="#question-3-2-points">Question 3 (2 points)</a></li>
+  <li><a href="#question-4-3-points" id="toc-question-4-3-points" class="nav-link" data-scroll-target="#question-4-3-points">Question 4 (3 points)</a></li>
+  </ul></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="chapter-1-quiz-1b.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
+    </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Quiz 1b: Pandas Fundamentals</h1>
+</div>
 
 
 
+<div class="quarto-title-meta">
 
-<section id="repository-guidelines" class="level1">
-<h1>Repository Guidelines</h1>
-<section id="project-structure-module-organization" class="level2">
-<h2 class="anchored" data-anchor-id="project-structure-module-organization">Project Structure &amp; Module Organization</h2>
-<ul>
-<li><code>Assignments/</code>: Quarto <code>.qmd</code> files for homework and quizzes, organized by module.</li>
-<li><code>Textbook/</code>: Module chapters and supporting assets (including <code>images/</code> subfolders).</li>
-<li><code>Templates/</code>: Required templates for assignments, quizzes, and textbook chapters.</li>
-<li><code>Claude-planning/</code>: Planning notes for module development (one Markdown file per topic).</li>
-<li><code>_site/</code>: Rendered website output (generated).</li>
-<li><code>_freeze/</code>: Quarto execution cache (generated).</li>
-</ul>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="instructions" class="level2">
+<h2 class="anchored" data-anchor-id="instructions">Instructions</h2>
+<p>Answer all questions. Write code by hand as neatly as possible. Partial credit will be given for correct reasoning even if syntax isn’t perfect.</p>
+<hr>
 </section>
-<section id="build-test-and-development-commands" class="level2">
-<h2 class="anchored" data-anchor-id="build-test-and-development-commands">Build, Test, and Development Commands</h2>
-<ul>
-<li><code>quarto preview</code>: Serve the site locally with live reload for <code>.qmd</code> changes.</li>
-<li><code>quarto render</code>: Build the full site into <code>_site/</code>.</li>
-<li><code>quarto render Textbook/Module 1 - EDA/chapter-1-eda.qmd</code>: Render a single page when iterating.</li>
-</ul>
+<section id="section-a-conceptual-questions" class="level2">
+<h2 class="anchored" data-anchor-id="section-a-conceptual-questions">Section A: Conceptual Questions</h2>
+<section id="question-1-2-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-1-2-points">Question 1 (2 points)</h3>
+<p>You’re working with a dataset that has a column called <code>income</code> with many missing values (NaN). Your teammate suggests: “Let’s just drop all rows with missing income values.”</p>
+<p><strong>a)</strong> What’s one potential problem with this approach?</p>
+<p><strong>b)</strong> What would you do during EDA to decide whether dropping these rows is a good idea?</p>
+<strong>Answer:</strong>
+<div style="border: 1px solid #ccc; min-height: 400px; margin-bottom: 20px;">
+<p><!-- This is the blank area for the user to write --></p>
+</div>
+<hr>
 </section>
-<section id="coding-style-naming-conventions" class="level2">
-<h2 class="anchored" data-anchor-id="coding-style-naming-conventions">Coding Style &amp; Naming Conventions</h2>
-<ul>
-<li>Content is Quarto Markdown (<code>.qmd</code>) with Python 3.12 code blocks.</li>
-<li>Use executable blocks with <code>{python}</code> and keep code outputs visible unless noted.</li>
-<li>Prefer descriptive file names that mirror module titles (e.g., <code>chapter-1-eda.qmd</code>).</li>
-<li>Follow template structure in <code>Templates/</code> for assignments, quizzes, and chapters.</li>
-</ul>
+<section id="question-2-2-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-2-2-points">Question 2 (2 points)</h3>
+<p>Suppose your dataset’s <code>income</code> column looked like this:</p>
+<pre><code>income
+13547.78
+78634.89
+43548.18
+106818.68
+None
+50618.85
+...</code></pre>
+<p>What data type would you expect this column to be? Explain your answer.</p>
+<strong>Answer:</strong>
+<div style="border: 1px solid #ccc; min-height: 400px; margin-bottom: 20px;">
+<p><!-- This is the blank area for the user to write --></p>
+</div>
 </section>
-<section id="testing-guidelines" class="level2">
-<h2 class="anchored" data-anchor-id="testing-guidelines">Testing Guidelines</h2>
-<ul>
-<li>No automated test suite is present.</li>
-<li>Validate changes by rendering the relevant page(s) with <code>quarto render</code> and reviewing the HTML in <code>_site/</code>.</li>
-</ul>
 </section>
-<section id="commit-pull-request-guidelines" class="level2">
-<h2 class="anchored" data-anchor-id="commit-pull-request-guidelines">Commit &amp; Pull Request Guidelines</h2>
-<ul>
-<li>Commit messages are short, sentence-case summaries (e.g., “Update course schedule for new 3-module structure”).</li>
-<li>PRs should describe what changed, which pages were rendered, and link any related issues.</li>
-<li>If updating content, include a screenshot or link to the rendered <code>_site/</code> output for the modified page.</li>
-</ul>
+<section id="section-b-code-writing" class="level2">
+<h2 class="anchored" data-anchor-id="section-b-code-writing">Section B: Code Writing</h2>
+<p>For questions 2-5, assume you have already imported pandas as <code>pd</code> and seaborn as <code>sns</code>.</p>
+<hr>
+<section id="question-1-2-points-1" class="level3">
+<h3 class="anchored" data-anchor-id="question-1-2-points-1">Question 1 (2 points)</h3>
+<p>Write code to load a CSV file called <code>customers.csv</code> into a DataFrame called <code>df</code>. Then, show the first few rows of the data.</p>
+<strong>Answer:</strong>
+<div style="border: 1px solid #ccc; min-height: 200px; margin-bottom: 20px;">
+<p><!-- This is the blank area for the user to write --></p>
+</div>
+<hr>
 </section>
-<section id="agent-specific-instructions" class="level2">
-<h2 class="anchored" data-anchor-id="agent-specific-instructions">Agent-Specific Instructions</h2>
-<ul>
-<li>Follow <code>Claude.md</code> for course-writing rules, templates, and pedagogy constraints.</li>
-<li>When creating assignments or chapters, consult <code>content-overview.md</code> and update <code>Claude-planning/</code> first.</li>
-</ul>
+<section id="question-2-2-points-1" class="level3">
+<h3 class="anchored" data-anchor-id="question-2-2-points-1">Question 2 (2 points)</h3>
+<p>Write code to select only the rows where the <code>age</code> column is greater than 25 and the <code>city</code> column equals “Houston”.</p>
+<strong>Answer:</strong>
+<div style="border: 1px solid #ccc; min-height: 400px; margin-bottom: 20px;">
+<p><!-- This is the blank area for the user to write --></p>
+</div>
+<hr>
+</section>
+<section id="question-3-2-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-3-2-points">Question 3 (2 points)</h3>
+<p>Write code to calculate the mean and median of the <code>age</code> column, as well as the 99th percentile of all ages. Assume the column is numeric with no missing values.</p>
+<strong>Answer:</strong>
+<div style="border: 1px solid #ccc; min-height: 400px; margin-bottom: 20px;">
+<p><!-- This is the blank area for the user to write --></p>
+</div>
+<hr>
+</section>
+<section id="question-4-3-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-4-3-points">Question 4 (3 points)</h3>
+<p>You have a DataFrame called <code>df</code> with columns <code>customer_id</code>, <code>name</code>, and <code>email</code>. Write code to:</p>
+<ol type="1">
+<li>Select only the <code>customer_id</code>, <code>customer_type</code> and <code>income</code> columns</li>
+<li>Filter to rows where the <code>custom_type</code> is “new”</li>
+<li>Filter to rows where these new customers have an income above $100k</li>
+<li>Display the first 5 rows of the result</li>
+</ol>
+<strong>Answer:</strong>
+<div style="border: 1px solid #ccc; min-height: 600px; margin-bottom: 20px;">
+<p><!-- This is the blank area for the user to write --></p>
+</div>
 
 
 </section>
@@ -216,7 +281,7 @@ ul.task-list li input[type="checkbox"] {
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp("https:\/\/paulsavala\.github\.io\/math-3339\/");
+        var filterRegex = new RegExp("https:\/\/paulsavala\.github\.io\/math-3339-intro-data-science-with-llms\/");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }

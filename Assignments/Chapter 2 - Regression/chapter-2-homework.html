@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.26">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -36,10 +36,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-0b37c64f34216b628666a8dac638b53b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -161,32 +161,32 @@ ul.task-list li input[type="checkbox"] {
 <section id="datasets" class="level3">
 <h3 class="anchored" data-anchor-id="datasets">Datasets</h3>
 <p>You’ll be working with three datasets:</p>
-<p><strong>Dataset 1:</strong> <code>real_estate.csv</code> - Real estate pricing data with columns:</p>
+<p><strong>Dataset 1:</strong> California Housing Dataset (StatLib)</p>
 <ul>
-<li><code>price</code>: Sale price in dollars (TARGET)</li>
-<li><code>sqft</code>: Square footage</li>
-<li><code>bedrooms</code>: Number of bedrooms</li>
-<li><code>bathrooms</code>: Number of bathrooms</li>
-<li><code>age</code>: Age of property in years</li>
-<li><code>distance_downtown</code>: Distance to downtown in miles</li>
-<li><code>crime_rate</code>: Neighborhood crime rate</li>
-<li><code>school_rating</code>: Local school rating (1-10)</li>
+<li>Source: https://www.dcc.fc.up.pt/~ltorgo/Regression/cal_housing.html</li>
+<li>Load using <code>sklearn.datasets.fetch_california_housing</code></li>
+<li>Target: <code>MedHouseVal</code> (median house value in $100,000s)</li>
+<li>Features: <code>MedInc</code>, <code>HouseAge</code>, <code>AveRooms</code>, <code>AveBedrms</code>, <code>Population</code>, <code>AveOccup</code>, <code>Latitude</code>, <code>Longitude</code></li>
 </ul>
-<p><strong>Dataset 2:</strong> <code>advertising.csv</code> - Advertising budget and sales data with columns:</p>
+<p><strong>Dataset 2:</strong> Advertising Dataset (ISLR)</p>
 <ul>
-<li><code>sales</code>: Product sales in thousands (TARGET)</li>
-<li><code>tv</code>: TV advertising budget in thousands</li>
-<li><code>radio</code>: Radio advertising budget in thousands</li>
-<li><code>newspaper</code>: Newspaper advertising budget in thousands</li>
+<li>Direct download: https://www.statlearning.com/s/Advertising.csv</li>
+<li>Columns:
+<ul>
+<li><code>Sales</code>: Product sales in thousands (TARGET)</li>
+<li><code>TV</code>: TV advertising budget in thousands</li>
+<li><code>Radio</code>: Radio advertising budget in thousands</li>
+<li><code>Newspaper</code>: Newspaper advertising budget in thousands</li>
+</ul></li>
+<li>Note: The file includes an <code>Unnamed: 0</code> index column. Drop it after loading.</li>
 </ul>
-<p><strong>Dataset 3:</strong> <code>employee_performance.csv</code> - Employee metrics with multicollinearity with columns:</p>
+<p><strong>Dataset 3:</strong> Bike Sharing Dataset (UCI)</p>
 <ul>
-<li><code>performance_score</code>: Performance rating (TARGET)</li>
-<li><code>years_experience</code>: Years of experience</li>
-<li><code>training_hours</code>: Hours of training completed</li>
-<li><code>projects_completed</code>: Number of projects completed</li>
-<li><code>months_employed</code>: Months with company (highly correlated with years_experience)</li>
-<li><code>certifications</code>: Number of certifications</li>
+<li>Source: https://archive.ics.uci.edu/ml/datasets/bike+sharing+dataset</li>
+<li>Use the <code>day.csv</code> file from the dataset</li>
+<li>Target: <code>cnt</code> (total rentals)</li>
+<li>Key features: <code>temp</code>, <code>atemp</code> (highly correlated), <code>hum</code>, <code>windspeed</code>, <code>season</code>, <code>workingday</code></li>
+<li>Note: <code>instant</code> and <code>dteday</code> are identifiers and should be dropped before modeling.</li>
 </ul>
 <hr>
 </section>
@@ -196,18 +196,18 @@ ul.task-list li input[type="checkbox"] {
 <p>Complete questions 1-10 without using AI coding assistants. The goal is to build your foundational understanding of regression diagnostics and regularization.</p>
 <section id="question-1-4-points" class="level3">
 <h3 class="anchored" data-anchor-id="question-1-4-points">Question 1 (4 points)</h3>
-<p>Load the <code>advertising.csv</code> dataset and fit a Linear Regression model to predict <code>sales</code> using all three advertising channels.</p>
+<p>Load the Advertising dataset and fit a Linear Regression model to predict <code>Sales</code> using all three advertising channels.</p>
 <ol type="a">
 <li><p>Extract and display the coefficients for each feature</p></li>
-<li><p>Interpret each coefficient in plain language (e.g., “For every additional thousand dollars spent on TV advertising, sales increase by…”)</p></li>
-<li><p>Which advertising channel has the strongest impact on sales?</p></li>
+<li><p>Interpret each coefficient in plain language (e.g., “For every additional thousand dollars spent on TV advertising, Sales increase by…”)</p></li>
+<li><p>Which advertising channel has the strongest impact on Sales?</p></li>
 <li><p>Calculate R² for this model. What does this value tell you about the model’s performance?</p></li>
 </ol>
 <hr>
 </section>
 <section id="question-2-5-points" class="level3">
 <h3 class="anchored" data-anchor-id="question-2-5-points">Question 2 (5 points)</h3>
-<p>Continuing with the advertising dataset, manually calculate the following for your linear regression model:</p>
+<p>Continuing with the Advertising dataset, manually calculate the following for your linear regression model:</p>
 <ol type="a">
 <li><p>Calculate the residuals (actual - predicted) for the first 5 data points</p></li>
 <li><p>Compute the Mean Squared Error (MSE) manually from all residuals</p></li>
@@ -231,7 +231,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="question-4-5-points" class="level3">
 <h3 class="anchored" data-anchor-id="question-4-5-points">Question 4 (5 points)</h3>
-<p>Load the <code>real_estate.csv</code> dataset. Calculate the correlation matrix for all numerical features.</p>
+<p>Load the California Housing dataset. Calculate the correlation matrix for all numerical features.</p>
 <ol type="a">
 <li><p>Display the correlation matrix</p></li>
 <li><p>Which pair of features has the highest correlation (excluding correlations with the target)?</p></li>
@@ -242,7 +242,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="question-5-5-points" class="level3">
 <h3 class="anchored" data-anchor-id="question-5-5-points">Question 5 (5 points)</h3>
-<p>Using the <code>real_estate.csv</code> dataset, fit three models predicting <code>price</code>:</p>
+<p>Using the California Housing dataset, fit three models predicting <code>MedHouseVal</code>:</p>
 <ul>
 <li><strong>Model 1:</strong> Linear Regression (no regularization)</li>
 <li><strong>Model 2:</strong> Ridge Regression with alpha=1.0</li>
@@ -270,13 +270,13 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="question-7-5-points" class="level3">
 <h3 class="anchored" data-anchor-id="question-7-5-points">Question 7 (5 points)</h3>
-<p>Using the <code>advertising.csv</code> dataset, create polynomial features of degree 2 for the <code>tv</code> feature only.</p>
+<p>Using the Advertising dataset, create polynomial features of degree 2 for the <code>TV</code> feature only.</p>
 <ol type="a">
 <li><p>Use <code>PolynomialFeatures(degree=2, include_bias=False)</code> to create polynomial features</p></li>
 <li><p>Fit a Linear Regression model using the original features plus the polynomial features of TV</p></li>
 <li><p>Compare R² with the original linear model (without polynomial features)</p></li>
 <li><p>Did adding polynomial features improve performance? Why might this be the case?</p></li>
-<li><p>Plot sales vs.&nbsp;TV budget, showing both the linear and polynomial model predictions</p></li>
+<li><p>Plot <code>Sales</code> vs.&nbsp;<code>TV</code> budget, showing both the linear and polynomial model predictions</p></li>
 </ol>
 <hr>
 </section>
@@ -297,7 +297,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="question-9-4-points" class="level3">
 <h3 class="anchored" data-anchor-id="question-9-4-points">Question 9 (4 points)</h3>
-<p>Using the <code>employee_performance.csv</code> dataset, fit a Ridge regression model with alpha=10.0.</p>
+<p>Using the Bike Sharing dataset (<code>day.csv</code>), fit a Ridge regression model with alpha=10.0. Use the features <code>temp</code>, <code>atemp</code>, <code>hum</code>, <code>windspeed</code>, <code>season</code>, and <code>workingday</code> to predict <code>cnt</code>.</p>
 <ol type="a">
 <li><p>Split data into train/test (80/20, random_state=42)</p></li>
 <li><p>Fit the model and calculate train R² and test R²</p></li>
@@ -316,7 +316,7 @@ ul.task-list li input[type="checkbox"] {
 <li>Creates two plots side by side: (1) residuals vs fitted values, (2) histogram of residuals</li>
 <li>Returns the residuals array</li>
 </ul>
-<p>Test your function on a linear regression model fitted to the advertising dataset.</p>
+<p>Test your function on a linear regression model fitted to the Advertising dataset.</p>
 <p>Based on the plots, do the residuals appear randomly distributed? Are they centered around zero?</p>
 <hr>
 </section>
@@ -328,7 +328,7 @@ ul.task-list li input[type="checkbox"] {
 <hr>
 <section id="question-11-5-points" class="level3">
 <h3 class="anchored" data-anchor-id="question-11-5-points">Question 11 (5 points)</h3>
-<p>Use AI to perform a comprehensive grid search for Ridge regression on the <code>real_estate.csv</code> dataset.</p>
+<p>Use AI to perform a comprehensive grid search for Ridge regression on the California Housing dataset.</p>
 <p>Test alpha values: [0.001, 0.01, 0.1, 1, 10, 100, 1000]</p>
 <p>Your code should:</p>
 <ul>
@@ -350,7 +350,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="question-12-6-points" class="level3">
 <h3 class="anchored" data-anchor-id="question-12-6-points">Question 12 (6 points)</h3>
-<p>Prompt AI to create a comprehensive comparison of regularization techniques on the <code>employee_performance.csv</code> dataset (which has multicollinearity).</p>
+<p>Prompt AI to create a comprehensive comparison of regularization techniques on the Bike Sharing dataset (which has multicollinearity between <code>temp</code> and <code>atemp</code>). Use the features <code>temp</code>, <code>atemp</code>, <code>hum</code>, <code>windspeed</code>, <code>season</code>, and <code>workingday</code> to predict <code>cnt</code>.</p>
 <p>Compare:</p>
 <ul>
 <li>Linear Regression (no regularization)</li>
@@ -378,7 +378,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="question-13-6-points" class="level3">
 <h3 class="anchored" data-anchor-id="question-13-6-points">Question 13 (6 points)</h3>
-<p>Use AI to test polynomial regression of different degrees on the <code>advertising.csv</code> dataset using the <code>tv</code> feature.</p>
+<p>Use AI to test polynomial regression of different degrees on the Advertising dataset using the <code>TV</code> feature.</p>
 <p>Test polynomial degrees: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]</p>
 <p>Your code should:</p>
 <ul>
@@ -400,7 +400,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="question-14-6-points" class="level3">
 <h3 class="anchored" data-anchor-id="question-14-6-points">Question 14 (6 points)</h3>
-<p>Prompt AI to generate a complete regression diagnostics report for a linear regression model on <code>real_estate.csv</code>.</p>
+<p>Prompt AI to generate a complete regression diagnostics report for a linear regression model on the California Housing dataset.</p>
 <p>The report should include:</p>
 <ul>
 <li>Residuals vs.&nbsp;Fitted values plot</li>
@@ -422,7 +422,7 @@ ul.task-list li input[type="checkbox"] {
 <section id="question-15-5-points" class="level3">
 <h3 class="anchored" data-anchor-id="question-15-5-points">Question 15 (5 points)</h3>
 <p>Use AI to create a “coefficient path” visualization for Lasso regression.</p>
-<p>Using the <code>real_estate.csv</code> dataset:</p>
+<p>Using the California Housing dataset:</p>
 <ul>
 <li>Fit Lasso models with alpha values ranging from 0.001 to 1000 (log scale, 50 points)</li>
 <li>Track the coefficient values for each feature at each alpha</li>
@@ -442,7 +442,7 @@ ul.task-list li input[type="checkbox"] {
 <section id="question-16-6-points" class="level3">
 <h3 class="anchored" data-anchor-id="question-16-6-points">Question 16 (6 points)</h3>
 <p>Prompt AI to compare polynomial regression with and without regularization.</p>
-<p>Using the <code>advertising.csv</code> dataset with TV feature:</p>
+<p>Using the Advertising dataset with <code>TV</code> feature:</p>
 <ul>
 <li>Fit polynomial models of degree 10 with:
 <ul>
@@ -469,7 +469,7 @@ ul.task-list li input[type="checkbox"] {
 <section id="question-17-5-points" class="level3">
 <h3 class="anchored" data-anchor-id="question-17-5-points">Question 17 (5 points)</h3>
 <p>Use AI to investigate the impact of feature scaling on Ridge and Lasso regression.</p>
-<p>Using the <code>real_estate.csv</code> dataset:</p>
+<p>Using the California Housing dataset:</p>
 <ul>
 <li>Fit Ridge and Lasso models (alpha=1.0) with:
 <ul>
@@ -503,7 +503,7 @@ ul.task-list li input[type="checkbox"] {
 <li>Compare performance with using all features</li>
 <li>Generate a report showing selected features and performance comparison</li>
 </ul>
-<p>Test this on the <code>real_estate.csv</code> dataset with alpha=0.1.</p>
+<p>Test this on the California Housing dataset with alpha=0.1.</p>
 <p>How many features were selected? Did feature selection improve or hurt performance?</p>
 <p><strong>Deliverables:</strong></p>
 <ul>
@@ -518,7 +518,7 @@ ul.task-list li input[type="checkbox"] {
 <section id="question-19-6-points" class="level3">
 <h3 class="anchored" data-anchor-id="question-19-6-points">Question 19 (6 points)</h3>
 <p>Use AI to create a comprehensive model selection workflow that combines polynomial features with regularization.</p>
-<p>Using the <code>advertising.csv</code> dataset:</p>
+<p>Using the Advertising dataset:</p>
 <ul>
 <li>Test polynomial degrees [1, 2, 3, 4, 5]</li>
 <li>For each degree, test Ridge, Lasso, and Linear Regression</li>
@@ -546,7 +546,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="question-20-7-points" class="level3">
 <h3 class="anchored" data-anchor-id="question-20-7-points">Question 20 (7 points)</h3>
-<p>For this final question, ask AI to help you conduct a <strong>complete regression analysis</strong> from start to finish on the <code>real_estate.csv</code> dataset.</p>
+<p>For this final question, ask AI to help you conduct a <strong>complete regression analysis</strong> from start to finish on the California Housing dataset.</p>
 <p>Your analysis should include:</p>
 <ol type="1">
 <li><strong>Exploratory Data Analysis:</strong>

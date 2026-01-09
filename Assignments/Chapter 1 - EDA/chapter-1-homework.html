@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.26">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -20,10 +20,45 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
@@ -36,10 +71,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-0b37c64f34216b628666a8dac638b53b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -67,6 +102,9 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
 
 <link rel="stylesheet" href="../../styles/textbook-nav.css">
@@ -144,18 +182,129 @@ ul.task-list li input[type="checkbox"] {
 </ol>
 <section id="dataset" class="level3">
 <h3 class="anchored" data-anchor-id="dataset">Dataset</h3>
-<p>You’ll be working with a dataset called <code>housing_data.csv</code> which contains information about houses sold in various cities. The dataset includes:</p>
+<p>You’ll be working with the <strong>California Housing Dataset</strong>, which contains information about California census block groups. You should load it using <code>sklearn.datasets.fetch_california_housing</code> and then create a Pandas DataFrame with the feature columns plus the target.</p>
+<p><strong>Data Set Characteristics:</strong></p>
 <ul>
-<li><code>price</code>: Sale price in dollars</li>
-<li><code>square_feet</code>: Size of the house</li>
-<li><code>bedrooms</code>: Number of bedrooms</li>
-<li><code>bathrooms</code>: Number of bathrooms</li>
-<li><code>year_built</code>: Year the house was built</li>
-<li><code>city</code>: City where the house is located</li>
-<li><code>lot_size</code>: Size of the lot in square feet</li>
-<li><code>garage_spaces</code>: Number of garage spaces</li>
-<li><code>has_pool</code>: Whether the house has a pool (True/False)</li>
+<li>Number of Instances: 20640</li>
+<li>Number of Attributes: 8 numeric, predictive attributes and the target</li>
 </ul>
+<p><strong>Attribute Information:</strong></p>
+<ul>
+<li><code>MedInc</code>: Median income in block group</li>
+<li><code>HouseAge</code>: Median house age in block group</li>
+<li><code>AveRooms</code>: Average number of rooms per household</li>
+<li><code>AveBedrms</code>: Average number of bedrooms per household</li>
+<li><code>Population</code>: Block group population</li>
+<li><code>AveOccup</code>: Average number of household members</li>
+<li><code>Latitude</code>: Block group latitude</li>
+<li><code>Longitude</code>: Block group longitude</li>
+</ul>
+<p><strong>Target Variable:</strong></p>
+<ul>
+<li><code>MedHouseVal</code>: Median house value for California districts, expressed in hundreds of thousands of dollars ($100,000).</li>
+</ul>
+<p><strong>Notes:</strong></p>
+<ul>
+<li>This dataset comes from the StatLib repository: https://www.dcc.fc.up.pt/~ltorgo/Regression/cal_housing.html</li>
+<li>This dataset was derived from the 1990 U.S. census and uses one row per census block group.</li>
+<li>A block group typically has a population of 600 to 3,000 people.</li>
+<li>Since rooms/bedrooms are averages per household, some values can be surprisingly large.</li>
+<li>Missing Attribute Values: None</li>
+</ul>
+<p>Use the following code to load the dataset into a DataFrame named <code>df</code>:</p>
+<div id="6cf23800" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> fetch_california_housing</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>housing <span class="op">=</span> fetch_california_housing(as_frame<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> housing.frame</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>df.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">MedInc</th>
+<th data-quarto-table-cell-role="th">HouseAge</th>
+<th data-quarto-table-cell-role="th">AveRooms</th>
+<th data-quarto-table-cell-role="th">AveBedrms</th>
+<th data-quarto-table-cell-role="th">Population</th>
+<th data-quarto-table-cell-role="th">AveOccup</th>
+<th data-quarto-table-cell-role="th">Latitude</th>
+<th data-quarto-table-cell-role="th">Longitude</th>
+<th data-quarto-table-cell-role="th">MedHouseVal</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>8.3252</td>
+<td>41.0</td>
+<td>6.984127</td>
+<td>1.023810</td>
+<td>322.0</td>
+<td>2.555556</td>
+<td>37.88</td>
+<td>-122.23</td>
+<td>4.526</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>8.3014</td>
+<td>21.0</td>
+<td>6.238137</td>
+<td>0.971880</td>
+<td>2401.0</td>
+<td>2.109842</td>
+<td>37.86</td>
+<td>-122.22</td>
+<td>3.585</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>7.2574</td>
+<td>52.0</td>
+<td>8.288136</td>
+<td>1.073446</td>
+<td>496.0</td>
+<td>2.802260</td>
+<td>37.85</td>
+<td>-122.24</td>
+<td>3.521</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>5.6431</td>
+<td>52.0</td>
+<td>5.817352</td>
+<td>1.073059</td>
+<td>558.0</td>
+<td>2.547945</td>
+<td>37.85</td>
+<td>-122.25</td>
+<td>3.413</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>3.8462</td>
+<td>52.0</td>
+<td>6.281853</td>
+<td>1.081081</td>
+<td>565.0</td>
+<td>2.181467</td>
+<td>37.85</td>
+<td>-122.25</td>
+<td>3.422</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
 <hr>
 </section>
 </section>
@@ -171,8 +320,7 @@ ul.task-list li input[type="checkbox"] {
 <h3 class="anchored" data-anchor-id="question-1-5-points">Question 1 (5 points)</h3>
 <p>Use AI to create a comprehensive data profile that includes:</p>
 <ul>
-<li>Summary statistics for ALL numerical columns (not just price)</li>
-<li>Value counts for ALL categorical columns</li>
+<li>Summary statistics for ALL numerical columns (including the target)</li>
 <li>A report on missing values (which columns, how many, what percentage)</li>
 <li>Identification of potential outliers in numerical columns (using percentile method: values below 1st or above 99th percentile)</li>
 </ul>
@@ -188,8 +336,7 @@ ul.task-list li input[type="checkbox"] {
 <h3 class="anchored" data-anchor-id="question-2-5-points">Question 2 (5 points)</h3>
 <p>Prompt the AI to create a function that generates a complete set of univariate visualizations for the dataset. This should include:</p>
 <ul>
-<li>Histograms for all numerical columns</li>
-<li>Bar plots for all categorical columns</li>
+<li>Histograms for all numerical columns (including the target)</li>
 <li>All plots should be saved to a folder called <code>univariate_plots/</code></li>
 <li>Each plot should have proper labels and titles</li>
 </ul>
@@ -204,12 +351,12 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="question-3-5-points" class="level3">
 <h3 class="anchored" data-anchor-id="question-3-5-points">Question 3 (5 points)</h3>
-<p>Use AI to create a pair plot (using <code>sns.pairplot()</code>) showing relationships between key numerical variables: <code>price</code>, <code>square_feet</code>, <code>bedrooms</code>, and <code>year_built</code>. Color the points by <code>city</code>.</p>
+<p>Use AI to create a pair plot (using <code>sns.pairplot()</code>) showing relationships between key numerical variables: <code>MedHouseVal</code>, <code>MedInc</code>, <code>HouseAge</code>, and <code>AveRooms</code>. Color the points by <strong>binned</strong> <code>MedHouseVal</code> (for example, low/medium/high using <code>pd.qcut</code>).</p>
 <p>Based on the pair plot, answer:</p>
 <ul>
 <li>Which pair of variables shows the strongest visual relationship?</li>
-<li>Are there any variables that don’t seem to relate to price?</li>
-<li>Do you notice any city-specific patterns?</li>
+<li>Are there any variables that don’t seem to relate to <code>MedHouseVal</code>?</li>
+<li>Do you notice any differences across the low/medium/high value groups?</li>
 </ul>
 <p><strong>Deliverables:</strong></p>
 <ul>
@@ -221,14 +368,14 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="question-4-6-points" class="level3">
 <h3 class="anchored" data-anchor-id="question-4-6-points">Question 4 (6 points)</h3>
-<p>Prompt the AI to create a function that compares price distributions across different subgroups. Specifically:</p>
+<p>Prompt the AI to create a function that compares <code>MedHouseVal</code> distributions across different subgroups. Specifically:</p>
 <ul>
-<li>Compare price by city</li>
-<li>Compare price by number of bedrooms</li>
-<li>Compare price by whether the house has a pool</li>
+<li>Compare <code>MedHouseVal</code> by <strong>binned <code>MedInc</code></strong> (e.g., low/medium/high)</li>
+<li>Compare <code>MedHouseVal</code> by <strong>binned <code>HouseAge</code></strong> (e.g., 0-10, 10-30, 30+)</li>
+<li>Compare <code>MedHouseVal</code> by <strong>latitude region</strong> (e.g., North/Central/South using cutoffs)</li>
 <li>Generate both statistical summaries AND visualizations (box plots or violin plots)</li>
 </ul>
-<p>Run this function and write 2-3 paragraphs interpreting the results. What insights did you gain about what drives housing prices?</p>
+<p>Run this function and write 2-3 paragraphs interpreting the results. What insights did you gain about what drives housing values?</p>
 <p><strong>Deliverables:</strong></p>
 <ul>
 <li>The prompt(s) you used</li>
@@ -240,7 +387,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="question-5-6-points" class="level3">
 <h3 class="anchored" data-anchor-id="question-5-6-points">Question 5 (6 points)</h3>
-<p>Ask the AI to help you identify potential outliers in the <code>price</code> column. Your approach should:</p>
+<p>Ask the AI to help you identify potential outliers in the <code>MedHouseVal</code> column. Your approach should:</p>
 <ul>
 <li>Define outliers as values below the 1st percentile or above the 99th percentile</li>
 <li>Create visualizations showing the distribution with outliers highlighted</li>
@@ -262,9 +409,9 @@ ul.task-list li input[type="checkbox"] {
 <p>Use AI to create a comprehensive test suite for the housing dataset. Your test suite should include at least 5 unit tests that check:</p>
 <ul>
 <li>Data types are correct</li>
-<li>No negative values in columns where they don’t make sense (price, square_feet, etc.)</li>
-<li>Dates are within reasonable ranges (year_built should be between 1800 and 2024)</li>
-<li>Categorical values are from expected sets (cities should only be from a known list)</li>
+<li>No negative values in columns where they don’t make sense (<code>MedInc</code>, <code>AveRooms</code>, <code>AveBedrms</code>, <code>Population</code>, <code>AveOccup</code>)</li>
+<li>Reasonable ranges for geographic coordinates (Latitude between 32 and 42, Longitude between -125 and -114)</li>
+<li>Reasonable ranges for <code>HouseAge</code> (e.g., 0 to 100)</li>
 <li>No duplicate rows</li>
 </ul>
 <p>Run all tests and report which (if any) failed.</p>
@@ -278,12 +425,12 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="question-7-5-points" class="level3">
 <h3 class="anchored" data-anchor-id="question-7-5-points">Question 7 (5 points)</h3>
-<p>Prompt the AI to create multiple scatter plots exploring the relationship between price and other numerical variables. You should generate:</p>
+<p>Prompt the AI to create multiple scatter plots exploring the relationship between <code>MedHouseVal</code> and other numerical variables. You should generate:</p>
 <ul>
-<li>Price vs.&nbsp;square_feet (colored by city)</li>
-<li>Price vs.&nbsp;year_built (colored by has_pool)</li>
-<li>Price vs.&nbsp;lot_size (with a trend line)</li>
-<li>Price_per_sqft vs.&nbsp;bedrooms (colored by city)</li>
+<li><code>MedHouseVal</code> vs.&nbsp;<code>MedInc</code> (colored by <code>Latitude</code>)</li>
+<li><code>MedHouseVal</code> vs.&nbsp;<code>HouseAge</code> (colored by binned <code>HouseAge</code>)</li>
+<li><code>MedHouseVal</code> vs.&nbsp;<code>AveRooms</code> (with a trend line)</li>
+<li><code>MedHouseVal</code> vs.&nbsp;<code>AveOccup</code> (colored by <code>Longitude</code>)</li>
 </ul>
 <p>For each plot, write 1-2 sentences describing what you observe.</p>
 <p><strong>Deliverables:</strong></p>
@@ -296,14 +443,20 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="question-8-6-points" class="level3">
 <h3 class="anchored" data-anchor-id="question-8-6-points">Question 8 (6 points)</h3>
-<p>Use AI to create a function that systematically explores how price relates to ALL categorical variables in the dataset. For each categorical variable, the function should:</p>
+<p>Use AI to create a function that systematically explores how <code>MedHouseVal</code> relates to <strong>engineered categorical variables</strong> created from numeric columns. For each engineered categorical variable, the function should:</p>
 <ul>
-<li>Create a bar plot showing average price by category</li>
-<li>Generate a box plot showing the distribution of prices across categories</li>
+<li>Create a bar plot showing average <code>MedHouseVal</code> by category</li>
+<li>Generate a box plot showing the distribution of <code>MedHouseVal</code> across categories</li>
 <li>Calculate and display summary statistics (mean, median, count) for each category</li>
 <li>Save all plots to a folder called <code>categorical_analysis/</code></li>
 </ul>
-<p>Run this function and write a paragraph identifying which categorical variables seem most important in determining house prices.</p>
+<p>Use at least three engineered categories such as:</p>
+<ul>
+<li><code>MedInc</code> binned into low/medium/high</li>
+<li><code>HouseAge</code> binned into 3-4 groups</li>
+<li><code>Latitude</code> binned into North/Central/South</li>
+</ul>
+<p>Run this function and write a paragraph identifying which engineered categories seem most important in determining house values.</p>
 <p><strong>Deliverables:</strong></p>
 <ul>
 <li>The prompt(s) you used</li>
@@ -323,7 +476,7 @@ ul.task-list li input[type="checkbox"] {
 <li>Create a markdown-formatted report with findings</li>
 <li>Save all plots to a specified folder</li>
 </ul>
-<p>Run this function on three different columns: <code>price</code>, <code>square_feet</code>, and <code>lot_size</code>.</p>
+<p>Run this function on three different columns: <code>MedHouseVal</code>, <code>MedInc</code>, and <code>AveRooms</code>.</p>
 <p><strong>Deliverables:</strong></p>
 <ul>
 <li>The prompt(s) you used</li>
@@ -340,14 +493,14 @@ ul.task-list li input[type="checkbox"] {
 <li>Overall dataset summary (rows, columns, missing values)</li>
 <li>Distribution plots for key numerical variables</li>
 <li>Correlation analysis</li>
-<li>Price analysis by different categorical variables</li>
+<li><code>MedHouseVal</code> analysis by different engineered categorical variables</li>
 <li>Any interesting patterns or anomalies you discovered</li>
 </ul>
 <p>Write a 1-page executive summary (300-400 words) that you would present to a stakeholder who doesn’t know anything about data science. Explain:</p>
 <ul>
 <li>What the dataset contains</li>
 <li>Key findings from your analysis</li>
-<li>What factors seem most important in determining house prices</li>
+<li>What factors seem most important in determining house values</li>
 <li>Any data quality issues or limitations</li>
 <li>Recommendations for next steps</li>
 </ul>

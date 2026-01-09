@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>agents – MATH 3339: Introduction to Data Science</title>
+<title>Quiz 1b - AI – MATH 3339: Introduction to Data Science with LLMs</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,23 +23,23 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-ff63373b1067ca6f91cf1456aa1f00a2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-ff63373b1067ca6f91cf1456aa1f00a2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -69,7 +69,7 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
 
-<link rel="stylesheet" href="styles/textbook-nav.css">
+<link rel="stylesheet" href="../../styles/textbook-nav.css">
 </head>
 
 <body class="fullcontent quarto-light">
@@ -81,65 +81,34 @@ ul.task-list li input[type="checkbox"] {
 <!-- margin-sidebar -->
     
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Quiz 1b - AI</h1>
+</div>
 
 
 
+<div class="quarto-title-meta">
 
-<section id="repository-guidelines" class="level1">
-<h1>Repository Guidelines</h1>
-<section id="project-structure-module-organization" class="level2">
-<h2 class="anchored" data-anchor-id="project-structure-module-organization">Project Structure &amp; Module Organization</h2>
-<ul>
-<li><code>Assignments/</code>: Quarto <code>.qmd</code> files for homework and quizzes, organized by module.</li>
-<li><code>Textbook/</code>: Module chapters and supporting assets (including <code>images/</code> subfolders).</li>
-<li><code>Templates/</code>: Required templates for assignments, quizzes, and textbook chapters.</li>
-<li><code>Claude-planning/</code>: Planning notes for module development (one Markdown file per topic).</li>
-<li><code>_site/</code>: Rendered website output (generated).</li>
-<li><code>_freeze/</code>: Quarto execution cache (generated).</li>
-</ul>
-</section>
-<section id="build-test-and-development-commands" class="level2">
-<h2 class="anchored" data-anchor-id="build-test-and-development-commands">Build, Test, and Development Commands</h2>
-<ul>
-<li><code>quarto preview</code>: Serve the site locally with live reload for <code>.qmd</code> changes.</li>
-<li><code>quarto render</code>: Build the full site into <code>_site/</code>.</li>
-<li><code>quarto render Textbook/Module 1 - EDA/chapter-1-eda.qmd</code>: Render a single page when iterating.</li>
-</ul>
-</section>
-<section id="coding-style-naming-conventions" class="level2">
-<h2 class="anchored" data-anchor-id="coding-style-naming-conventions">Coding Style &amp; Naming Conventions</h2>
-<ul>
-<li>Content is Quarto Markdown (<code>.qmd</code>) with Python 3.12 code blocks.</li>
-<li>Use executable blocks with <code>{python}</code> and keep code outputs visible unless noted.</li>
-<li>Prefer descriptive file names that mirror module titles (e.g., <code>chapter-1-eda.qmd</code>).</li>
-<li>Follow template structure in <code>Templates/</code> for assignments, quizzes, and chapters.</li>
-</ul>
-</section>
-<section id="testing-guidelines" class="level2">
-<h2 class="anchored" data-anchor-id="testing-guidelines">Testing Guidelines</h2>
-<ul>
-<li>No automated test suite is present.</li>
-<li>Validate changes by rendering the relevant page(s) with <code>quarto render</code> and reviewing the HTML in <code>_site/</code>.</li>
-</ul>
-</section>
-<section id="commit-pull-request-guidelines" class="level2">
-<h2 class="anchored" data-anchor-id="commit-pull-request-guidelines">Commit &amp; Pull Request Guidelines</h2>
-<ul>
-<li>Commit messages are short, sentence-case summaries (e.g., “Update course schedule for new 3-module structure”).</li>
-<li>PRs should describe what changed, which pages were rendered, and link any related issues.</li>
-<li>If updating content, include a screenshot or link to the rendered <code>_site/</code> output for the modified page.</li>
-</ul>
-</section>
-<section id="agent-specific-instructions" class="level2">
-<h2 class="anchored" data-anchor-id="agent-specific-instructions">Agent-Specific Instructions</h2>
-<ul>
-<li>Follow <code>Claude.md</code> for course-writing rules, templates, and pedagogy constraints.</li>
-<li>When creating assignments or chapters, consult <code>content-overview.md</code> and update <code>Claude-planning/</code> first.</li>
-</ul>
+    
+  
+    
+  </div>
+  
 
 
-</section>
+</header>
+
+
+<section id="instructions" class="level2">
+<h2 class="anchored" data-anchor-id="instructions">Instructions:</h2>
+<p>You should use AI (most likely Cursor, but any other tool is fine as well) to answer the questions below.</p>
+<p><strong>Q1:</strong> Start by looking over the <a href="https://data.austintexas.gov/Health-and-Community-Services/Austin-Animal-Center-Outcomes-10-01-2013-to-05-05-/9t4d-g238/about_data">Austin Animal Center Outcomes dataset</a>. The data is too large to quickly download (about 175k rows), however, if you scroll down the page you’ll the columns included.</p>
+<p>Work with an LLM to propose an EDA plan. This should include data cleaning, exploration, visualization, and business understanding.</p>
+
+
 </section>
 
 </main> <!-- /main -->
@@ -216,7 +185,7 @@ ul.task-list li input[type="checkbox"] {
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp("https:\/\/paulsavala\.github\.io\/math-3339\/");
+        var filterRegex = new RegExp("https:\/\/paulsavala\.github\.io\/math-3339-intro-data-science-with-llms\/");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
