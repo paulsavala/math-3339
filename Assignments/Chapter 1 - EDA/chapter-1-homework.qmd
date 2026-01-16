@@ -1,5 +1,5 @@
 ---
-title: "Module 1 Homework: AI-Assisted Coding and Exploratory Data Analysis"
+title: "Chapter 1 Homework: AI-Assisted Coding and Exploratory Data Analysis"
 format:
   html:
     toc: true
@@ -22,17 +22,46 @@ For all questions, submit:
 
 ### Dataset
 
-You'll be working with a dataset called `housing_data.csv` which contains information about houses sold in various cities. The dataset includes:
+You'll be working with the **California Housing Dataset**, which contains information about California census block groups. You should load it using `sklearn.datasets.fetch_california_housing` and then create a Pandas DataFrame with the feature columns plus the target.
 
-- `price`: Sale price in dollars
-- `square_feet`: Size of the house
-- `bedrooms`: Number of bedrooms
-- `bathrooms`: Number of bathrooms
-- `year_built`: Year the house was built
-- `city`: City where the house is located
-- `lot_size`: Size of the lot in square feet
-- `garage_spaces`: Number of garage spaces
-- `has_pool`: Whether the house has a pool (True/False)
+**Data Set Characteristics:**
+
+- Number of Instances: 20640
+- Number of Attributes: 8 numeric, predictive attributes and the target
+
+**Attribute Information:**
+
+- `MedInc`: Median income in block group
+- `HouseAge`: Median house age in block group
+- `AveRooms`: Average number of rooms per household
+- `AveBedrms`: Average number of bedrooms per household
+- `Population`: Block group population
+- `AveOccup`: Average number of household members
+- `Latitude`: Block group latitude
+- `Longitude`: Block group longitude
+
+**Target Variable:**
+
+- `MedHouseVal`: Median house value for California districts, expressed in hundreds of thousands of dollars ($100,000).
+
+**Notes:**
+
+- This dataset comes from the StatLib repository: https://www.dcc.fc.up.pt/~ltorgo/Regression/cal_housing.html
+- This dataset was derived from the 1990 U.S. census and uses one row per census block group.
+- A block group typically has a population of 600 to 3,000 people.
+- Since rooms/bedrooms are averages per household, some values can be surprisingly large.
+- Missing Attribute Values: None
+
+Use the following code to load the dataset into a DataFrame named `df`:
+
+```{python}
+from sklearn.datasets import fetch_california_housing
+import pandas as pd
+
+housing = fetch_california_housing(as_frame=True)
+df = housing.frame
+df.head()
+```
 
 ---
 
@@ -45,8 +74,7 @@ You'll be working with a dataset called `housing_data.csv` which contains inform
 
 Use AI to create a comprehensive data profile that includes:
 
-- Summary statistics for ALL numerical columns (not just price)
-- Value counts for ALL categorical columns
+- Summary statistics for ALL numerical columns (including the target)
 - A report on missing values (which columns, how many, what percentage)
 - Identification of potential outliers in numerical columns (using percentile method: values below 1st or above 99th percentile)
 
@@ -62,8 +90,7 @@ Use AI to create a comprehensive data profile that includes:
 
 Prompt the AI to create a function that generates a complete set of univariate visualizations for the dataset. This should include:
 
-- Histograms for all numerical columns
-- Bar plots for all categorical columns
+- Histograms for all numerical columns (including the target)
 - All plots should be saved to a folder called `univariate_plots/`
 - Each plot should have proper labels and titles
 
@@ -79,13 +106,13 @@ Run the function and submit all generated plots along with your code.
 
 ### Question 3 (5 points)
 
-Use AI to create a pair plot (using `sns.pairplot()`) showing relationships between key numerical variables: `price`, `square_feet`, `bedrooms`, and `year_built`. Color the points by `city`.
+Use AI to create a pair plot (using `sns.pairplot()`) showing relationships between key numerical variables: `MedHouseVal`, `MedInc`, `HouseAge`, and `AveRooms`. Color the points by **binned** `MedHouseVal` (for example, low/medium/high using `pd.qcut`).
 
 Based on the pair plot, answer:
 
 - Which pair of variables shows the strongest visual relationship?
-- Are there any variables that don't seem to relate to price?
-- Do you notice any city-specific patterns?
+- Are there any variables that don't seem to relate to `MedHouseVal`?
+- Do you notice any differences across the low/medium/high value groups?
 
 **Deliverables:**
 
@@ -97,14 +124,14 @@ Based on the pair plot, answer:
 
 ### Question 4 (6 points)
 
-Prompt the AI to create a function that compares price distributions across different subgroups. Specifically:
+Prompt the AI to create a function that compares `MedHouseVal` distributions across different subgroups. Specifically:
 
-- Compare price by city
-- Compare price by number of bedrooms
-- Compare price by whether the house has a pool
+- Compare `MedHouseVal` by **binned `MedInc`** (e.g., low/medium/high)
+- Compare `MedHouseVal` by **binned `HouseAge`** (e.g., 0-10, 10-30, 30+)
+- Compare `MedHouseVal` by **latitude region** (e.g., North/Central/South using cutoffs)
 - Generate both statistical summaries AND visualizations (box plots or violin plots)
 
-Run this function and write 2-3 paragraphs interpreting the results. What insights did you gain about what drives housing prices?
+Run this function and write 2-3 paragraphs interpreting the results. What insights did you gain about what drives housing values?
 
 **Deliverables:**
 
@@ -117,7 +144,7 @@ Run this function and write 2-3 paragraphs interpreting the results. What insigh
 
 ### Question 5 (6 points)
 
-Ask the AI to help you identify potential outliers in the `price` column. Your approach should:
+Ask the AI to help you identify potential outliers in the `MedHouseVal` column. Your approach should:
 
 - Define outliers as values below the 1st percentile or above the 99th percentile
 - Create visualizations showing the distribution with outliers highlighted
@@ -140,9 +167,9 @@ How many potential outliers did you identify? Should they be removed, or do they
 Use AI to create a comprehensive test suite for the housing dataset. Your test suite should include at least 5 unit tests that check:
 
 - Data types are correct
-- No negative values in columns where they don't make sense (price, square_feet, etc.)
-- Dates are within reasonable ranges (year_built should be between 1800 and 2024)
-- Categorical values are from expected sets (cities should only be from a known list)
+- No negative values in columns where they don't make sense (`MedInc`, `AveRooms`, `AveBedrms`, `Population`, `AveOccup`)
+- Reasonable ranges for geographic coordinates (Latitude between 32 and 42, Longitude between -125 and -114)
+- Reasonable ranges for `HouseAge` (e.g., 0 to 100)
 - No duplicate rows
 
 Run all tests and report which (if any) failed.
@@ -157,12 +184,12 @@ Run all tests and report which (if any) failed.
 
 ### Question 7 (5 points)
 
-Prompt the AI to create multiple scatter plots exploring the relationship between price and other numerical variables. You should generate:
+Prompt the AI to create multiple scatter plots exploring the relationship between `MedHouseVal` and other numerical variables. You should generate:
 
-- Price vs. square_feet (colored by city)
-- Price vs. year_built (colored by has_pool)
-- Price vs. lot_size (with a trend line)
-- Price_per_sqft vs. bedrooms (colored by city)
+- `MedHouseVal` vs. `MedInc` (colored by `Latitude`)
+- `MedHouseVal` vs. `HouseAge` (colored by binned `HouseAge`)
+- `MedHouseVal` vs. `AveRooms` (with a trend line)
+- `MedHouseVal` vs. `AveOccup` (colored by `Longitude`)
 
 For each plot, write 1-2 sentences describing what you observe.
 
@@ -176,14 +203,20 @@ For each plot, write 1-2 sentences describing what you observe.
 
 ### Question 8 (6 points)
 
-Use AI to create a function that systematically explores how price relates to ALL categorical variables in the dataset. For each categorical variable, the function should:
+Use AI to create a function that systematically explores how `MedHouseVal` relates to **engineered categorical variables** created from numeric columns. For each engineered categorical variable, the function should:
 
-- Create a bar plot showing average price by category
-- Generate a box plot showing the distribution of prices across categories
+- Create a bar plot showing average `MedHouseVal` by category
+- Generate a box plot showing the distribution of `MedHouseVal` across categories
 - Calculate and display summary statistics (mean, median, count) for each category
 - Save all plots to a folder called `categorical_analysis/`
 
-Run this function and write a paragraph identifying which categorical variables seem most important in determining house prices.
+Use at least three engineered categories such as:
+
+- `MedInc` binned into low/medium/high
+- `HouseAge` binned into 3-4 groups
+- `Latitude` binned into North/Central/South
+
+Run this function and write a paragraph identifying which engineered categories seem most important in determining house values.
 
 **Deliverables:**
 
@@ -204,7 +237,7 @@ Use AI to create a function that performs a complete exploratory data analysis f
 - Create a markdown-formatted report with findings
 - Save all plots to a specified folder
 
-Run this function on three different columns: `price`, `square_feet`, and `lot_size`.
+Run this function on three different columns: `MedHouseVal`, `MedInc`, and `AveRooms`.
 
 **Deliverables:**
 
@@ -222,14 +255,14 @@ For this final question, ask the AI to help you create a comprehensive EDA repor
 - Overall dataset summary (rows, columns, missing values)
 - Distribution plots for key numerical variables
 - Correlation analysis
-- Price analysis by different categorical variables
+- `MedHouseVal` analysis by different engineered categorical variables
 - Any interesting patterns or anomalies you discovered
 
 Write a 1-page executive summary (300-400 words) that you would present to a stakeholder who doesn't know anything about data science. Explain:
 
 - What the dataset contains
 - Key findings from your analysis
-- What factors seem most important in determining house prices
+- What factors seem most important in determining house values
 - Any data quality issues or limitations
 - Recommendations for next steps
 
@@ -251,19 +284,3 @@ Submit a ZIP file containing one folder for each problem. Within each folder you
 3. **Written responses:** A single document (PDF or Markdown) with all your written answers, interpretations, and AI prompts used
 4. **Data:** Include your cleaned/modified datasets if you created any
 
----
-
-## Tips for Success
-
-- Write specific, detailed prompts
-- If the AI's first attempt isn't quite right, refine your prompt
-- Always review and test the AI-generated code
-- Don't just accept AI output—understand what it's doing
-- Include context in your prompts (e.g., "I'm working with a housing dataset with columns...")
-
-### General:
-
-- Start early—EDA often reveals unexpected issues that take time to address
-- Your interpretations are just as important as your code
-- If you find something interesting in the data, explore it further!
-- Use your brain. That's what it's there for.

@@ -1,25 +1,26 @@
 ---
-title: "Module 5 Homework: Classification Models"
+title: "Chapter 3 Homework: Classification Models"
 format:
   html:
     toc: true
     toc-depth: 3
     code-fold: false
     theme: cosmo
+jupyter: python3
 ---
 
 ## Instructions
 
 **Due Date:** [To be assigned by instructor]
 
-This homework is divided into two parts. Part A should be completed **without AI assistance** to build your foundational understanding of classification models, metrics, and evaluation. Part B should be completed **with AI assistance** (like Gemini CLI) to practice comprehensive model comparison and hyperparameter tuning at scale.
+This homework is meant to be completed **with AI assistance** (like Gemini CLI) to practice classification workflows, diagnostics, and model comparison at scale.
 
 For all questions, submit:
 
 1. Your code (in a `.py` file or Jupyter notebook)
 2. All visualizations generated
 3. Written answers to interpretation questions (can be in markdown or comments)
-4. For Part B: Include the prompts you used with the AI assistant
+4. The prompts you used with the AI assistant(s)
 
 ### Datasets
 
@@ -36,12 +37,16 @@ You'll be working with three datasets:
 - `Fare`: Ticket fare
 - `Embarked`: Port of embarkation (C, Q, S)
 
+Load this data using the data hosted here: `https://raw.githubusercontent.com/datasciencedojo/datasets/refs/heads/master/titanic.csv`.
+
 **Dataset 2:** `spotify.csv` - Spotify song data with columns:
 
 - `popularity`: Song popularity score (0-100)
 - `danceability`, `energy`, `loudness`, `speechiness`, `acousticness`, `instrumentalness`, `liveness`, `valence`, `tempo`: Audio features
 
-You will create a binary target: viral_hit = popularity > 80
+You will create a binary target: viral_hit = popularity > 80.
+
+Download the Spotify data from here: `https://www.kaggle.com/datasets/maharshipandya/-spotify-tracks-dataset`
 
 **Dataset 3:** `isp_customers.csv` - Internet service provider customer data with columns:
 
@@ -51,11 +56,9 @@ You will create a binary target: viral_hit = popularity > 80
 - `PhoneService`, `InternetService`, `Contract`: Service details
 - `MonthlyCharges`, `TotalCharges`: Billing information
 
+Download the ISP customer data from here: `https://www.kaggle.com/datasets/mehmetsabrikunt/internet-service-churn`.
+
 ---
-
-## Part A: By Hand (No AI Assistance)
-
-Complete questions 1-10 without using AI coding assistants. The goal is to build your foundational understanding of classification models and metrics.
 
 ### Question 1 (4 points)
 
@@ -206,16 +209,6 @@ b) When would you choose recall as your primary metric? Give a real-world exampl
 c) What is the F1 score and when is it useful?
 
 d) Why is accuracy often misleading for imbalanced datasets?
-
----
-
-## Part B: With AI Assistance
-
-For questions 11-20, you should use an AI coding assistant (like Gemini CLI) to help you perform comprehensive classification analysis. The goal is to practice systematic model comparison and handling real-world challenges.
-
-**Important:** For each question, save the prompt(s) you used with the AI assistant. Part of your grade will be based on the quality of your prompts.
-
----
 
 ### Question 11 (5 points)
 
@@ -484,48 +477,18 @@ Submit a ZIP file containing:
 
 ---
 
-## Grading Rubric
-
-**Part A: By Hand (45 points)**
-
-- Code correctness and implementation: 25 points
-- Proper understanding of classification metrics and models: 12 points
-- Written interpretations and explanations: 8 points
-
-**Part B: AI-Assisted (55 points)**
-
-- Code functionality and correctness: 25 points
-- Quality and specificity of AI prompts: 14 points
-- Visualizations (ROC curves, confusion matrices, comparisons): 10 points
-- Written interpretations and insights: 6 points
-
-**Total: 100 points**
-
----
-
 ## Tips for Success
-
-### For Part A:
-
-- Always check class balance before fitting models
-- Remember: precision = "of those I predicted positive, how many were correct?"
-- Remember: recall = "of those that were actually positive, how many did I find?"
-- Decision tree depth controls overfitting—start shallow
-- k-NN requires scaling; trees do not
-- When comparing models, use multiple metrics, not just accuracy
-
-### For Part B:
-
-- Ask AI to test many hyperparameter combinations systematically
-- Request ROC curves for all models on the same plot for easy comparison
-- When dealing with imbalance, always compare multiple strategies
-- Ask for decision boundary visualizations to understand model behavior
-- Request confusion matrices normalized by row (actual class) for better interpretation
 
 ### General:
 
-- Accuracy can be misleading—always check class balance first
-- Think about the business context when choosing metrics
+- Always check class balance before fitting models
+- Precision = "of those I predicted positive, how many were correct?"
+- Recall = "of those that were actually positive, how many did I find?"
+- Decision tree depth controls overfitting—start shallow
+- k-NN requires scaling; trees do not
+- When comparing models, use multiple metrics, not just accuracy
+- Ask AI to test many hyperparameter combinations systematically
+- When dealing with imbalance, always compare multiple strategies
 - ROC/AUC is great for model comparison but doesn't tell the whole story
 - Feature importance from different models may disagree—that's okay
 - Use your brain. That's what it's there for.

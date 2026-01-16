@@ -1,5 +1,5 @@
 ---
-title: "Module 4 Homework: Regression Models"
+title: "Chapter 2 Homework: Regression Models"
 format:
   html:
     toc: true
@@ -26,32 +26,64 @@ For all questions, submit:
 
 You'll be working with three datasets:
 
-**Dataset 1:** `real_estate.csv` - Real estate pricing data with columns:
+**Dataset 1:** California Housing Dataset (StatLib)
 
-- `price`: Sale price in dollars (TARGET)
-- `sqft`: Square footage
-- `bedrooms`: Number of bedrooms
-- `bathrooms`: Number of bathrooms
-- `age`: Age of property in years
-- `distance_downtown`: Distance to downtown in miles
-- `crime_rate`: Neighborhood crime rate
-- `school_rating`: Local school rating (1-10)
+- Source: https://www.dcc.fc.up.pt/~ltorgo/Regression/cal_housing.html
+- Load using `sklearn.datasets.fetch_california_housing`
+- Target: `MedHouseVal` (median house value in $100,000s)
+- Features: `MedInc`, `HouseAge`, `AveRooms`, `AveBedrms`, `Population`, `AveOccup`, `Latitude`, `Longitude`
 
-**Dataset 2:** `advertising.csv` - Advertising budget and sales data with columns:
+Use the following code to load the dataset into a DataFrame named `housing_df`:
 
-- `sales`: Product sales in thousands (TARGET)
-- `tv`: TV advertising budget in thousands
-- `radio`: Radio advertising budget in thousands
-- `newspaper`: Newspaper advertising budget in thousands
+```{python}
+from sklearn.datasets import fetch_california_housing
+import pandas as pd
 
-**Dataset 3:** `employee_performance.csv` - Employee metrics with multicollinearity with columns:
+housing = fetch_california_housing(as_frame=True)
+housing_df = housing.frame
+housing_df.head()
+```
 
-- `performance_score`: Performance rating (TARGET)
-- `years_experience`: Years of experience
-- `training_hours`: Hours of training completed
-- `projects_completed`: Number of projects completed
-- `months_employed`: Months with company (highly correlated with years_experience)
-- `certifications`: Number of certifications
+**Dataset 2:** Advertising Dataset (ISLR)
+
+- Direct download: https://www.statlearning.com/s/Advertising.csv
+- Columns:
+  - `Sales`: Product sales in thousands (TARGET)
+  - `TV`: TV advertising budget in thousands
+  - `Radio`: Radio advertising budget in thousands
+  - `Newspaper`: Newspaper advertising budget in thousands
+- Note: The file includes an `Unnamed: 0` index column. Drop it after loading.
+
+Use the following code to load the dataset into a DataFrame named `advertising_df`:
+
+```{python}
+import pandas as pd
+
+advertising_url = "https://www.statlearning.com/s/Advertising.csv"
+advertising_df = pd.read_csv(advertising_url)
+advertising_df = advertising_df.drop(columns=["Unnamed: 0"])
+advertising_df.head()
+```
+
+**Dataset 3:** Bike Sharing Dataset (UCI)
+
+- Source: https://archive.ics.uci.edu/ml/datasets/bike+sharing+dataset
+- Use the `day.csv` file from the dataset
+- Target: `cnt` (total rentals)
+- Key features: `temp`, `atemp` (highly correlated), `hum`, `windspeed`, `season`, `workingday`
+- Note: `instant` and `dteday` are identifiers and should be dropped before modeling.
+- Download the dataset from: https://archive.ics.uci.edu/dataset/275/bike+sharing+dataset
+
+Use the following code to load the dataset into a DataFrame named `bikes_df`:
+
+```{python}
+import pandas as pd
+
+# Once you have the data downloaded, CHANGE THE CODE BELOW to point to where you have the file saved
+# bikes_df = pd.read_csv("day.csv")
+# bikes_df = bikes_df.drop(columns=["instant", "dteday"])
+# bikes_df.head()
+```
 
 ---
 
@@ -61,13 +93,13 @@ Complete questions 1-10 without using AI coding assistants. The goal is to build
 
 ### Question 1 (4 points)
 
-Load the `advertising.csv` dataset and fit a Linear Regression model to predict `sales` using all three advertising channels.
+Load the Advertising dataset and fit a Linear Regression model to predict `Sales` using all three advertising channels.
 
 a) Extract and display the coefficients for each feature
 
-b) Interpret each coefficient in plain language (e.g., "For every additional thousand dollars spent on TV advertising, sales increase by...")
+b) Interpret each coefficient in plain language (e.g., "For every additional thousand dollars spent on TV advertising, Sales increase by...")
 
-c) Which advertising channel has the strongest impact on sales?
+c) Which advertising channel has the strongest impact on Sales?
 
 d) Calculate R² for this model. What does this value tell you about the model's performance?
 
@@ -75,7 +107,7 @@ d) Calculate R² for this model. What does this value tell you about the model's
 
 ### Question 2 (5 points)
 
-Continuing with the advertising dataset, manually calculate the following for your linear regression model:
+Continuing with the Advertising dataset, manually calculate the following for your linear regression model:
 
 a) Calculate the residuals (actual - predicted) for the first 5 data points
 
@@ -107,7 +139,7 @@ e) Create a histogram of the residuals. Do they appear approximately normally di
 
 ### Question 4 (5 points)
 
-Load the `real_estate.csv` dataset. Calculate the correlation matrix for all numerical features.
+Load the California Housing dataset. Calculate the correlation matrix for all numerical features.
 
 a) Display the correlation matrix
 
@@ -121,7 +153,7 @@ d) Based on the correlation matrix, do you see evidence of multicollinearity in 
 
 ### Question 5 (5 points)
 
-Using the `real_estate.csv` dataset, fit three models predicting `price`:
+Using the California Housing dataset, fit three models predicting `MedHouseVal`:
 
 - **Model 1:** Linear Regression (no regularization)
 - **Model 2:** Ridge Regression with alpha=1.0
@@ -155,7 +187,7 @@ d) In what situation would you prefer Lasso over Ridge?
 
 ### Question 7 (5 points)
 
-Using the `advertising.csv` dataset, create polynomial features of degree 2 for the `tv` feature only.
+Using the Advertising dataset, create polynomial features of degree 2 for the `TV` feature only.
 
 a) Use `PolynomialFeatures(degree=2, include_bias=False)` to create polynomial features
 
@@ -165,7 +197,7 @@ c) Compare R² with the original linear model (without polynomial features)
 
 d) Did adding polynomial features improve performance? Why might this be the case?
 
-e) Plot sales vs. TV budget, showing both the linear and polynomial model predictions
+e) Plot `Sales` vs. `TV` budget, showing both the linear and polynomial model predictions
 
 ---
 
@@ -187,7 +219,7 @@ c) Suggest two approaches to address this issue.
 
 ### Question 9 (4 points)
 
-Using the `employee_performance.csv` dataset, fit a Ridge regression model with alpha=10.0.
+Using the Bike Sharing dataset (`day.csv`), fit a Ridge regression model with alpha=10.0. Use the features `temp`, `atemp`, `hum`, `windspeed`, `season`, and `workingday` to predict `cnt`.
 
 a) Split data into train/test (80/20, random_state=42)
 
@@ -210,7 +242,7 @@ Write a function called `plot_residual_diagnostics` that:
 - Creates two plots side by side: (1) residuals vs fitted values, (2) histogram of residuals
 - Returns the residuals array
 
-Test your function on a linear regression model fitted to the advertising dataset.
+Test your function on a linear regression model fitted to the Advertising dataset.
 
 Based on the plots, do the residuals appear randomly distributed? Are they centered around zero?
 
@@ -226,7 +258,7 @@ For questions 11-20, you should use an AI coding assistant (like Gemini CLI) to 
 
 ### Question 11 (5 points)
 
-Use AI to perform a comprehensive grid search for Ridge regression on the `real_estate.csv` dataset.
+Use AI to perform a comprehensive grid search for Ridge regression on the California Housing dataset.
 
 Test alpha values: [0.001, 0.01, 0.1, 1, 10, 100, 1000]
 
@@ -251,7 +283,7 @@ What happens to model performance as alpha increases? Is there a point where it 
 
 ### Question 12 (6 points)
 
-Prompt AI to create a comprehensive comparison of regularization techniques on the `employee_performance.csv` dataset (which has multicollinearity).
+Prompt AI to create a comprehensive comparison of regularization techniques on the Bike Sharing dataset (which has multicollinearity between `temp` and `atemp`). Use the features `temp`, `atemp`, `hum`, `windspeed`, `season`, and `workingday` to predict `cnt`.
 
 Compare:
 
@@ -281,7 +313,7 @@ Write a paragraph discussing how regularization helped with the multicollinearit
 
 ### Question 13 (6 points)
 
-Use AI to test polynomial regression of different degrees on the `advertising.csv` dataset using the `tv` feature.
+Use AI to test polynomial regression of different degrees on the Advertising dataset using the `TV` feature.
 
 Test polynomial degrees: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
@@ -306,7 +338,7 @@ At what degree does overfitting begin to occur? How can you tell?
 
 ### Question 14 (6 points)
 
-Prompt AI to generate a complete regression diagnostics report for a linear regression model on `real_estate.csv`.
+Prompt AI to generate a complete regression diagnostics report for a linear regression model on the California Housing dataset.
 
 The report should include:
 
@@ -331,7 +363,7 @@ Based on these diagnostics, are the linear regression assumptions satisfied? Whi
 
 Use AI to create a "coefficient path" visualization for Lasso regression.
 
-Using the `real_estate.csv` dataset:
+Using the California Housing dataset:
 
 - Fit Lasso models with alpha values ranging from 0.001 to 1000 (log scale, 50 points)
 - Track the coefficient values for each feature at each alpha
@@ -353,7 +385,7 @@ Which features are most important (last to be zeroed out)? Which are least impor
 
 Prompt AI to compare polynomial regression with and without regularization.
 
-Using the `advertising.csv` dataset with TV feature:
+Using the Advertising dataset with `TV` feature:
 
 - Fit polynomial models of degree 10 with:
   - No regularization (Linear Regression)
@@ -380,7 +412,7 @@ Does regularization help control overfitting in high-degree polynomials? How?
 
 Use AI to investigate the impact of feature scaling on Ridge and Lasso regression.
 
-Using the `real_estate.csv` dataset:
+Using the California Housing dataset:
 
 - Fit Ridge and Lasso models (alpha=1.0) with:
   - No scaling (raw features)
@@ -414,7 +446,7 @@ The pipeline should:
 - Compare performance with using all features
 - Generate a report showing selected features and performance comparison
 
-Test this on the `real_estate.csv` dataset with alpha=0.1.
+Test this on the California Housing dataset with alpha=0.1.
 
 How many features were selected? Did feature selection improve or hurt performance?
 
@@ -432,7 +464,7 @@ How many features were selected? Did feature selection improve or hurt performan
 
 Use AI to create a comprehensive model selection workflow that combines polynomial features with regularization.
 
-Using the `advertising.csv` dataset:
+Using the Advertising dataset:
 
 - Test polynomial degrees [1, 2, 3, 4, 5]
 - For each degree, test Ridge, Lasso, and Linear Regression
@@ -460,7 +492,7 @@ Your code should:
 
 ### Question 20 (7 points)
 
-For this final question, ask AI to help you conduct a **complete regression analysis** from start to finish on the `real_estate.csv` dataset.
+For this final question, ask AI to help you conduct a **complete regression analysis** from start to finish on the California Housing dataset.
 
 Your analysis should include:
 
@@ -516,50 +548,3 @@ Submit a ZIP file containing:
 2. **Visualizations folder:** All plots and charts generated
 3. **Written responses:** A single document (PDF or Markdown) with all your written answers, interpretations, and AI prompts used
 4. **Data:** Include the datasets if you made any modifications
-
----
-
-## Grading Rubric
-
-**Part A: By Hand (45 points)**
-
-- Code correctness and implementation: 25 points
-- Proper understanding of diagnostics and regularization: 12 points
-- Written interpretations and explanations: 8 points
-
-**Part B: AI-Assisted (55 points)**
-
-- Code functionality and correctness: 25 points
-- Quality and specificity of AI prompts: 14 points
-- Visualizations and diagnostic quality: 10 points
-- Written interpretations and insights: 6 points
-
-**Total: 100 points**
-
----
-
-## Tips for Success
-
-### For Part A:
-
-- Draw residual plots carefully and look for patterns
-- When computing metrics by hand, work with small subsets first to verify
-- Regularization coefficients shrink toward zero—compare magnitudes across models
-- Understanding assumptions is crucial—violating them can make predictions unreliable
-- Polynomial features can capture non-linear relationships but risk overfitting
-
-### For Part B:
-
-- Request diagnostic plots that check all assumptions systematically
-- Ask for log-scale plots when testing many alpha values
-- Request coefficient path plots to understand feature selection
-- Ask for side-by-side comparisons to see regularization effects clearly
-- When testing polynomials, visualize the fitted curves to see overfitting
-
-### General:
-
-- Start early—comprehensive diagnostics take time to interpret
-- Focus on understanding why regularization helps, not just applying it
-- Use residual plots as your primary diagnostic tool
-- Connect regularization back to bias-variance tradeoff from Module 3
-- Use your brain. That's what it's there for.

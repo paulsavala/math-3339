@@ -34,6 +34,7 @@ Given the stochastic (unpredictable, non-deterministic) nature of LLMs, it's imp
 ### 1.1 Why Use AI for Coding?
 
 Imagine the following situation: You have a data set with five columns of data, one of which is a target variable you want to predict. For example, you might be trying to predict the price of a house based on its size, number of bedrooms, number of bathrooms, and location. You want to build a model to predict the price of a house based on these features. This data is small enough that you could do the EDA by hand, including:
+
 - Making graphs for each column
 - Calculating summary statistics
 - Checking for missing values

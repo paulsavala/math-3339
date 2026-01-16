@@ -1,0 +1,77 @@
+---
+title: "Mini Project 1: EDA"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    theme: cosmo
+jupyter: python3
+---
+
+## Overview
+Mini project 1 is a one week project where you take a dataset and research questions, and perform exploratory data analysis (EDA). The goal of this project is for you to get hands-on practice working with an AI agent to do EDA, and quickly turning around a project. Note that in this project you _will not_ be building any machine learning models. You simply want to use the EDA process to understand your data.
+
+## Datasets and research questions
+
+### Earthquakes
+- [Dataset](https://www.kaggle.com/datasets/dhrubangtalukdar/200-years-of-global-major-earthquakes-18262026)
+- Research questions:
+    - Explain the various metrics associated with earthquakes (depth, gap, time-travel residuals, etc.), and what they tell us about an earthquake.
+    - How does the number and intensity of earthquakes vary geographically?
+    - How has the number, intensity and location of earthquakes changed over time?
+
+### CO2 and Greenhouse Gas Emissions
+- [Dataset](https://www.kaggle.com/datasets/ibrahimqasimi/global-co-and-greenhouse-gas-emissions-17502024)
+- Research questions:
+    - Discuss the key metrics from this dataset related to emissions.
+    - Across the globe, how have emissions changed over time?
+    - How are emissions distributed geographically?
+    - From the 1900s to now, how can you describe the geographic trends in emissions? Which countries are improving, which are worsening? What else do you see?
+
+### Global Gender Inequality
+- [Dataset](https://www.kaggle.com/datasets/umitka/global-gender-equality-indicators)
+- Research questions:
+    - Explain the various metrics associated with gender (in)equality. What are they, are how do they relate to the perception of (in)equality"?
+    - How have various measures of gender equality changed over time? Geographically?
+    - How would you describe the trends in gender (in)equality? Which countries are improving? Which metrics are improving quickly, and which are stagnating? What else do you see?
+
+### NBA
+- [Dataset](https://www.kaggle.com/datasets/eoinamoore/historical-nba-data-and-player-box-scores)
+- Research questions:
+    - How can you describe the similarities and differences between teams in the NBA seasons covered? What helps us understand the teams who are winning, the middling teams, and the teams who are struggling?
+    - To what extent does team history (e.g. record of championships, new teams vs old teams, etc) have an effect of performance? Do top teams continue to attract top talent?
+    - How can we understand individual _players_? That is, what sorts of players are fundamental? What attributes do we see from the top players? How much are they playing? What is their mixture of offense and defense like? What stats are key?
+
+### Formula 1
+- [Dataset](https://www.kaggle.com/datasets/rohanrao/formula-1-world-championship-1950-2020)
+- Research questions:
+    - This dataset includes a number of files across all sorts of topics, including individual drivers, teams, pit stops, tracks, etc. Quickly decide on a few key research questions and get them approved by your instructor.
+    - For all research questions, be sure to start with an overview of all key terms and metrics, and their relevance to performance (e.g. what is a pit stop, and why does it matter).
+
+### City of Austin Revenue Budget
+- [Dataset](https://data.austintexas.gov/Budget-and-Finance/Revenue-Open-Budget-revised/5rhv-xasu/about_data)
+- Research quetsions:
+    - This data shows the City of Austin's budget for revenue. Start by explaining key terms and metrics.
+    - How can we understand the distribution of revenue for the City of Austin?
+    - How is the distribution of revenue changing across time, both at a macro level, and on a per-department level? What does this help us learn about the priorities for the City of Austin?
+
+### NYC Taxi Trips
+- [Dataset](https://www.google.com/url?q=https%3A%2F%2Fwww.kaggle.com%2Fdatasets%2Fashvanths%2Fnyc-yellow-taxi)
+- [Borough/zones dataset](https://www.google.com/url?q=https%3A%2F%2Fcatalog.data.gov%2Fdataset%2Fnyc-taxi-zones%2Fresource%2F420d5aec-435f-4f78-90ce-d109a6a41d0f)
+- Research questions:
+    - How is taxi data distributed throughout the city and the five boroughs?
+    - What factors leads to higher tips?
+    - How can we understand the spatial and/or temporal distribution of taxi trips?
+
+### San Francisco Building Permits
+- [Dataset](https://www.google.com/url?q=https%3A%2F%2Fwww.kaggle.com%2Fdatasets%2Faparnashastry%2Fbuilding-permit-applications-data%3Fselect%3DBuilding_Permits.csv)
+- Research questions:
+    - How do permit status relate to the other factors in this dataset? For example, what permit status get issued the most, and what leads to them being completed vs withdrawn vs expired, etc?
+    - How does location relate to all the other factors present?
+    - How does time of year relate to all the other factors present?
+
+
+## Deliverables
+- A ~10 minute presentation giving an overview of your data, addressing your research questions, and finishing with a conclusion
+- A LinkedIn article explaining how you utilized agents/LLMs to do your EDA process
