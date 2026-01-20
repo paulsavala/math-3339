@@ -31,7 +31,7 @@ format:
 | Mon, Jan 12 | Course intro, What is EDA?, AI coding assistants |  | [Link](https://docs.google.com/presentation/d/1KUEpKTWWH6G0qiXUSEFjeUmGzl6b2dsyebWrtqshQiI/edit?usp=sharing) |
 | Wed, Jan 14 | Writing effective prompts, when to use AI vs by hand | Section 1 | [Link](In-class%20activities/Chapter%201/1.1%20-%20Setup%20and%20Prompting.html) |
 | Fri, Jan 16 | Quiz 1a | | |
-| Wed, Jan 21 | Pandas basics: loading data, selecting/filtering, dat cleaning | Section 2 | [Link](In-class%20activities/Chapter%201/1.2%20-%20EDA%20First%20Look.ipynb) |
+| Wed, Jan 21 | Pandas basics: loading data, selecting/filtering, data cleaning | Section 2 | [Link](In-class%20activities/Chapter%201/1.2%20-%20EDA%20First%20Look.ipynb) |
 | Fri, Jan 23 | Statistical summaries, outlier detection | Section 3 | [Link](In-class%20activities/Chapter%201/1.3%20-%20Statistical%20Summaries.ipynb) |
 | Mon, Jan 26 | Quiz 1b | | |
 | Wed, Jan 28 | Data visualization and testing | Sections 4 and 5 | [Link](In-class%20activities/Chapter%201/1.4-1.5%20-%20Visualization%20and%20Testing.ipynb) |
