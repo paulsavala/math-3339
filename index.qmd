@@ -82,7 +82,7 @@ format:
 | Fri, Feb 27 | Multicollinearity: detection and handling | Section 6 | [Link](In-class%20activities/Chapter%202/2.6%20-%20Multicollinearity.ipynb) |
 | Mon, Mar 2 | Quiz 2c |
 | Wed, Mar 4 | Regularization: Ridge and Lasso regression | Section 7 | [Link](In-class%20activities/Chapter%202/2.7%20-%20Regularization.ipynb) |
-| Fri, Mar 6 | Elastic Net and choosing between approaches | Section 8 | [Link](In-class%20activities/Chapter%202/2.8-2.9%20-%20Elastic%20Net.ipynb) |
+| Fri, Mar 6 | Elastic Net and choosing between approaches | Sections 8-10 | [Link](In-class%20activities/Chapter%202/2.8-2.9%20-%20Elastic%20Net.ipynb) |
 | Mon, Mar 9 | Quiz 2d | |
 
 **Homework 2 due date:** Mon, Mar 9
