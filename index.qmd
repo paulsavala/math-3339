@@ -48,9 +48,11 @@ format:
 
 ## Mini Project 1: EDA
 
+[Mini project 1: EDA](Projects/mini-project-1/mini-project-1.qmd)
+
 | Date | Activity |
 |------|----------|
-| Wed, Feb 4 | Mini project work day |
+| Wed, Feb 4 | Mini project work day | 
 | Fri, Feb 6 | Mini project work day |
 | Mon, Feb 9 | Mini project presentations |
 
