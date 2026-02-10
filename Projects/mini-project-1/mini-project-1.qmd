@@ -11,6 +11,8 @@ format:
 ## Overview
 Mini project 1 is a one week project where you take a dataset and research questions, and perform exploratory data analysis (EDA). The goal of this project is for you to get hands-on practice working with an AI agent to do EDA, and quickly turning around a project. Note that in this project you _will not_ be building any machine learning models. You simply want to use the EDA process to understand your data.
 
+View the rubric you'll be graded on [here](Projects/mini-project-1/Rubric.pdf).
+
 ## Datasets and research questions
 
 ### Earthquakes
@@ -19,21 +21,6 @@ Mini project 1 is a one week project where you take a dataset and research quest
     - Explain the various metrics associated with earthquakes (depth, gap, time-travel residuals, etc.), and what they tell us about an earthquake.
     - How does the number and intensity of earthquakes vary geographically?
     - How has the number, intensity and location of earthquakes changed over time?
-
-### CO2 and Greenhouse Gas Emissions
-- [Dataset](https://www.kaggle.com/datasets/ibrahimqasimi/global-co-and-greenhouse-gas-emissions-17502024)
-- Research questions:
-    - Discuss the key metrics from this dataset related to emissions.
-    - Across the globe, how have emissions changed over time?
-    - How are emissions distributed geographically?
-    - From the 1900s to now, how can you describe the geographic trends in emissions? Which countries are improving, which are worsening? What else do you see?
-
-### Global Gender Inequality
-- [Dataset](https://www.kaggle.com/datasets/umitka/global-gender-equality-indicators)
-- Research questions:
-    - Explain the various metrics associated with gender (in)equality. What are they, are how do they relate to the perception of (in)equality"?
-    - How have various measures of gender equality changed over time? Geographically?
-    - How would you describe the trends in gender (in)equality? Which countries are improving? Which metrics are improving quickly, and which are stagnating? What else do you see?
 
 ### NBA
 - [Dataset](https://www.kaggle.com/datasets/eoinamoore/historical-nba-data-and-player-box-scores)

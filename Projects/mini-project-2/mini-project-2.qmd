@@ -1,0 +1,49 @@
+---
+title: "Mini Project 1: EDA"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    theme: cosmo
+---
+
+## Overview
+Mini project 2 is a one week project where you take a dataset and modeling task, and build a machine learning model to solve the task. The goal of this project is for you to get hands-on practice working with an AI agent to build a machine learning model, and quickly turning around a project. You will primarily be graded based on the quality of your model, and how well you understand it, your results, and the process you used to build it (e.g. working with your data, feature engineering, model selection, etc.). 
+
+Note that you **may NOT use the same data you used in Mini Project 1 in this project**.
+
+View the rubric you'll be graded on [here](Projects/mini-project-2/Rubric.pdf).
+
+## Datasets and research questions
+
+### Earthquakes
+- [Dataset](https://www.kaggle.com/datasets/dhrubangtalukdar/200-years-of-global-major-earthquakes-18262026)
+- **Modeling task**: Build a model to predict the magnitude of an earthquake based on the other features in the dataset. Be sure to not use columns which may leak information, or use information that wouldn't be available ahead of time, such as the uncertainty of the earthquake's magnitude.
+
+### NBA
+- [Dataset](https://www.kaggle.com/datasets/eoinamoore/historical-nba-data-and-player-box-scores)
+- **Modeling task**: Build a model to predict the attendance of an NBA game based on the other features in the dataset. You should take into account team/player performance both that season and in previous seasons.
+
+### Formula 1
+- [Dataset](https://www.kaggle.com/datasets/rohanrao/formula-1-world-championship-1950-2020)
+- **Modeling task**: Predict the time in qualifying 1, 2 and 3 for a given driver and track.
+
+### Spotify
+- [Dataset](https://www.kaggle.com/datasets/maharshipandya/-spotify-tracks-dataset)
+- **Modeling task**: Predict the popularity of a given song based on the other features in the dataset.
+
+### 2016 election results
+- [Dataset](https://www.kaggle.com/datasets/benhamner/2016-us-election)
+- **Modeling task**: How can county demographics help predict the number of votes each candidate will get?
+
+## Deliverables
+- A 7-13 minute presentation (no more than 13 minutes). Your presentation should cover:
+    - A very brief overview of your data (one slide)
+    - How your data relates to your modeling task
+    - The model you used
+    - How you worked with your data to prepare it for modeling (not just cleaning, also data transformations, feature engineering, etc.)
+    - Other models you considered, and why you chose the one you did
+    - Your modeling results
+    - Your conclusions
+- A LinkedIn article explaining how you utilized agents/LLMs to do your EDA process
