@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>MATH 3339: Introduction to Data Science</title>
+<title>Mini Project 1: EDA – MATH 3339: Introduction to Data Science</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,23 +23,23 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -69,7 +69,7 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
 
-<link rel="stylesheet" href="styles/textbook-nav.css">
+<link rel="stylesheet" href="../../styles/textbook-nav.css">
 </head>
 
 <body class="quarto-light">
@@ -83,16 +83,17 @@ ul.task-list li input[type="checkbox"] {
         <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">On this page</h2>
    
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#datasets-and-research-questions" id="toc-datasets-and-research-questions" class="nav-link" data-scroll-target="#datasets-and-research-questions">Datasets and research questions</a>
   <ul class="collapse">
-  <li><a href="#links" id="toc-links" class="nav-link active" data-scroll-target="#links">Links</a></li>
-  <li><a href="#chapter-1-exploratory-data-analysis-ai-assisted-coding" id="toc-chapter-1-exploratory-data-analysis-ai-assisted-coding" class="nav-link" data-scroll-target="#chapter-1-exploratory-data-analysis-ai-assisted-coding">Chapter 1: Exploratory Data Analysis &amp; AI-Assisted Coding</a></li>
-  <li><a href="#mini-project-1-eda" id="toc-mini-project-1-eda" class="nav-link" data-scroll-target="#mini-project-1-eda">Mini Project 1: EDA</a></li>
-  <li><a href="#chapter-2-regression-models" id="toc-chapter-2-regression-models" class="nav-link" data-scroll-target="#chapter-2-regression-models">Chapter 2: Regression Models</a></li>
-  <li><a href="#mini-project-2-regression-models" id="toc-mini-project-2-regression-models" class="nav-link" data-scroll-target="#mini-project-2-regression-models">Mini Project 2: Regression models</a></li>
-  <li><a href="#chapter-3-classification-models" id="toc-chapter-3-classification-models" class="nav-link" data-scroll-target="#chapter-3-classification-models">Chapter 3: Classification Models</a></li>
-  <li><a href="#chapter-4-llms-for-feature-engineering-and-data-extraction" id="toc-chapter-4-llms-for-feature-engineering-and-data-extraction" class="nav-link" data-scroll-target="#chapter-4-llms-for-feature-engineering-and-data-extraction">Chapter 4: LLMs for Feature Engineering and Data Extraction</a></li>
-  <li><a href="#final-exam-week-presentations-wrap-up" id="toc-final-exam-week-presentations-wrap-up" class="nav-link" data-scroll-target="#final-exam-week-presentations-wrap-up">Final exam week: Presentations &amp; Wrap-up</a></li>
-  <li><a href="#assessment-overview" id="toc-assessment-overview" class="nav-link" data-scroll-target="#assessment-overview">Assessment Overview</a></li>
+  <li><a href="#earthquakes" id="toc-earthquakes" class="nav-link" data-scroll-target="#earthquakes">Earthquakes</a></li>
+  <li><a href="#nba" id="toc-nba" class="nav-link" data-scroll-target="#nba">NBA</a></li>
+  <li><a href="#formula-1" id="toc-formula-1" class="nav-link" data-scroll-target="#formula-1">Formula 1</a></li>
+  <li><a href="#spotify" id="toc-spotify" class="nav-link" data-scroll-target="#spotify">Spotify</a></li>
+  <li><a href="#election-results" id="toc-election-results" class="nav-link" data-scroll-target="#election-results">2016 election results</a></li>
+  </ul></li>
+  <li><a href="#deliverables" id="toc-deliverables" class="nav-link" data-scroll-target="#deliverables">Deliverables</a></li>
   </ul>
 </nav>
     </div>
@@ -101,8 +102,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">MATH 3339: Introduction to Data Science</h1>
-<p class="subtitle lead">Course Schedule</p>
+<h1 class="title">Mini Project 1: EDA</h1>
 </div>
 
 
@@ -119,483 +119,65 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="links" class="level2">
-<h2 class="anchored" data-anchor-id="links">Links</h2>
-<ul>
-<li><a href="./Textbook/table-of-contents.html">Textbook</a></li>
-<li><a href="https://paulsavala.github.io/math-3339/">Course Website (this page)</a></li>
-</ul>
-<hr>
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">Overview</h2>
+<p>Mini project 2 is a one week project where you take a dataset and modeling task, and build a machine learning model to solve the task. The goal of this project is for you to get hands-on practice working with an AI agent to build a machine learning model, and quickly turning around a project. You will primarily be graded based on the quality of your model, and how well you understand it, your results, and the process you used to build it (e.g.&nbsp;working with your data, feature engineering, model selection, etc.).</p>
+<p>Note that you <strong>may NOT use the same data you used in Mini Project 1 in this project</strong>.</p>
+<p>View the rubric you’ll be graded on <a href="Projects/mini-project-2/Rubric.pdf">here</a>.</p>
 </section>
-<section id="chapter-1-exploratory-data-analysis-ai-assisted-coding" class="level2">
-<h2 class="anchored" data-anchor-id="chapter-1-exploratory-data-analysis-ai-assisted-coding">Chapter 1: Exploratory Data Analysis &amp; AI-Assisted Coding</h2>
-<section id="learning-objectives" class="level3">
-<h3 class="anchored" data-anchor-id="learning-objectives">Learning Objectives</h3>
+<section id="datasets-and-research-questions" class="level2">
+<h2 class="anchored" data-anchor-id="datasets-and-research-questions">Datasets and research questions</h2>
+<section id="earthquakes" class="level3">
+<h3 class="anchored" data-anchor-id="earthquakes">Earthquakes</h3>
 <ul>
-<li>Use AI coding assistants effectively with good prompts</li>
-<li>Manipulate data with Pandas (loading, filtering, cleaning)</li>
-<li>Calculate and interpret statistical summaries</li>
-<li>Create effective visualizations with Seaborn</li>
-<li>Test data analysis code with assert statements</li>
+<li><a href="https://www.kaggle.com/datasets/dhrubangtalukdar/200-years-of-global-major-earthquakes-18262026">Dataset</a></li>
+<li><strong>Modeling task</strong>: Build a model to predict the magnitude of an earthquake based on the other features in the dataset. Be sure to not use columns which may leak information, or use information that wouldn’t be available ahead of time, such as the uncertainty of the earthquake’s magnitude.</li>
 </ul>
 </section>
-<section id="schedule" class="level3">
-<h3 class="anchored" data-anchor-id="schedule">Schedule</h3>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Date</th>
-<th>Topic</th>
-<th>Textbook</th>
-<th>In-class Activity</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Mon, Jan 12</td>
-<td>Course intro, What is EDA?, AI coding assistants</td>
-<td></td>
-<td><a href="https://docs.google.com/presentation/d/1KUEpKTWWH6G0qiXUSEFjeUmGzl6b2dsyebWrtqshQiI/edit?usp=sharing">Link</a></td>
-</tr>
-<tr class="even">
-<td>Wed, Jan 14</td>
-<td>Writing effective prompts, when to use AI vs by hand</td>
-<td>Section 1</td>
-<td><a href="In-class activities/Chapter 1/1.1 - Setup and Prompting.html">Link</a></td>
-</tr>
-<tr class="odd">
-<td>Fri, Jan 16</td>
-<td>Quiz 1a</td>
-<td></td>
-<td></td>
-</tr>
-<tr class="even">
-<td>Wed, Jan 21</td>
-<td>Pandas basics: loading data, selecting/filtering, data cleaning</td>
-<td>Section 2</td>
-<td><a href="./In-class activities/Chapter 1/1.2 - EDA First Look.html">Link</a></td>
-</tr>
-<tr class="odd">
-<td>Fri, Jan 23</td>
-<td>Statistical summaries, outlier detection</td>
-<td>Section 3</td>
-<td><a href="./In-class activities/Chapter 1/1.3 - Statistical Summaries.html">Link</a></td>
-</tr>
-<tr class="even">
-<td>Mon, Jan 26</td>
-<td>Quiz 1b</td>
-<td></td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>Wed, Jan 28</td>
-<td>Data visualization and testing</td>
-<td>Sections 4 and 5</td>
-<td><a href="./In-class activities/Chapter 1/1.4-1.5 - Visualization and Testing.html">Link</a></td>
-</tr>
-<tr class="even">
-<td>Fri, Jan 30</td>
-<td>In-class activity: EDA in practice</td>
-<td>Sections 6 and 7</td>
-<td><a href="./In-class activities/Chapter 1/1.6-1.7 - Iterative EDA.html">Link</a></td>
-</tr>
-<tr class="odd">
-<td>Mon, Feb 2</td>
-<td>Quiz 1c</td>
-<td></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Homework 1 due date:</strong> Mon, Feb 2</p>
-</section>
-<section id="resources" class="level3">
-<h3 class="anchored" data-anchor-id="resources">Resources</h3>
+<section id="nba" class="level3">
+<h3 class="anchored" data-anchor-id="nba">NBA</h3>
 <ul>
-<li><a href="./Textbook/Chapter 1 - EDA/chapter-1-eda.html">Chapter 1: EDA and AI-Assisted Coding</a></li>
-<li><a href="./Assignments/Chapter 1 - EDA/chapter-1-homework.html">Chapter 1 Homework</a></li>
-</ul>
-<hr>
-</section>
-</section>
-<section id="mini-project-1-eda" class="level2">
-<h2 class="anchored" data-anchor-id="mini-project-1-eda">Mini Project 1: EDA</h2>
-<p><a href="./Projects/mini-project-1/mini-project-1.html">Mini project 1: EDA</a></p>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Date</th>
-<th>Activity</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Wed, Feb 4</td>
-<td>Mini project work day</td>
-</tr>
-<tr class="even">
-<td>Fri, Feb 6</td>
-<td>Mini project work day</td>
-</tr>
-<tr class="odd">
-<td>Mon, Feb 9</td>
-<td>Mini project presentations</td>
-</tr>
-</tbody>
-</table>
-<hr>
-</section>
-<section id="chapter-2-regression-models" class="level2">
-<h2 class="anchored" data-anchor-id="chapter-2-regression-models">Chapter 2: Regression Models</h2>
-<section id="learning-objectives-1" class="level3">
-<h3 class="anchored" data-anchor-id="learning-objectives-1">Learning Objectives</h3>
-<ul>
-<li>Understand proper train/validation/test methodology</li>
-<li>Use cross-validation for reliable model evaluation</li>
-<li>Understand and check linear regression assumptions</li>
-<li>Interpret regression coefficients correctly</li>
-<li>Use residual analysis to diagnose model problems</li>
-<li>Apply polynomial features for non-linear relationships</li>
-<li>Recognize and handle multicollinearity</li>
-<li>Use Ridge, Lasso, and Elastic Net regularization</li>
+<li><a href="https://www.kaggle.com/datasets/eoinamoore/historical-nba-data-and-player-box-scores">Dataset</a></li>
+<li><strong>Modeling task</strong>: Build a model to predict the attendance of an NBA game based on the other features in the dataset. You should take into account team/player performance both that season and in previous seasons.</li>
 </ul>
 </section>
-<section id="schedule-1" class="level3">
-<h3 class="anchored" data-anchor-id="schedule-1">Schedule</h3>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Date</th>
-<th>Topic</th>
-<th>Textbook</th>
-<th>In-class Activity</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Wed, Feb 11</td>
-<td>Train/validation/test methodology, cross-validation intro</td>
-<td>Section 1</td>
-<td><a href="./In-class activities/Chapter 2/2.1 - Train Test Split.html">Link</a></td>
-</tr>
-<tr class="even">
-<td>Fri, Feb 13</td>
-<td>Linear regression fundamentals &amp; assumptions</td>
-<td>Section 2</td>
-<td><a href="./In-class activities/Chapter 2/2.2 - Linear Regression.html">Link</a></td>
-</tr>
-<tr class="odd">
-<td>Mon, Feb 16</td>
-<td>Quiz 2a</td>
-<td></td>
-<td></td>
-</tr>
-<tr class="even">
-<td>Wed, Feb 18</td>
-<td>Regression evaluation metrics (MSE, MAE, R², Adjusted R²)</td>
-<td>Section 3</td>
-<td><a href="./In-class activities/Chapter 2/2.3 - Evaluation Metrics.html">Link</a></td>
-</tr>
-<tr class="odd">
-<td>Fri, Feb 20</td>
-<td>Residual analysis and diagnostic plots</td>
-<td>Section 4</td>
-<td><a href="./In-class activities/Chapter 2/2.4 - Residual Analysis.html">Link</a></td>
-</tr>
-<tr class="even">
-<td>Mon, Feb 23</td>
-<td>Quiz 2b</td>
-<td></td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>Wed, Feb 25</td>
-<td>Polynomial regression and feature expansion</td>
-<td>Section 5</td>
-<td><a href="./In-class activities/Chapter 2/2.5 - Polynomial Regression.html">Link</a></td>
-</tr>
-<tr class="even">
-<td>Fri, Feb 27</td>
-<td>Multicollinearity: detection and handling</td>
-<td>Section 6</td>
-<td><a href="./In-class activities/Chapter 2/2.6 - Multicollinearity.html">Link</a></td>
-</tr>
-<tr class="odd">
-<td>Mon, Mar 2</td>
-<td>Quiz 2c</td>
-<td></td>
-<td></td>
-</tr>
-<tr class="even">
-<td>Wed, Mar 4</td>
-<td>Regularization: Ridge and Lasso regression</td>
-<td>Section 7</td>
-<td><a href="./In-class activities/Chapter 2/2.7 - Regularization.html">Link</a></td>
-</tr>
-<tr class="odd">
-<td>Fri, Mar 6</td>
-<td>Elastic Net and choosing between approaches</td>
-<td>Sections 8-10</td>
-<td><a href="./In-class activities/Chapter 2/2.8-2.9 - Elastic Net.html">Link</a></td>
-</tr>
-<tr class="even">
-<td>Mon, Mar 9</td>
-<td>Quiz 2d</td>
-<td></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Homework 2 due date:</strong> Mon, Mar 9</p>
-</section>
-<section id="resources-1" class="level3">
-<h3 class="anchored" data-anchor-id="resources-1">Resources</h3>
+<section id="formula-1" class="level3">
+<h3 class="anchored" data-anchor-id="formula-1">Formula 1</h3>
 <ul>
-<li><a href="./Textbook/Chapter-2-Regression/chapter-2-regression.html">Chapter 2: Regression Models</a></li>
-<li><a href="./Assignments/Chapter 2 - Regression/chapter-2-homework.html">Chapter 2 Homework</a></li>
-</ul>
-<hr>
-</section>
-</section>
-<section id="mini-project-2-regression-models" class="level2">
-<h2 class="anchored" data-anchor-id="mini-project-2-regression-models">Mini Project 2: Regression models</h2>
-<p><a href="./Projects/mini-project-2/mini-project-2.html">Mini project 2: Regression models</a></p>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Date</th>
-<th>Activity</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Wed, Mar 11</td>
-<td>Mini project work day</td>
-</tr>
-<tr class="even">
-<td>Fri, Mar 13</td>
-<td>Mini project work day</td>
-</tr>
-<tr class="odd">
-<td>Mon, Mar 23</td>
-<td>Mini project presentations</td>
-</tr>
-</tbody>
-</table>
-<hr>
-</section>
-<section id="chapter-3-classification-models" class="level2">
-<h2 class="anchored" data-anchor-id="chapter-3-classification-models">Chapter 3: Classification Models</h2>
-<section id="learning-objectives-2" class="level3">
-<h3 class="anchored" data-anchor-id="learning-objectives-2">Learning Objectives</h3>
-<ul>
-<li>Understand supervised vs unsupervised learning paradigms</li>
-<li>Understand logistic regression and interpret odds ratios</li>
-<li>Read and interpret confusion matrices</li>
-<li>Calculate precision, recall, F1 score and choose appropriately</li>
-<li>Fit and tune decision trees, random forests, SVMs, k-NN</li>
-<li>Use ROC curves and AUC for model comparison</li>
-<li>Handle class imbalance with weights and resampling</li>
+<li><a href="https://www.kaggle.com/datasets/rohanrao/formula-1-world-championship-1950-2020">Dataset</a></li>
+<li><strong>Modeling task</strong>: Predict the time in qualifying 1, 2 and 3 for a given driver and track.</li>
 </ul>
 </section>
-<section id="schedule-2" class="level3">
-<h3 class="anchored" data-anchor-id="schedule-2">Schedule</h3>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 26%">
-<col style="width: 30%">
-<col style="width: 43%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Date</th>
-<th>Topic</th>
-<th>Textbook</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Wed, Mar 25</td>
-<td>Supervised vs unsupervised learning, classification intro</td>
-<td>Sections 1 and 2</td>
-</tr>
-<tr class="even">
-<td>Fri, Mar 27</td>
-<td>Logistic regression and confusion matrices</td>
-<td>Sections 3</td>
-</tr>
-<tr class="odd">
-<td>Mon, Mar 30</td>
-<td>Quiz 3a</td>
-<td></td>
-</tr>
-<tr class="even">
-<td>Wed, Apr 1</td>
-<td>Classification metrics: precision, recall, F1, ROC/AUC</td>
-<td>Section 4</td>
-</tr>
-<tr class="odd">
-<td>Fri, Apr 3</td>
-<td>Decision trees and random forests</td>
-<td>Sections 5 and 6</td>
-</tr>
-<tr class="even">
-<td>Mon, Apr 6</td>
-<td>Quiz 3b</td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>Wed, Apr 8</td>
-<td>Support vector machines and k-Nearest neighbors</td>
-<td>Sections 7 and 8</td>
-</tr>
-<tr class="even">
-<td>Fri, Apr 10</td>
-<td>Class imbalance handling (SMOTE, class weights)</td>
-<td>Section 10</td>
-</tr>
-<tr class="odd">
-<td>Mon, Apr 13</td>
-<td>Quiz 3c</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Homework 3 due date:</strong> Mon, Apr 13</p>
-</section>
-<section id="resources-2" class="level3">
-<h3 class="anchored" data-anchor-id="resources-2">Resources</h3>
+<section id="spotify" class="level3">
+<h3 class="anchored" data-anchor-id="spotify">Spotify</h3>
 <ul>
-<li><a href="./Textbook/Chapter-3-Classification/chapter-3-classification.html">Chapter 3: Classification Models</a></li>
-<li><a href="./Assignments/Chapter 3 - Classification/chapter-3-homework.html">Chapter 3 Homework</a></li>
-</ul>
-<hr>
-</section>
-</section>
-<section id="chapter-4-llms-for-feature-engineering-and-data-extraction" class="level2">
-<h2 class="anchored" data-anchor-id="chapter-4-llms-for-feature-engineering-and-data-extraction">Chapter 4: LLMs for Feature Engineering and Data Extraction</h2>
-<section id="learning-objectives-3" class="level3">
-<h3 class="anchored" data-anchor-id="learning-objectives-3">Learning Objectives</h3>
-<ul>
-<li>Understand how LLMs can transform unstructured text into ML-ready features</li>
-<li>Write effective prompts for information extraction tasks</li>
-<li>Integrate LLM APIs (OpenAI, Anthropic, Google) into data pipelines</li>
-<li>Parse and validate JSON responses from LLMs</li>
-<li>Calculate and compare API costs across different providers</li>
-<li>Validate LLM-extracted features for quality and consistency</li>
-<li>Integrate LLM-generated features into traditional ML models</li>
-<li>Make informed decisions about when to use LLMs vs.&nbsp;traditional approaches</li>
+<li><a href="https://www.kaggle.com/datasets/maharshipandya/-spotify-tracks-dataset">Dataset</a></li>
+<li><strong>Modeling task</strong>: Predict the popularity of a given song based on the other features in the dataset.</li>
 </ul>
 </section>
-<section id="schedule-3" class="level3">
-<h3 class="anchored" data-anchor-id="schedule-3">Schedule</h3>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 46%">
-<col style="width: 53%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Date</th>
-<th>Topic</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Wed, Apr 15</td>
-<td>Introduction to LLMs for feature extraction; Zero-shot extraction; Writing effective prompts, <strong>Begin final project</strong></td>
-</tr>
-<tr class="even">
-<td>Fri, Apr 17</td>
-<td>API integration (OpenAI, Anthropic, Google); Parameters (temperature, max_tokens); Cost calculation</td>
-</tr>
-<tr class="odd">
-<td>Mon, Apr 20</td>
-<td>Quiz 4a: Prompt engineering and API basics</td>
-</tr>
-<tr class="even">
-<td>Wed, Apr 22</td>
-<td>JSON parsing and validation; Handling malformed responses; Building DataFrames</td>
-</tr>
-<tr class="odd">
-<td>Fri, Apr 24</td>
-<td>Few-shot prompting; Quality assessment; Integration with ML pipelines</td>
-</tr>
-<tr class="even">
-<td>Mon, Apr 27</td>
-<td>Quiz 4b: Integration and quality control</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Homework 4 due date:</strong> Mon, Apr 27</p>
-</section>
-<section id="resources-3" class="level3">
-<h3 class="anchored" data-anchor-id="resources-3">Resources</h3>
+<section id="election-results" class="level3">
+<h3 class="anchored" data-anchor-id="election-results">2016 election results</h3>
 <ul>
-<li><strong>Textbook:</strong> <a href="./Textbook/Chapter-4-LLMs-Feature-Engineering/chapter-4-llms-feature-engineering.html">Chapter 4: LLMs for Feature Engineering</a></li>
-<li><strong>Homework:</strong> <a href="Assignments/Chapter 4 - LLMs Feature Engineering/chapter-4-homework.qmd">Chapter 4 Homework</a></li>
+<li><a href="https://www.kaggle.com/datasets/benhamner/2016-us-election">Dataset</a></li>
+<li><strong>Modeling task</strong>: How can county demographics help predict the number of votes each candidate will get?</li>
 </ul>
-<p>–</p>
 </section>
 </section>
-<section id="final-exam-week-presentations-wrap-up" class="level2">
-<h2 class="anchored" data-anchor-id="final-exam-week-presentations-wrap-up">Final exam week: Presentations &amp; Wrap-up</h2>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Date</th>
-<th>Topic</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Wed, Apr 29</td>
-<td>Final project work day</td>
-</tr>
-<tr class="even">
-<td>Fri, May 1</td>
-<td>Final project work day</td>
-</tr>
-<tr class="odd">
-<td>Wed, May 6</td>
-<td>Final project presentations</td>
-</tr>
-</tbody>
-</table>
-<hr>
-</section>
-<section id="assessment-overview" class="level2">
-<h2 class="anchored" data-anchor-id="assessment-overview">Assessment Overview</h2>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Assessment</th>
-<th>Weight</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Quizzes</td>
-<td>25%</td>
-</tr>
-<tr class="even">
-<td>Homework</td>
-<td>20%</td>
-</tr>
-<tr class="odd">
-<td>Mini projects</td>
-<td>12.5% each = 25%</td>
-</tr>
-<tr class="even">
-<td>Attendance</td>
-<td>10%</td>
-</tr>
-<tr class="odd">
-<td>Final Project</td>
-<td>20%</td>
-</tr>
-</tbody>
-</table>
+<section id="deliverables" class="level2">
+<h2 class="anchored" data-anchor-id="deliverables">Deliverables</h2>
+<ul>
+<li>A 7-13 minute presentation (no more than 13 minutes). Your presentation should cover:
+<ul>
+<li>A very brief overview of your data (one slide)</li>
+<li>How your data relates to your modeling task</li>
+<li>The model you used</li>
+<li>How you worked with your data to prepare it for modeling (not just cleaning, also data transformations, feature engineering, etc.)</li>
+<li>Other models you considered, and why you chose the one you did</li>
+<li>Your modeling results</li>
+<li>Your conclusions</li>
+</ul></li>
+<li>A LinkedIn article explaining how you utilized agents/LLMs to do your EDA process</li>
+</ul>
 
 
 </section>
