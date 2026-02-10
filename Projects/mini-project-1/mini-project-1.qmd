@@ -6,7 +6,6 @@ format:
     toc-depth: 3
     code-fold: false
     theme: cosmo
-jupyter: python3
 ---
 
 ## Overview
@@ -73,5 +72,5 @@ Mini project 1 is a one week project where you take a dataset and research quest
 
 
 ## Deliverables
-- A ~10 minute presentation giving an overview of your data, addressing your research questions, and finishing with a conclusion
+- A 5-10 minute presentation (no more than 10 minutes) giving an overview of your data, addressing your research questions, and finishing with a conclusion
 - A LinkedIn article explaining how you utilized agents/LLMs to do your EDA process
