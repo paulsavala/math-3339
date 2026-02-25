@@ -151,14 +151,14 @@
     "href": "In-class activities/Chapter 2/2.4 - Residual Analysis.html#quick-recap",
     "title": "Chapter 2.4: Residual Analysis",
     "section": "Quick Recap",
-    "text": "Quick Recap\n\nResiduals = Actual - Predicted (how wrong was the model?)\nGood residual plot: random scatter around 0, no patterns\nFunnel shape → heteroscedasticity (variance not constant)\nCurved pattern → non-linearity (need polynomial terms or transformation)\nClusters → missing categorical variable\n\n\n# Load and prepare data\nhousing = fetch_california_housing(as_frame=True)\ndf = housing.frame\n\n# Use features 'MedInc', 'HouseAge', 'AveRooms', 'AveBedrms', 'Population' to predict 'MedHouseVal'\n\n\n# 80/20 train/test split\n\n\n# Fit the model\n\n\n# Get predictions on test set\n\n\n# Priunt out test R²"
+    "text": "Quick Recap\n\nResiduals = Actual - Predicted (how wrong was the model?)\nGood residual plot: random scatter around 0, no patterns\nFunnel shape → heteroscedasticity (variance not constant)\nCurved pattern → non-linearity (need polynomial terms or transformation)\nClusters → missing categorical variable\n\n\n# Load and prepare data\nhousing = fetch_california_housing(as_frame=True)\ndf = housing.frame\n\n\ndf.head()\n\n\n\n\n\n\n\n\nMedInc\nHouseAge\nAveRooms\nAveBedrms\nPopulation\nAveOccup\nLatitude\nLongitude\nMedHouseVal\n\n\n\n\n0\n8.3252\n41.0\n6.984127\n1.023810\n322.0\n2.555556\n37.88\n-122.23\n4.526\n\n\n1\n8.3014\n21.0\n6.238137\n0.971880\n2401.0\n2.109842\n37.86\n-122.22\n3.585\n\n\n2\n7.2574\n52.0\n8.288136\n1.073446\n496.0\n2.802260\n37.85\n-122.24\n3.521\n\n\n3\n5.6431\n52.0\n5.817352\n1.073059\n558.0\n2.547945\n37.85\n-122.25\n3.413\n\n\n4\n3.8462\n52.0\n6.281853\n1.081081\n565.0\n2.181467\n37.85\n-122.25\n3.422\n\n\n\n\n\n\n\n\n# Use features 'MedInc', 'HouseAge', 'AveRooms', 'AveBedrms', 'Population' to predict 'MedHouseVal'\n\n\n# 80/20 train/test split\n\n\n# Fit the model\n\n\n# Get predictions on test set\n\n\n# Print out MSE, MAE and R² for predictions on test set\n\nMake a scatter plot showing the actual (x-axis) vs predicted (y-axis) values.\n\n# Scatter plot"
   },
   {
     "objectID": "In-class activities/Chapter 2/2.4 - Residual Analysis.html#practice",
     "href": "In-class activities/Chapter 2/2.4 - Residual Analysis.html#practice",
     "title": "Chapter 2.4: Residual Analysis",
     "section": "Practice",
-    "text": "Practice\n\n1. Fit regression, calculate residuals: y_test - y_pred\n\n# Calculate residuals\nresiduals = y_test - y_pred\n\n# Calculate and interpret mean of residuals\n\nWhat do we learn from looking at the mean residual?\n(Write your answer here)\n\n\n2. Create scatter plot: fitted values (x) vs residuals (y)\n\n# Step 1: Scatter plot with fitted values on x-axis, residuals on y-axis\n\n\n# Step 2: Add labels and title\n\nWhat do we learn from this graph?\n(Write your answer here)\n\n\n3. Add a horizontal line at y=0 for reference\n\n# Add horizontal line at y=0\n\n\n\n4. Create histogram of residuals - does it look normal?\n\n# Step 1: Create histogram of residuals\n\nQuestion: Does the histogram look approximately normal (bell-shaped)? Or is it skewed? What does this tell us?\n(Write your answer here)\n\n\n5. Describe any patterns you see in the residual plot\nLook back at your residuals vs fitted values plot. Answer these questions:\na) Is there a funnel shape (wider spread on one side)?\n(Write your observation here)\nb) Is there a curved pattern (U-shape or arch)?\n(Write your observation here)\nc) Are there any obvious clusters or groups?\n(Write your observation here)\nd) Is there a horizontal band of points at any particular value?\n(Write your observation here)\n\n\n6. Based on patterns, which assumption might be violated?\nMatch the patterns to assumptions: - Funnel shape → Homoscedasticity violated (variance not constant) - Curved pattern → Linearity violated (relationship is non-linear) - Non-normal histogram → Normality violated - Clusters → Possible independence issues or missing variables\nYour diagnosis: Based on your plots, which assumption(s) appear to be violated?\n(Write your diagnosis here)\nWhat would you recommend doing to fix this?\n(Write your recommendation here)"
+    "text": "Practice\n\n1. Fit regression, calculate residuals: y_test - preds\n\n# Calculate residuals\n\n\n# Calculate and interpret mean of residuals\n\nnp.float64(0.01530552057403575)\n\n\nWhat do we learn from looking at the mean residual?\n(Write your answer here)\n\n\n2. Create scatter plot: fitted values (x) vs residuals (y)\n\n# Step 1: Scatter plot with fitted values on x-axis, residuals on y-axis\n\n\n# Step 2: Add labels and title\n\n\n# Step 3: Add a horizontal line at x=0 (red) for reference\n\nWhat do we learn from this graph?\n(Write your answer here)\n\n\n3. Create histogram of residuals - does it look normal?\n\n# Step 1: Create histogram of residuals\n\nQuestion: Does the histogram look approximately normal (bell-shaped)? Or is it skewed? What does this tell us?\n(Write your answer here)\n\n\n5. Describe any patterns you see in the residual plot\nLook back at your residuals vs fitted values plot. Answer these questions:\na) Is there a funnel shape (wider spread on one side)?\n(Write your observation here)\nb) Is there a curved pattern (U-shape or arch)?\n(Write your observation here)\nc) Are there any obvious clusters or groups?\n(Write your observation here)\nd) Is there a horizontal band of points at any particular value?\n(Write your observation here)\n\n\n6. Based on patterns, which assumption might be violated?\nMatch the patterns to assumptions:\n\nFunnel shape → Homoscedasticity violated (variance not constant)\nCurved pattern → Linearity violated (relationship is non-linear)\nNon-normal histogram → Normality violated\nClusters → Possible independence issues or missing variables\n\nYour diagnosis: Based on your plots, which assumption(s) appear to be violated?\n(Write your diagnosis here)\nWhat would you recommend doing to fix this?\n(Write your recommendation here)"
   },
   {
     "objectID": "In-class activities/Chapter 2/2.4 - Residual Analysis.html#discussion-question",
@@ -243,6 +243,111 @@
     "title": "Chapter 2.6: Multicollinearity",
     "section": "Practice",
     "text": "Practice\n\n1. Create correlation matrix with df[features].corr()\n\n# Calculate and show the correlation matrix between all features in X\n...\n\n\n\n2. Create heatmap with sns.heatmap(corr_matrix, annot=True)\n\n# Turn this into a heatmap. After making your initial heatmap, consider ways you could improve it visually, then implement those changes.\n...\n\n\n\n3. List all pairs with correlation &gt; 0.7 (or &lt; -0.7)\n\n# Find all pairs of variables with correlation above 0.7 (nothing special about this value, just a high correlation)\n...\n\nYour observation: Which features are highly correlated? Does this make sense intuitively?\n(Write your answer here)\n\n\n4. Calculate VIF for each feature\nVIF measures how much the variance of a coefficient is inflated due to correlation with other features.\n\n# Calculate VIF for all pairs of features. Turn the output into a DataFrame.\n\nWhat do you learn from this VIF?\n(Write your answer here)\n\n\n5. Remove one problematic feature, recalculate VIF - did it improve?\n\n# Step 1: Choose a feature with high VIF to remove, then remove it from X\n...\n\n# Step 2: Recalculate VIF, what changes?\n...\n\nYour analysis: Did removing the feature improve the VIF values? If there are still features with high VIF, what would you do next?\n(Write your answer here)\n\n\n6. See the effect on coefficients\nFit a linear regression model using all variables in X, and then all variables in X minus the one you removed. How did the model coefficients change?\n\n# Fit models with and without the problematic feature\n...\n\n# Compare coefficients from this model with coefficients from full model (all features in X)\n..."
+  },
+  {
+    "objectID": "In-class activities/Chapter 3/3.9-3.10 - ROC Curves and Class Imbalance.html",
+    "href": "In-class activities/Chapter 3/3.9-3.10 - ROC Curves and Class Imbalance.html",
+    "title": "Chapter 3.9-3.10: ROC Curves and Class Imbalance",
+    "section": "",
+    "text": "Download Jupyter notebook (.ipynb)\nGoal: Understand why accuracy is misleading for imbalanced data, use ROC/AUC for evaluation, and apply class weighting."
+  },
+  {
+    "objectID": "In-class activities/Chapter 3/3.9-3.10 - ROC Curves and Class Imbalance.html#quick-recap",
+    "href": "In-class activities/Chapter 3/3.9-3.10 - ROC Curves and Class Imbalance.html#quick-recap",
+    "title": "Chapter 3.9-3.10: ROC Curves and Class Imbalance",
+    "section": "Quick Recap",
+    "text": "Quick Recap\n\nROC curve plots True Positive Rate vs False Positive Rate at every threshold\nAUC (Area Under the Curve) summarizes the ROC: 1.0 = perfect, 0.5 = random guessing\nClass imbalance = one class is much more common than the other\nWith imbalanced data, a model can get high accuracy by always predicting the majority class\nclass_weight='balanced' tells the model to pay more attention to the minority class\nWith imbalanced data, focus on precision, recall, and F1 instead of accuracy"
+  },
+  {
+    "objectID": "In-class activities/Chapter 3/3.9-3.10 - ROC Curves and Class Imbalance.html#data",
+    "href": "In-class activities/Chapter 3/3.9-3.10 - ROC Curves and Class Imbalance.html#data",
+    "title": "Chapter 3.9-3.10: ROC Curves and Class Imbalance",
+    "section": "Data",
+    "text": "Data\nWe’ll use the Spotify dataset with an intentionally imbalanced target: predicting “viral hits” (popularity &gt; 70).\n\n# Load Spotify data\nspotify = pd.read_csv('../../Textbook/data/spotify.csv')\nspotify.head()"
+  },
+  {
+    "objectID": "In-class activities/Chapter 3/3.9-3.10 - ROC Curves and Class Imbalance.html#practice",
+    "href": "In-class activities/Chapter 3/3.9-3.10 - ROC Curves and Class Imbalance.html#practice",
+    "title": "Chapter 3.9-3.10: ROC Curves and Class Imbalance",
+    "section": "Practice",
+    "text": "Practice\n\n1. Use AI — Create an imbalanced target and check balance\nCreate a binary target: viral = (popularity &gt; 70).astype(int). Check the class distribution — how imbalanced is it?\n\n# Create binary target for viral hits\nspotify['viral'] = ...\n\n# Check class distribution\n...\n\n\n\n2. Use AI — Fit logistic regression and evaluate\nSelect features (danceability, energy, valence, tempo, loudness, acousticness), train/test split, fit a LogisticRegression model. Print both the accuracy and the full classification report.\n\n# Step 1: Select features and target\n\n\n# Step 2: Train/test split (80/20, random_state=42)\n\n\n# Step 3: Fit LogisticRegression\n\n\n# Step 4: Print accuracy and classification report\n\n\n\n3. Interpretation — The accuracy trap\nLook at the classification report. Is accuracy high? What about recall for the minority class (viral hits)? What’s happening?\nYour answer:\n(Write your answer here)\n\n\n4. Use AI — Fit with class_weight=‘balanced’ and compare\nFit a new LogisticRegression(class_weight='balanced'). Display the confusion matrices for both models (unweighted and balanced) side by side.\n\n# Step 1: Fit LogisticRegression with class_weight='balanced'\n\n\n# Step 2: Display both confusion matrices side by side\n# Hint: use plt.subplots(1, 2, figsize=(12, 5))\n\n\n\n5. Interpretation — Balanced vs unweighted\nWhat changed between the two models? Did accuracy go up or down? Did recall for viral hits improve? Is the balanced model “better”?\nYour answer:\n(Write your answer here)\n\n\n6. Use AI — Plot ROC curves for both models\nPlot the ROC curves for the unweighted and balanced logistic regression models on the same plot. Include the AUC score in the legend. Add a dashed diagonal line for reference (random classifier).\n\n# Plot ROC curves for both models on the same plot\n# Note: Use predict_proba()[:, 1] to get probabilities for the positive class\n\n\n\n7. Interpretation — ROC and AUC\nLooking at the ROC curves: - Which model is actually better at ranking predictions? - Does AUC tell a different story than accuracy?\nYour answer:\n(Write your answer here)\n\n\n8. Use AI — Compare multiple models with ROC curves\nFit logistic regression, random forest, and SVM (all with class_weight='balanced') on the Spotify data. Plot all three ROC curves on the same plot with AUC in the legend.\nNote: For SVM, use SVC(class_weight='balanced', probability=True) to enable predict_proba().\n\n# Fit all three models and plot ROC curves\n\n\n\n9. Interpretation — Why accuracy misleads\nWhy is accuracy a misleading metric for imbalanced data? Give a concrete example using the viral hits scenario. (For instance: if only 5% of songs are viral, what accuracy would a model get by predicting “not viral” for every song?)\nYour answer:\n(Write your answer here)"
+  },
+  {
+    "objectID": "In-class activities/Chapter 3/3.9-3.10 - ROC Curves and Class Imbalance.html#discussion",
+    "href": "In-class activities/Chapter 3/3.9-3.10 - ROC Curves and Class Imbalance.html#discussion",
+    "title": "Chapter 3.9-3.10: ROC Curves and Class Imbalance",
+    "section": "Discussion",
+    "text": "Discussion\nIn the real world, most classification problems have imbalanced classes. Before you evaluate any model, what’s the very first thing you should check about your data?\n(Discuss with a neighbor)"
+  },
+  {
+    "objectID": "In-class activities/Chapter 3/3.7-3.8 - SVMs and KNN.html",
+    "href": "In-class activities/Chapter 3/3.7-3.8 - SVMs and KNN.html",
+    "title": "Chapter 3.7-3.8: SVMs and k-Nearest Neighbors",
+    "section": "",
+    "text": "Download Jupyter notebook (.ipynb)\nGoal: Fit SVMs and k-NN models, understand when feature scaling matters, and compare all Chapter 3 models."
+  },
+  {
+    "objectID": "In-class activities/Chapter 3/3.7-3.8 - SVMs and KNN.html#quick-recap",
+    "href": "In-class activities/Chapter 3/3.7-3.8 - SVMs and KNN.html#quick-recap",
+    "title": "Chapter 3.7-3.8: SVMs and k-Nearest Neighbors",
+    "section": "Quick Recap",
+    "text": "Quick Recap\n\nSVMs find the boundary that maximizes the margin between classes\nThe kernel trick lets SVMs handle non-linear boundaries (RBF kernel)\nAlways scale features before using SVMs — they’re sensitive to feature magnitudes\nk-NN classifies by majority vote of the k nearest neighbors — no explicit training step\nSmall k → overfitting (too sensitive to noise); large k → underfitting (too smooth)\nk-NN is also sensitive to feature scale (distances depend on units)"
+  },
+  {
+    "objectID": "In-class activities/Chapter 3/3.7-3.8 - SVMs and KNN.html#data",
+    "href": "In-class activities/Chapter 3/3.7-3.8 - SVMs and KNN.html#data",
+    "title": "Chapter 3.7-3.8: SVMs and k-Nearest Neighbors",
+    "section": "Data",
+    "text": "Data\nWe’ll use the classic Iris dataset — nice numeric features and 3 classes.\n\n# Load Iris dataset\niris = load_iris(as_frame=True)\nX = iris.data\ny = iris.target\n\nprint(f\"Features: {list(X.columns)}\")\nprint(f\"Classes: {list(iris.target_names)}\")\nX.head()"
+  },
+  {
+    "objectID": "In-class activities/Chapter 3/3.7-3.8 - SVMs and KNN.html#practice",
+    "href": "In-class activities/Chapter 3/3.7-3.8 - SVMs and KNN.html#practice",
+    "title": "Chapter 3.7-3.8: SVMs and k-Nearest Neighbors",
+    "section": "Practice",
+    "text": "Practice\n\n1. Use AI — Train/test split and scale features\nSplit into train/test (80/20), then scale features with StandardScaler. Remember: fit the scaler on training data only, then transform both train and test.\n\n# Step 1: Train/test split (80/20, random_state=42)\n\n\n# Step 2: Fit StandardScaler on training data, transform both\n\n\n\n2. Use AI — Compare SVM kernels\nFit SVC(kernel='linear') and SVC(kernel='rbf') on the scaled data. Compare their test accuracy.\n\n# Fit SVM with linear kernel\n\n\n# Fit SVM with RBF kernel\n\n\n# Compare test accuracy\n\n\n\n3. Interpretation — Why does scaling matter?\nWhy do SVMs and k-NN require feature scaling, but decision trees don’t? Think about how each algorithm uses the feature values.\nYour answer:\n(Write your answer here)\n\n\n4. Use AI — Find the best k for k-NN\nFit KNeighborsClassifier with k = 1, 3, 7, 15, 30. Plot test accuracy vs k.\n\n# Fit k-NN with different values of k and plot accuracy\n\n\n\n5. Interpretation — Choosing k\nLooking at the plot: - What happens at k=1? (Think about overfitting) - What happens at very large k? (Think about underfitting) - What value of k looks best?\nYour answer:\n(Write your answer here)\n\n\n6. Use AI — Compare all Chapter 3 models\nFit all five models on the Iris data: logistic regression, decision tree, random forest, SVM (RBF), and k-NN (using the best k from above). Display results in a DataFrame sorted by accuracy.\n\n# Compare all models and display results as a sorted DataFrame\n\n\n\n7. Interpretation — Model comparison\nLooking at the results: - Is there one clear “winner”? - Are the differences between models large or small? - What does this tell you about model selection?\nYour answer:\n(Write your answer here)"
+  },
+  {
+    "objectID": "In-class activities/Chapter 3/3.7-3.8 - SVMs and KNN.html#discussion",
+    "href": "In-class activities/Chapter 3/3.7-3.8 - SVMs and KNN.html#discussion",
+    "title": "Chapter 3.7-3.8: SVMs and k-Nearest Neighbors",
+    "section": "Discussion",
+    "text": "Discussion\nWhen would you reach for SVM instead of random forest? When would k-NN be a particularly bad choice (think about dataset size and number of features)?\n(Discuss with a neighbor)"
+  },
+  {
+    "objectID": "In-class activities/Chapter 3/3.5-3.6 - Decision Trees and Random Forests.html",
+    "href": "In-class activities/Chapter 3/3.5-3.6 - Decision Trees and Random Forests.html",
+    "title": "Chapter 3.5-3.6: Decision Trees and Random Forests",
+    "section": "",
+    "text": "Download Jupyter notebook (.ipynb)\nGoal: Visualize how decision trees make splits, observe overfitting, and see how random forests improve stability."
+  },
+  {
+    "objectID": "In-class activities/Chapter 3/3.5-3.6 - Decision Trees and Random Forests.html#quick-recap",
+    "href": "In-class activities/Chapter 3/3.5-3.6 - Decision Trees and Random Forests.html#quick-recap",
+    "title": "Chapter 3.5-3.6: Decision Trees and Random Forests",
+    "section": "Quick Recap",
+    "text": "Quick Recap\n\nDecision trees split data on features that best separate the classes (using Gini impurity)\nDeeper trees fit training data better but are prone to overfitting\nmax_depth controls how deep the tree can grow — smaller = simpler model\nRandom forests = many decision trees, each trained on a random subset of data and features\nRandom forests are more robust and stable than a single tree"
+  },
+  {
+    "objectID": "In-class activities/Chapter 3/3.5-3.6 - Decision Trees and Random Forests.html#data",
+    "href": "In-class activities/Chapter 3/3.5-3.6 - Decision Trees and Random Forests.html#data",
+    "title": "Chapter 3.5-3.6: Decision Trees and Random Forests",
+    "section": "Data",
+    "text": "Data\nWe’ll use the California Housing dataset, converted to a binary classification problem: is the median house value above or below the overall median?\n\n# Load California Housing and convert to binary classification\nhousing = fetch_california_housing(as_frame=True)\ndf = housing.frame\n\n# Create binary target: 1 if above median, 0 if below\nmedian_value = df['MedHouseVal'].median()\ndf['high_value'] = (df['MedHouseVal'] &gt; median_value).astype(int)\n\nprint(f\"Median house value: ${median_value * 100000:,.0f}\")\ndf['high_value'].value_counts()"
+  },
+  {
+    "objectID": "In-class activities/Chapter 3/3.5-3.6 - Decision Trees and Random Forests.html#practice",
+    "href": "In-class activities/Chapter 3/3.5-3.6 - Decision Trees and Random Forests.html#practice",
+    "title": "Chapter 3.5-3.6: Decision Trees and Random Forests",
+    "section": "Practice",
+    "text": "Practice\n\n1. Use AI — Prepare features and train/test split\nSelect features (MedInc, HouseAge, AveRooms, AveOccup, Latitude, Longitude), define the target as high_value, and split into train/test (80/20).\n\n# Step 1: Select features and target\n\n\n# Step 2: Train/test split (80/20, random_state=42)\n\n\n\n2. Use AI — Fit and visualize a shallow decision tree\nFit a DecisionTreeClassifier(max_depth=3, random_state=42) and visualize it with plot_tree(). Use filled=True and pass the feature names.\n\n# Step 1: Fit DecisionTreeClassifier with max_depth=3\n\n\n# Step 2: Visualize with plot_tree (use figsize=(20, 10) for readability)\n\n\n\n3. Interpretation — Reading the tree\nLook at the tree visualization: - What is the first feature the tree splits on? Why do you think it chose that feature? - Trace the path for a neighborhood with: median income = 3.5, house age = 20. What does the tree predict?\nYour answer:\n(Write your answer here)\n\n\n4. Use AI — Compare trees with different depths\nFit decision trees with max_depth = 2, 5, 10, and None (unlimited). Print the train accuracy and test accuracy for each. Which one overfits?\n\n# Fit trees with different max_depth values and compare train/test accuracy\n\n\n\n5. Interpretation — Overfitting\nExplain in your own words why an unlimited-depth tree overfits. What is it “memorizing”?\nYour answer:\n(Write your answer here)\n\n\n6. Use AI — Fit a random forest and compare\nFit a RandomForestClassifier(n_estimators=100, max_depth=5, random_state=42). Compare its test accuracy to the best single decision tree from above.\n\n# Step 1: Fit RandomForestClassifier\n\n\n# Step 2: Print test accuracy and compare to best single tree\n\n\n\n7. Use AI — Compare feature importances\nPlot the feature importances for both the single decision tree (max_depth=5) and the random forest side by side.\n\n# Plot feature importances side by side\n# Hint: use plt.subplots(1, 2, figsize=(14, 5))\n\n\n\n8. Interpretation — Feature importance stability\nAre the feature importances the same between the single tree and the random forest? Why might a random forest give more stable and reliable feature importances?\nYour answer:\n(Write your answer here)"
+  },
+  {
+    "objectID": "In-class activities/Chapter 3/3.5-3.6 - Decision Trees and Random Forests.html#discussion",
+    "href": "In-class activities/Chapter 3/3.5-3.6 - Decision Trees and Random Forests.html#discussion",
+    "title": "Chapter 3.5-3.6: Decision Trees and Random Forests",
+    "section": "Discussion",
+    "text": "Discussion\nIf you had to explain your model to a home buyer, would you show them the decision tree or the random forest results? Why?\n(Discuss with a neighbor)"
   },
   {
     "objectID": "In-class activities/Chapter 1/1.3 - Statistical Summaries.html",
@@ -1050,6 +1155,111 @@
     "text": "Key Takeaways\n\nEDA is iterative: Each answer leads to new questions\nDocument as you go: Write down findings and decisions while they’re fresh\nThere’s no “right” path: Different analysts will explore different directions\nFollow your curiosity: When something surprises you, dig deeper\n\nThe best EDA happens when you stay curious and keep asking “why?” and “what if?”"
   },
   {
+    "objectID": "In-class activities/Chapter 3/3.1-3.2 - Supervised Learning and Classification.html",
+    "href": "In-class activities/Chapter 3/3.1-3.2 - Supervised Learning and Classification.html",
+    "title": "Chapter 3.1-3.2: Supervised Learning and Classification",
+    "section": "",
+    "text": "Download Jupyter notebook (.ipynb)\nGoal: Distinguish supervised from unsupervised learning, and identify problems as regression or classification."
+  },
+  {
+    "objectID": "In-class activities/Chapter 3/3.1-3.2 - Supervised Learning and Classification.html#quick-recap",
+    "href": "In-class activities/Chapter 3/3.1-3.2 - Supervised Learning and Classification.html#quick-recap",
+    "title": "Chapter 3.1-3.2: Supervised Learning and Classification",
+    "section": "Quick Recap",
+    "text": "Quick Recap\n\nSupervised learning uses labeled data — you have both features (X) and a target (y)\nUnsupervised learning finds patterns in data without labels — no target variable\nClassification predicts a category (survived/died, spam/not spam)\nRegression predicts a continuous number (price, temperature)\nBinary classification = 2 classes; multi-class = 3+ classes"
+  },
+  {
+    "objectID": "In-class activities/Chapter 3/3.1-3.2 - Supervised Learning and Classification.html#data",
+    "href": "In-class activities/Chapter 3/3.1-3.2 - Supervised Learning and Classification.html#data",
+    "title": "Chapter 3.1-3.2: Supervised Learning and Classification",
+    "section": "Data",
+    "text": "Data\nWe’ll use the Titanic dataset (supervised) and Iris (for an unsupervised demo).\n\n# Load Titanic data\ntitanic = pd.read_csv('../../Textbook/data/titanic.csv')\ntitanic.head()"
+  },
+  {
+    "objectID": "In-class activities/Chapter 3/3.1-3.2 - Supervised Learning and Classification.html#practice",
+    "href": "In-class activities/Chapter 3/3.1-3.2 - Supervised Learning and Classification.html#practice",
+    "title": "Chapter 3.1-3.2: Supervised Learning and Classification",
+    "section": "Practice",
+    "text": "Practice\n\n1. Inspect the Titanic data\nLook at the columns. What is the target column (what we want to predict)? What columns could be useful features?\n\n# Inspect the columns and data types\n...\n\nYour answer: What is the target column? What features might be useful?\n(Write your answer here)\n\n\n2. Check the class distribution of Survived\nUse .value_counts() on the target column. Is the dataset balanced (roughly equal numbers of each class) or imbalanced?\n\n# Check class distribution\n...\n\nYour interpretation: Is the dataset balanced or imbalanced? What percentage survived?\n(Write your answer here)\n\n\n3. By hand — Classify these problems\nFor each scenario below, identify whether it is regression, binary classification, or multi-class classification:\n\nPredicting whether an email is spam or not spam\nPredicting tomorrow’s high temperature in Houston\nPredicting which genre a movie belongs to (action, comedy, drama, horror, etc.)\nPredicting a student’s final exam score\nPredicting whether a credit card transaction is fraudulent\n\nYour answers:\n\n\n\n\n\n\n\n\n\n4. Use AI — Unsupervised learning demo with Iris\nLoad the Iris dataset from this url: https://gist.githubusercontent.com/netj/8836201/raw/6f9306ad21398ea43cba4f7d537619d0e07d5ae3/iris.csv. Fit KMeans(n_clusters=3) on the features and create a scatterplot of the clusters (using sepal length and sepal width). Then make a second scatterplot colored by the actual species to see how well the clustering worked. How well do the features (sepal length and width) explain the different species?\n\n# Step 1: Load Iris data (features only, no labels)\n\n\n# Step 2: Fit KMeans with 3 clusters\n\n\n# Step 3: Plot clusters using sepal length (col 0) and sepal width (col 1)\n\n\n# Step 4: Plot again, but color by actual species labels for comparison\n\n(Write your conclusion here)\n\n\n5. Use AI — Prepare Titanic features for modeling\nSelect numeric columns (Pclass, Age, SibSp, Parch, Fare), fill missing Age values with the median, and split into train/test sets (80/20).\n\n# Step 1: Select numeric features and target\n\n\n# Step 2: Fill missing Age with median\n\n\n# Step 3: Train/test split (80/20, random_state=42)\n\n\n\n6. Interpretation — Supervised vs unsupervised\nIn your own words, what’s the key difference between supervised and unsupervised learning? When would you use each?\nYour answer:\n(Write your answer here)"
+  },
+  {
+    "objectID": "In-class activities/Chapter 3/3.1-3.2 - Supervised Learning and Classification.html#discussion",
+    "href": "In-class activities/Chapter 3/3.1-3.2 - Supervised Learning and Classification.html#discussion",
+    "title": "Chapter 3.1-3.2: Supervised Learning and Classification",
+    "section": "Discussion",
+    "text": "Discussion\nThink of a problem from your daily life. Is it regression or classification? How do you know?\n(Discuss with a neighbor)"
+  },
+  {
+    "objectID": "In-class activities/Chapter 3/3.3 - Logistic Regression.html",
+    "href": "In-class activities/Chapter 3/3.3 - Logistic Regression.html",
+    "title": "Chapter 3.3: Logistic Regression",
+    "section": "",
+    "text": "Download Jupyter notebook (.ipynb)\nGoal: Fit a logistic regression model, understand predicted probabilities, and interpret coefficients as odds ratios."
+  },
+  {
+    "objectID": "In-class activities/Chapter 3/3.3 - Logistic Regression.html#quick-recap",
+    "href": "In-class activities/Chapter 3/3.3 - Logistic Regression.html#quick-recap",
+    "title": "Chapter 3.3: Logistic Regression",
+    "section": "Quick Recap",
+    "text": "Quick Recap\n\nThe sigmoid function squashes any real number to a value between 0 and 1\npredict_proba() returns the probability of each class; predict() returns the class label using threshold 0.5\nCoefficients tell you how each feature affects the log-odds of the positive class\nOdds ratios = exp(coefficient) — a 1-unit increase in the feature multiplies the odds by this amount\nOdds ratio &gt; 1 means the feature increases the probability; &lt; 1 means it decreases it"
+  },
+  {
+    "objectID": "In-class activities/Chapter 3/3.3 - Logistic Regression.html#data",
+    "href": "In-class activities/Chapter 3/3.3 - Logistic Regression.html#data",
+    "title": "Chapter 3.3: Logistic Regression",
+    "section": "Data",
+    "text": "Data\nWe’ll use the Spotify dataset to predict whether a song is “popular” based on audio features.\n\n# Load Spotify data\nspotify = pd.read_csv('../../Textbook/data/spotify.csv')\nspotify.head()"
+  },
+  {
+    "objectID": "In-class activities/Chapter 3/3.3 - Logistic Regression.html#practice",
+    "href": "In-class activities/Chapter 3/3.3 - Logistic Regression.html#practice",
+    "title": "Chapter 3.3: Logistic Regression",
+    "section": "Practice",
+    "text": "Practice\n\n1. Create a binary target and check class balance\nCreate a new column popular that is 1 if popularity &gt; 50 and 0 otherwise. Then check how many songs fall into each class.\n\n# Create binary target: popular if popularity &gt; 50\nspotify['popular'] = ...\n\n# Check class balance\n...\n\n\n\n2. Use AI — Select features and train/test split\nSelect these features: danceability, energy, valence, tempo, loudness. Split into train/test (80/20).\n\n# Step 1: Select features\n\n\n# Step 2: Define target\n\n\n# Step 3: Train/test split (80/20, random_state=42)\n\n\n\n3. Use AI — Plot the sigmoid function\nPlot the sigmoid function \\(\\sigma(z) = \\frac{1}{1 + e^{-z}}\\) for z from -6 to 6. Add a horizontal dashed line at y=0.5 and a vertical dashed line at z=0.\n\n# Plot sigmoid function from z = -6 to z = 6\n\n\n\n4. Use AI — Fit logistic regression and get predicted probabilities\nFit a LogisticRegression model on the training data. Then use predict_proba() on the test set and display the first 10 rows alongside the actual labels.\n\n# Step 1: Fit LogisticRegression\n\n\n# Step 2: Get predicted probabilities for test set\n\n\n# Step 3: Display first 10 rows with actual labels and predicted probabilities\n\n\n\n5. Interpretation — Prediction confidence\nLook at the probabilities from the previous step. If a song has P(popular) = 0.52 and another has P(popular) = 0.95: - Are both predicted as “popular”? - How confident is the model in each prediction? - Would you trust both predictions equally?\nYour answer:\n(Write your answer here)\n\n\n6. Use AI — Extract coefficients and compute odds ratios\nGet the model’s coefficients, compute np.exp(coef) to get odds ratios, and display them as a DataFrame sorted by odds ratio.\n\n# Step 1: Extract coefficients\n\n\n# Step 2: Compute odds ratios with np.exp()\n\n\n# Step 3: Create and display DataFrame sorted by odds ratio\n\n\n\n7. Interpretation — Feature effects\nWhich audio feature has the strongest effect on popularity? Does the direction (increases or decreases popularity) make intuitive sense?\nYour answer:\n(Write your answer here)"
+  },
+  {
+    "objectID": "In-class activities/Chapter 3/3.3 - Logistic Regression.html#discussion",
+    "href": "In-class activities/Chapter 3/3.3 - Logistic Regression.html#discussion",
+    "title": "Chapter 3.3: Logistic Regression",
+    "section": "Discussion",
+    "text": "Discussion\nIf you lowered the classification threshold from 0.5 to 0.3, would you predict more or fewer songs as popular? When might you want to do this?\n(Discuss with a neighbor)"
+  },
+  {
+    "objectID": "In-class activities/Chapter 3/3.4 - Confusion Matrix and Metrics.html",
+    "href": "In-class activities/Chapter 3/3.4 - Confusion Matrix and Metrics.html",
+    "title": "Chapter 3.4: Confusion Matrix and Metrics",
+    "section": "",
+    "text": "Download Jupyter notebook (.ipynb)\nGoal: Build and interpret confusion matrices, and reason about when to prioritize precision vs recall."
+  },
+  {
+    "objectID": "In-class activities/Chapter 3/3.4 - Confusion Matrix and Metrics.html#quick-recap",
+    "href": "In-class activities/Chapter 3/3.4 - Confusion Matrix and Metrics.html#quick-recap",
+    "title": "Chapter 3.4: Confusion Matrix and Metrics",
+    "section": "Quick Recap",
+    "text": "Quick Recap\n\nTP (True Positive): Predicted positive, actually positive\nTN (True Negative): Predicted negative, actually negative\nFP (False Positive): Predicted positive, actually negative — “false alarm”\nFN (False Negative): Predicted negative, actually positive — “missed case”\nAccuracy = (TP + TN) / Total — overall correctness\nPrecision = TP / (TP + FP) — “when I say positive, am I right?”\nRecall = TP / (TP + FN) — “did I catch all the positives?”\nF1 Score = harmonic mean of precision and recall"
+  },
+  {
+    "objectID": "In-class activities/Chapter 3/3.4 - Confusion Matrix and Metrics.html#data",
+    "href": "In-class activities/Chapter 3/3.4 - Confusion Matrix and Metrics.html#data",
+    "title": "Chapter 3.4: Confusion Matrix and Metrics",
+    "section": "Data",
+    "text": "Data\nWe’ll use the Titanic dataset — survival prediction makes the TP/FP/FN concepts very concrete.\n\n# Load Titanic data\ntitanic = pd.read_csv('../../Textbook/data/titanic.csv')\ntitanic.head()"
+  },
+  {
+    "objectID": "In-class activities/Chapter 3/3.4 - Confusion Matrix and Metrics.html#practice",
+    "href": "In-class activities/Chapter 3/3.4 - Confusion Matrix and Metrics.html#practice",
+    "title": "Chapter 3.4: Confusion Matrix and Metrics",
+    "section": "Practice",
+    "text": "Practice\n\n1. Use AI — Prepare data and fit a model\nSelect numeric features (Pclass, Age, SibSp, Parch, Fare), fill missing Age with the median, split into train/test (80/20), and fit a LogisticRegression model. Get predictions on the test set.\n\n# Step 1: Select features and target, fill missing Age\n\n\n# Step 2: Train/test split (80/20, random_state=42)\n\n\n# Step 3: Fit LogisticRegression\n\n\n# Step 4: Get predictions on test set\n\n\n\n2. Use AI — Create and display a confusion matrix\nUse confusion_matrix() to create the confusion matrix, then display it as a heatmap with sns.heatmap(annot=True, fmt='d').\n\n# Step 1: Create confusion matrix\n\n\n# Step 2: Display as heatmap\n\n\n\n3. Interpretation — What do the errors mean?\nIn the Titanic context (positive = survived): - What does a false positive mean? (Model predicted ___ but actually ___) - What does a false negative mean? - Which type of error feels “worse” to you in this context?\nYour answer:\n(Write your answer here)\n\n\n4. Use AI — Generate a classification report\nUse classification_report() to see precision, recall, and F1 for each class.\n\n# Print the classification report\n\n\n\n5. By hand — Disease screening scenario\nYou’re building a model to screen patients for a disease. - A false negative means a sick patient is sent home untreated - A false positive means a healthy patient gets additional (unnecessary) tests\nWhich metric should you prioritize — precision or recall? Why?\nYour answer:\n(Write your answer here)\n\n\n6. By hand — Spam filter scenario\nYou’re building an email spam filter. - A false positive means a legitimate email goes to the spam folder - A false negative means a spam email reaches the inbox\nWhich metric matters more here — precision or recall? Why?\nYour answer:\n(Write your answer here)\n\n\n7. Use AI — Normalized confusion matrix\nNormalize the confusion matrix by row (use normalize='true' in confusion_matrix()) and display as a heatmap. This shows the percentage of each actual class that was correctly/incorrectly classified.\n\n# Step 1: Create normalized confusion matrix\n\n\n# Step 2: Display as heatmap with percentage format\n\nYour interpretation: What percentage of actual survivors did the model correctly identify? What about non-survivors?\n(Write your answer here)\n\n\n8. Interpretation — The “95% accuracy” question\nIf someone told you “my model is 95% accurate,” what follow-up question would you ask before being impressed?\nYour answer:\n(Write your answer here)"
+  },
+  {
+    "objectID": "In-class activities/Chapter 3/3.4 - Confusion Matrix and Metrics.html#discussion",
+    "href": "In-class activities/Chapter 3/3.4 - Confusion Matrix and Metrics.html#discussion",
+    "title": "Chapter 3.4: Confusion Matrix and Metrics",
+    "section": "Discussion",
+    "text": "Discussion\nCan a model have high accuracy but terrible recall for one class? When would that happen?\n(Discuss with a neighbor)"
+  },
+  {
     "objectID": "In-class activities/Chapter 2/2.7 - Regularization.html",
     "href": "In-class activities/Chapter 2/2.7 - Regularization.html",
     "title": "Chapter 2.7: Ridge and Lasso Regularization",
@@ -1082,14 +1292,14 @@
     "href": "In-class activities/Chapter 2/2.1 - Train Test Split.html#quick-recap",
     "title": "Chapter 2.1: Train/Test Split",
     "section": "Quick Recap",
-    "text": "Quick Recap\n\nTraining set: Model learns from this data\nValidation set: Used to tune hyperparameters and compare models\nTest set: Final evaluation only - touched ONCE at the very end\n\nWhy three sets? If you tune on test data, you’re giving the model the answers to the test.\n\n# For this activity, we'll use a simpler dataset - California Housing\nfrom sklearn.datasets import fetch_california_housing\nhousing = fetch_california_housing(as_frame=True)\ndf = housing.frame\ndf.head()\n\n\n# Look at the data, check for missing values, check for weird data, etc.\n\n\n# Set the X (MedHouseVal) and y (everything else)"
+    "text": "Quick Recap\n\nTraining set: Model learns from this data\nValidation set: Used to tune hyperparameters and compare models\nTest set: Final evaluation only - touched ONCE at the very end\n\nWhy three sets? If you tune on test data, you’re giving the model the answers to the test.\n\n# For this activity, we'll use a simpler dataset - California Housing\nfrom sklearn.datasets import fetch_california_housing\nhousing = fetch_california_housing(as_frame=True)\ndf = housing.frame\ndf.head()\n\n\n\n\n\n\n\n\nMedInc\nHouseAge\nAveRooms\nAveBedrms\nPopulation\nAveOccup\nLatitude\nLongitude\nMedHouseVal\n\n\n\n\n0\n8.3252\n41.0\n6.984127\n1.023810\n322.0\n2.555556\n37.88\n-122.23\n4.526\n\n\n1\n8.3014\n21.0\n6.238137\n0.971880\n2401.0\n2.109842\n37.86\n-122.22\n3.585\n\n\n2\n7.2574\n52.0\n8.288136\n1.073446\n496.0\n2.802260\n37.85\n-122.24\n3.521\n\n\n3\n5.6431\n52.0\n5.817352\n1.073059\n558.0\n2.547945\n37.85\n-122.25\n3.413\n\n\n4\n3.8462\n52.0\n6.281853\n1.081081\n565.0\n2.181467\n37.85\n-122.25\n3.422\n\n\n\n\n\n\n\n\n# Set the y (MedHouseVal) and X (everything else)"
   },
   {
     "objectID": "In-class activities/Chapter 2/2.1 - Train Test Split.html#practice",
     "href": "In-class activities/Chapter 2/2.1 - Train Test Split.html#practice",
     "title": "Chapter 2.1: Train/Test Split",
     "section": "Practice",
-    "text": "Practice\n\n1. Split data into train (60%), validation (20%), test (20%)\nYou’ll need to call train_test_split twice: 1. First split: 80% train+val, 20% test 2. Second split: Split the 80% into 75% train, 25% val (which gives 60%/20% overall)\n\n# Step 1: Split into train (80%) and test (20%)\n\n\n\n# Step 2: Split training data into into train (75% of 80% = 60%) and validation (25% of 80% = 20%)\n\n\n\n2. Assert that no data was lost in the split\nThe total number of samples across all three sets should equal the original dataset size.\n\n# Step 1: Calculate total samples across train, val, and test\n\n\n# Step 2: Assert it equals len(X)\n\n\n# Step 3: Print all sizes to verify everything looks correct\n\n\n\n3. Use AI - Fit LinearRegression on train, predict on val AND test\n\n# Step 1: Create and fit a LinearRegression model on training data\n\n\n# Step 2: Calculate R² score on validation set\n\n\n# Step 3: Calculate R² score on test set\n\n\n\n4. Use AI - Compare val score vs test score - are they similar?\nIf the validation and test scores are similar, that’s a good sign - it means the validation set is giving us a reliable estimate of how the model will perform on unseen data.\n\n# Print both scores and calculate the difference\n\n\n# Are they within 0.02 of each other? That's pretty good!\n\nYour interpretation: Are the validation and test scores similar? What does this tell you?\n(Write your answer here)\n\n\n5. Use AI - Use cross_val_score with 5 folds on training data\nCross-validation gives you multiple estimates of model performance, which is more reliable than a single validation score.\n\n# Step 1: Create a new LinearRegression model\n# Step 2: Use cross_val_score with cv=5 on the TRAINING data (not all data!)\n\n\n# Print all 5 scores\n\n\n\n6. Use AI - What’s the mean and std of cross-validation scores?\n\n# Calculate mean and standard deviation of the CV scores\n\nYour interpretation: How does the CV mean compare to your single validation score from earlier? Is the standard deviation large or small?\n(Write your answer here)"
+    "text": "Practice\n\n1. Split data into train (60%), validation (20%), test (20%)\nYou’ll need to call train_test_split twice: 1. First split: 80% train+val, 20% test 2. Second split: How should you split the 80% training set so that it splits into a 60% training set + 20% validation?\nHint: \\(0.8x = 0.6\\), solve for \\(x\\)\n\n# Step 1: Split into train (80%) and test (20%)\n\n\n\n# Step 2: Split training data into into train (60%) and validation (20%)\n\n\n\n2. Assert that no data was lost in the split\nThe total number of samples across all three sets should equal the original dataset size.\n\n# Step 1: Calculate total samples across train, val, and test\n\n\n# Step 2: Assert it equals len(X)\n\n\n# Step 3: Print all sizes to verify everything looks correct\n\n\n\n3. Use AI - Fit LinearRegression on train, predict on val AND test\n\n# Step 1: Create and fit a LinearRegression model on training data\n\n\n# Step 2: Calculate R² score on validation set\n\n\n# Step 3: Calculate R² score on test set\n\n\n\n4. Use AI - Compare val score vs test score - are they similar?\nIf the validation and test scores are similar, that’s a good sign - it means the validation set is giving us a reliable estimate of how the model will perform on unseen data.\n\n# Print both scores and calculate the difference\n\n\n# Are they within 0.02 of each other? That's pretty good!\n\nYour interpretation: Are the validation and test scores similar? What does this tell you?\n(Write your answer here)\n\n\n5. Use AI - Use cross_val_score with 5 folds on training data\nCross-validation gives you multiple estimates of model performance, which is more reliable than a single validation score.\n\n# Step 1: Create a new LinearRegression model\n# Step 2: Use cross_val_score with cv=5 on the TRAINING data (not all data!)\n\n\n# Print all 5 scores\n\n\n\n6. Use AI - What’s the mean and std of cross-validation scores?\n\n# Calculate mean and standard deviation of the CV scores\n\nYour interpretation: How does the CV mean compare to your single validation score from earlier? Is the standard deviation large or small?\n(Write your answer here)"
   },
   {
     "objectID": "In-class activities/Chapter 2/2.1 - Train Test Split.html#discussion-question",
@@ -1138,21 +1348,21 @@
     "href": "In-class activities/Chapter 2/2.5 - Polynomial Regression.html#quick-recap",
     "title": "Chapter 2.5: Polynomial Regression",
     "section": "Quick Recap",
-    "text": "Quick Recap\n\nPolynomial features turn X into [X, X², X³, …] to capture curves\nHigher degree = more flexible, but risk of overfitting\nOverfitting: High training score, low validation score\nUse validation set to choose the best degree\n\n\n# Load diamonds dataset\ndiamonds = sns.load_dataset('diamonds')\n\n# Use a subset for faster training\ndiamonds_sample = diamonds.sample(n=5000, random_state=42)\n\n# We'll predict price from carat (single feature for visualization)\n...\n\n# Three-way split: 60% train, 20% val, 20% test\n..."
+    "text": "Quick Recap\n\nPolynomial features turn X into [X, X², X³, …] to capture curves\nHigher degree = more flexible, but risk of overfitting\nOverfitting: High training score, low validation score\nUse validation set to choose the best degree\n\n\n# Load diamonds dataset\ndiamonds = sns.load_dataset('diamonds')\n\n# Scatterplot comparing carat (x) and price (y). What relationship do you see?\n...\n\n# Grab X and y\nX = ... # Hint: Use double-brackets df[[\"column\"]] when selecting just one column\ny = ..."
   },
   {
     "objectID": "In-class activities/Chapter 2/2.5 - Polynomial Regression.html#practice",
     "href": "In-class activities/Chapter 2/2.5 - Polynomial Regression.html#practice",
     "title": "Chapter 2.5: Polynomial Regression",
     "section": "Practice",
-    "text": "Practice\n\n1. Create degree-2 polynomial features from carat\n\n# Step 1: Create PolynomialFeatures with degree=2\n...\n\n# Step 2: Fit on training data and transform train, val, test\n...\n\n\n\n2. Fit linear regression on polynomial features, calculate train and val R²\n\n# Step 1: Fit LinearRegression on polynomial features\n...\n\n# Step 2: Calculate R² on train and validation\n...\n\n\n\n3. Repeat for degree 3, 4, 5\n\n# Degree 3\n# Step 1: Create PolynomialFeatures(degree=3)\n\n\n# Step 2: Transform data\n\n\n# Step 3: Fit model and calculate scores\n\n\n\n# Degree 4\n\n\n\n# Degree 5\n\n\n\n\n4. Create a table showing degree, train R², val R²\n\n# Create a DataFrame from the results which shows the polynomial degree, as well as the training and validation R² values\n...\n\n\n\n5. Which degree shows the largest train-val gap (overfitting)?\n\n# Visualize the results\n\nYour observation: Which degree has the largest gap between train and val R²? This is a sign of overfitting.\n(Write your answer here)\n\n\n6. Which degree would you choose and why?\n\n# Pick the model with the highest validation R²\n\nYour recommendation: Which degree would you choose for this model? Explain your reasoning.\n(Write your answer here - consider both validation performance AND simplicity)"
+    "text": "Practice\n\n1a. (By-hand) Create degree-2 polynomial features from carat\n\n# Step 1: Create PolynomialFeatures with degree=2\npoly2 = PolynomialFeatures(degree=..., include_bias=...)\n\n# Step 2: Use .fit(data[[\"column\"]]) to learn the new polynomial feature\npoly2.fit(...)\n\n... = poly2.transform(...)\n\n\n\n1b. (By-hand) Train-test-validation split the data (60/20/20)\n\n# Three-way split: 60% train, 20% val, 20% test\n...\n\nQuestion: Why did we do PolynomialFeatures fit/transform before splitting the data? Why not after?\nAnswer:\n\n\n2. (By-hand) Fit linear regression on polynomial features, calculate train and val R²\n\n# Step 1: Fit LinearRegression on all features (carat and carat^2)\nlr = ...\nlr.fit(...)\npreds = ...\n\n# Step 2: Calculate MSE and MAE on test and validation sets\n...\n\n\n\n3. (By-hand) Repeat for degree 3, 4, 5\n\n# Degree 3\n# Step 1: Create PolynomialFeatures(degree=3)\n\n\n# Step 2: Transform data\n\n\n# Step 3: Fit model and calculate scores\n\n\n\n# Degree 4\n\n\n\n# Degree 5\n\n\n\n\n4. (Using AI) Create a table showing degree, train R², val R²\n\n# Create a DataFrame from the results which shows the polynomial degree, as well as the training and validation R² values\n...\n\n\n\n5. (Using AI) Which degree shows the largest train-val gap (overfitting)?\n\n# Visualize the results\n\nYour observation: Which degree has the largest gap between train and val R²? This is a sign of overfitting.\n(Write your answer here)\n\n\n6. (By-hand) Which degree would you choose and why?\n\n# Pick the model with the highest validation R²\n\nYour recommendation: Which degree would you choose for this model? Explain your reasoning.\n(Write your answer here - consider both validation performance AND simplicity)"
   },
   {
-    "objectID": "In-class activities/Chapter 2/2.5 - Polynomial Regression.html#visualize-the-polynomial-fits",
-    "href": "In-class activities/Chapter 2/2.5 - Polynomial Regression.html#visualize-the-polynomial-fits",
+    "objectID": "In-class activities/Chapter 2/2.5 - Polynomial Regression.html#using-ai-visualize-the-polynomial-fits",
+    "href": "In-class activities/Chapter 2/2.5 - Polynomial Regression.html#using-ai-visualize-the-polynomial-fits",
     "title": "Chapter 2.5: Polynomial Regression",
-    "section": "Visualize the polynomial fits",
-    "text": "Visualize the polynomial fits\n\n# Create a graph which shows the data points and the fitted polynomial overlaid on top of it"
+    "section": "(Using AI) Visualize the polynomial fits",
+    "text": "(Using AI) Visualize the polynomial fits\n\n# Create a graph which shows the data points and the fitted polynomial overlaid on top of it"
   },
   {
     "objectID": "Projects/mini-project-1/mini-project-1.html",
@@ -1229,7 +1439,7 @@
     "href": "index.html#chapter-3-classification-models",
     "title": "MATH 3339: Introduction to Data Science",
     "section": "Chapter 3: Classification Models",
-    "text": "Chapter 3: Classification Models\n\nLearning Objectives\n\nUnderstand supervised vs unsupervised learning paradigms\nUnderstand logistic regression and interpret odds ratios\nRead and interpret confusion matrices\nCalculate precision, recall, F1 score and choose appropriately\nFit and tune decision trees, random forests, SVMs, k-NN\nUse ROC curves and AUC for model comparison\nHandle class imbalance with weights and resampling\n\n\n\nSchedule\n\n\n\n\n\n\n\n\nDate\nTopic\nTextbook\n\n\n\n\nWed, Mar 25\nSupervised vs unsupervised learning, classification intro\nSections 1 and 2\n\n\nFri, Mar 27\nLogistic regression and confusion matrices\nSections 3\n\n\nMon, Mar 30\nQuiz 3a\n\n\n\nWed, Apr 1\nClassification metrics: precision, recall, F1, ROC/AUC\nSection 4\n\n\nFri, Apr 3\nDecision trees and random forests\nSections 5 and 6\n\n\nMon, Apr 6\nQuiz 3b\n\n\n\nWed, Apr 8\nSupport vector machines and k-Nearest neighbors\nSections 7 and 8\n\n\nFri, Apr 10\nClass imbalance handling (SMOTE, class weights)\nSection 10\n\n\nMon, Apr 13\nQuiz 3c\n\n\n\n\nHomework 3 due date: Mon, Apr 13\n\n\nResources\n\nChapter 3: Classification Models\nChapter 3 Homework"
+    "text": "Chapter 3: Classification Models\n\nLearning Objectives\n\nUnderstand supervised vs unsupervised learning paradigms\nUnderstand logistic regression and interpret odds ratios\nRead and interpret confusion matrices\nCalculate precision, recall, F1 score and choose appropriately\nFit and tune decision trees, random forests, SVMs, k-NN\nUse ROC curves and AUC for model comparison\nHandle class imbalance with weights and resampling\n\n\n\nSchedule\n\n\n\nDate\nTopic\nTextbook\nIn-class Activity\n\n\n\n\nWed, Mar 25\nSupervised vs unsupervised learning, classification intro\nSections 1 and 2\nLink\n\n\nFri, Mar 27\nLogistic regression and confusion matrices\nSections 3\nLink\n\n\nMon, Mar 30\nQuiz 3a\n\n\n\n\nWed, Apr 1\nClassification metrics: precision, recall, F1, ROC/AUC\nSection 4\nLink\n\n\nFri, Apr 3\nDecision trees and random forests\nSections 5 and 6\nLink\n\n\nMon, Apr 6\nQuiz 3b\n\n\n\n\nWed, Apr 8\nSupport vector machines and k-Nearest neighbors\nSections 7 and 8\nLink\n\n\nFri, Apr 10\nClass imbalance handling (SMOTE, class weights)\nSections 9 and 10\nLink\n\n\nMon, Apr 13\nQuiz 3c\n\n\n\n\n\nHomework 3 due date: Mon, Apr 13\n\n\nResources\n\nChapter 3: Classification Models\nChapter 3 Homework"
   },
   {
     "objectID": "index.html#chapter-4-llms-for-feature-engineering-and-data-extraction",

@@ -13,7 +13,7 @@ Mini project 2 is a one week project where you take a dataset and modeling task,
 
 Note that you **may NOT use the same data you used in Mini Project 1 in this project**.
 
-View the rubric you'll be graded on [here](Projects/mini-project-2/Rubric.pdf).
+View the rubric you'll be graded on [here](Rubric.pdf).
 
 ## Datasets and research questions
 
