@@ -114,30 +114,30 @@
   {
     "objectID": "Projects/mini-project-2/mini-project-2.html",
     "href": "Projects/mini-project-2/mini-project-2.html",
-    "title": "Mini Project 1: EDA",
+    "title": "Mini Project 2: Regression models",
     "section": "",
     "text": "Mini project 2 is a one week project where you take a dataset and modeling task, and build a machine learning model to solve the task. The goal of this project is for you to get hands-on practice working with an AI agent to build a machine learning model, and quickly turning around a project. You will primarily be graded based on the quality of your model, and how well you understand it, your results, and the process you used to build it (e.g. working with your data, feature engineering, model selection, etc.).\nNote that you may NOT use the same data you used in Mini Project 1 in this project.\nView the rubric you’ll be graded on here."
   },
   {
     "objectID": "Projects/mini-project-2/mini-project-2.html#overview",
     "href": "Projects/mini-project-2/mini-project-2.html#overview",
-    "title": "Mini Project 1: EDA",
+    "title": "Mini Project 2: Regression models",
     "section": "",
     "text": "Mini project 2 is a one week project where you take a dataset and modeling task, and build a machine learning model to solve the task. The goal of this project is for you to get hands-on practice working with an AI agent to build a machine learning model, and quickly turning around a project. You will primarily be graded based on the quality of your model, and how well you understand it, your results, and the process you used to build it (e.g. working with your data, feature engineering, model selection, etc.).\nNote that you may NOT use the same data you used in Mini Project 1 in this project.\nView the rubric you’ll be graded on here."
   },
   {
     "objectID": "Projects/mini-project-2/mini-project-2.html#datasets-and-research-questions",
     "href": "Projects/mini-project-2/mini-project-2.html#datasets-and-research-questions",
-    "title": "Mini Project 1: EDA",
+    "title": "Mini Project 2: Regression models",
     "section": "Datasets and research questions",
     "text": "Datasets and research questions\n\nEarthquakes\n\nDataset\nModeling task: Build a model to predict the magnitude of an earthquake based on the other features in the dataset. Be sure to not use columns which may leak information, or use information that wouldn’t be available ahead of time, such as the uncertainty of the earthquake’s magnitude.\n\n\n\nNBA\n\nDataset\nModeling task: Build a model to predict the attendance of an NBA game based on the other features in the dataset. You should take into account team/player performance both that season and in previous seasons.\n\n\n\nFormula 1\n\nDataset\nModeling task: Predict the time in qualifying 1, 2 and 3 for a given driver and track.\n\n\n\nSpotify\n\nDataset\nModeling task: Predict the popularity of a given song based on the other features in the dataset.\n\n\n\n2016 election results\n\nDataset\nModeling task: How can county demographics help predict the number of votes each candidate will get?"
   },
   {
     "objectID": "Projects/mini-project-2/mini-project-2.html#deliverables",
     "href": "Projects/mini-project-2/mini-project-2.html#deliverables",
-    "title": "Mini Project 1: EDA",
+    "title": "Mini Project 2: Regression models",
     "section": "Deliverables",
-    "text": "Deliverables\n\nA 7-13 minute presentation (no more than 13 minutes). Your presentation should cover:\n\nA very brief overview of your data (one slide)\nHow your data relates to your modeling task\nThe model you used\nHow you worked with your data to prepare it for modeling (not just cleaning, also data transformations, feature engineering, etc.)\nOther models you considered, and why you chose the one you did\nYour modeling results\nYour conclusions\n\nA LinkedIn article explaining how you utilized agents/LLMs to do your EDA process"
+    "text": "Deliverables\n\nA 7-13 minute presentation (no more than 13 minutes). Your presentation should cover:\n\nA very brief overview of your data (one slide)\nHow your data relates to your modeling task\nThe model you used\nHow you worked with your data to prepare it for modeling (not just cleaning, also data transformations, feature engineering, etc.)\nOther models you considered, and why you chose the one you did\nYour modeling results\nYour conclusions\n\nA LinkedIn article explaining your modeling process and why you made the choices you did."
   },
   {
     "objectID": "In-class activities/Chapter 2/2.4 - Residual Analysis.html",
@@ -1572,21 +1572,21 @@
     "href": "index.html#chapter-2-regression-models",
     "title": "MATH 3339: Introduction to Data Science",
     "section": "Chapter 2: Regression Models",
-    "text": "Chapter 2: Regression Models\n\nLearning Objectives\n\nUnderstand proper train/validation/test methodology\nUse cross-validation for reliable model evaluation\nUnderstand and check linear regression assumptions\nInterpret regression coefficients correctly\nUse residual analysis to diagnose model problems\nApply polynomial features for non-linear relationships\nRecognize and handle multicollinearity\nUse Ridge, Lasso, and Elastic Net regularization\n\n\n\nSchedule\n\n\n\nDate\nTopic\nTextbook\nIn-class Activity\n\n\n\n\nWed, Feb 11\nTrain/validation/test methodology, cross-validation intro\nSection 1\nLink\n\n\nFri, Feb 13\nLinear regression fundamentals & assumptions\nSection 2\nLink\n\n\nMon, Feb 16\nQuiz 2a\n\n\n\n\nWed, Feb 18\nRegression evaluation metrics (MSE, MAE, R², Adjusted R²)\nSection 3\nLink\n\n\nFri, Feb 20\nResidual analysis and diagnostic plots\nSection 4\nLink\n\n\nMon, Feb 23\nQuiz 2b\n\n\n\n\nWed, Feb 25\nPolynomial regression and feature expansion\nSection 5\nLink\n\n\nFri, Feb 27\nMulticollinearity: detection and handling\nSection 6\nLink\n\n\nMon, Mar 2\nQuiz 2c\n\n\n\n\nWed, Mar 4\nRegularization: Ridge and Lasso regression\nSection 7\nLink\n\n\nFri, Mar 6\nElastic Net and choosing between approaches (Mini project 2 begins)\nSections 8-10\nLink\n\n\nMon, Mar 9\nQuiz 2d (extra credit, optional, take-home), Mini project 2 work day (in-class)\n\n\n\n\nWed, Mar 11\nMini project 2 presentations\n\n\n\n\nFri, Mar 13\nNo class\n\n\n\n\n\nHomework 2 due date: Mon, Mar 9\n\n\nResources\n\nChapter 2: Regression Models\nChapter 2 Homework"
+    "text": "Chapter 2: Regression Models\n\nLearning Objectives\n\nUnderstand proper train/validation/test methodology\nUse cross-validation for reliable model evaluation\nUnderstand and check linear regression assumptions\nInterpret regression coefficients correctly\nUse residual analysis to diagnose model problems\nApply polynomial features for non-linear relationships\nRecognize and handle multicollinearity\nUse Ridge, Lasso, and Elastic Net regularization\n\n\n\nSchedule\n\n\n\nDate\nTopic\nTextbook\nIn-class Activity\n\n\n\n\nWed, Feb 11\nTrain/validation/test methodology, cross-validation intro\nSection 1\nLink\n\n\nFri, Feb 13\nLinear regression fundamentals & assumptions\nSection 2\nLink\n\n\nMon, Feb 16\nQuiz 2a\n\n\n\n\nWed, Feb 18\nRegression evaluation metrics (MSE, MAE, R², Adjusted R²)\nSection 3\nLink\n\n\nFri, Feb 20\nResidual analysis and diagnostic plots\nSection 4\nLink\n\n\nMon, Feb 23\nQuiz 2b\n\n\n\n\nWed, Feb 25\nPolynomial regression and feature expansion\nSection 5\nLink\n\n\nFri, Feb 27\nMulticollinearity: detection and handling\nSection 6\nLink\n\n\nMon, Mar 2\nQuiz 2c\n\n\n\n\nWed, Mar 4\nRegularization: Ridge and Lasso regression\nSection 7\nLink\n\n\nFri, Mar 6\nElastic Net and choosing between approaches (Mini project 2 begins)\nSections 8-10\nLink\n\n\nMon, Mar 9\nQuiz 2d (extra credit, optional, take-home), Mini project 2 work day (in-class)\n\n\n\n\nWed, Mar 11\nMini project 2 presentations\n\n\n\n\nFri, Mar 13\nNo class (LinkedIn article due by midnight)\n\n\n\n\n\nHomework 2 due date: Fri, Mar 13\n\n\nResources\n\nChapter 2: Regression Models\nChapter 2 Homework"
   },
   {
     "objectID": "index.html#mini-project-2-regression-models",
     "href": "index.html#mini-project-2-regression-models",
     "title": "MATH 3339: Introduction to Data Science",
     "section": "Mini Project 2: Regression models",
-    "text": "Mini Project 2: Regression models\nMini project 2: Regression models\n\n\n\nDate\nActivity\n\n\n\n\nFri, Mar 6\nMini project work day\n\n\nMon, Mar 9\nMini project work day\n\n\nWed, Mar 11\nMini project presentations"
+    "text": "Mini Project 2: Regression models\nMini project 2: Regression models\n\n\n\nDate\nActivity\n\n\n\n\nFri, Mar 6\nMini project work day\n\n\nMon, Mar 9\nMini project work day\n\n\nWed, Mar 11\nMini project presentations\n\n\nFri, Mar 13\nLinkedIn article due by midnight"
   },
   {
     "objectID": "index.html#chapter-3-classification-models",
     "href": "index.html#chapter-3-classification-models",
     "title": "MATH 3339: Introduction to Data Science",
     "section": "Chapter 3: Classification Models",
-    "text": "Chapter 3: Classification Models\n\nLearning Objectives\n\nUnderstand supervised vs unsupervised learning paradigms\nUnderstand logistic regression and interpret odds ratios\nRead and interpret confusion matrices\nCalculate precision, recall, F1 score and choose appropriately\nFit and tune decision trees, random forests, SVMs, k-NN\nUse ROC curves and AUC for model comparison\nHandle class imbalance with weights and resampling\n\n\n\nSchedule\n\n\n\nDate\nTopic\nTextbook\nIn-class Activity\n\n\n\n\nMon, Mar 23\nGuest speaker (Zoom link)\n\n\n\n\nWed, Mar 25\nSupervised vs unsupervised learning, classification intro\nSections 1 and 2\nLink\n\n\nFri, Mar 27\nLogistic regression and confusion matrices\nSections 3\nLink\n\n\nMon, Mar 30\nQuiz 3a\n\n\n\n\nWed, Apr 1\nClassification metrics: precision, recall, F1, ROC/AUC\nSection 4\nLink\n\n\nFri, Apr 3\nDecision trees and random forests\nSections 5 and 6\nLink\n\n\nMon, Apr 6\nQuiz 3b\n\n\n\n\nWed, Apr 8\nSupport vector machines and k-Nearest neighbors\nSections 7 and 8\nLink\n\n\nFri, Apr 10\nClass imbalance handling (SMOTE, class weights)\nSections 9 and 10\nLink\n\n\nMon, Apr 13\nQuiz 3c\n\n\n\n\n\nHomework 3 due date: Mon, Apr 13\n\n\nResources\n\nChapter 3: Classification Models\nChapter 3 Homework"
+    "text": "Chapter 3: Classification Models\n\nLearning Objectives\n\nUnderstand supervised vs unsupervised learning paradigms\nUnderstand logistic regression and interpret odds ratios\nRead and interpret confusion matrices\nCalculate precision, recall, F1 score and choose appropriately\nFit and tune decision trees, random forests, SVMs, k-NN\nUse ROC curves and AUC for model comparison\nHandle class imbalance with weights and resampling\n\n\n\nSchedule\n\n\n\nDate\nTopic\nTextbook\nIn-class Activity\n\n\n\n\nMon, Mar 23\nSupervised vs unsupervised learning, classification intro\nSections 1 and 2\nLink\n\n\nWed, Mar 25\nLogistic regression and confusion matrices\nSections 3\nLink\n\n\nFri, Mar 27\nGuest speaker (Zoom link)\n\n\n\n\nMon, Mar 30\nQuiz 3a\n\n\n\n\nWed, Apr 1\nClassification metrics: precision, recall, F1, ROC/AUC\nSection 4\nLink\n\n\nFri, Apr 3\nDecision trees and random forests\nSections 5 and 6\nLink\n\n\nMon, Apr 6\nQuiz 3b\n\n\n\n\nWed, Apr 8\nSupport vector machines and k-Nearest neighbors\nSections 7 and 8\nLink\n\n\nFri, Apr 10\nClass imbalance handling (SMOTE, class weights)\nSections 9 and 10\nLink\n\n\nMon, Apr 13\nQuiz 3c\n\n\n\n\n\nHomework 3 due date: Mon, Apr 13\n\n\nResources\n\nChapter 3: Classification Models\nChapter 3 Homework"
   },
   {
     "objectID": "index.html#chapter-4-llms-for-feature-engineering-and-data-extraction",
