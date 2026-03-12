@@ -1,0 +1,35 @@
+---
+title: "Final Project"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    theme: cosmo
+---
+
+## Overview
+The final project is an expanded version of your previous two mini projects. While the mini projects were short-term projects, the final project is a multi-week project. Because of that, I have much higher expectations for the quality and scope of your work.
+
+## Datasets and research questions
+It is up to you and your team to choose a dataset and research question. You should choose a dataset that is interesting to you, and that you have a research question for. You should also choose a dataset that is feasible to work with in the time available.
+
+For the dataset and research question, there are a few requirements:
+- The dataset should have at least 10k rows, and ideally at least 100k rows.
+- The dataset should have at least 7 relevant columns. That means columns like "name", "id", etc. are likely not counted towards your 7 columns.
+- The research question should not be so narrow that you can answer it with just a couple lines of code. For example, "What is the average ticket price for flights..." could be answered using a single `.mean()` call.
+- The research question should not be so broad that I can't assess your success. For example, a question like "Where do earthquakes happen" is overly broad, and could be explored in a million different ways.
+- Your research question should primarily be focused on building a model. You're not building an app, you're not building a dashboard. You're building a model.
+- You will use a model you build to a) make predictions about a situation, and b) understand what that model tells you about the situation. Both of these are very important. If all you do is say "My model got an $R^2$ of 0.9" and then you're done, that's a poor project. You need to explain how your model is making these predictions, and what this tells us about this situation.
+
+
+## Deliverables
+- A 10-15 minute presentation covering:
+    - A very brief overview of your data (one slide)
+    - The model you ultimately used
+    - How you worked with your data to prepare it for modeling (not just cleaning, also data transformations, feature engineering, etc.)
+    - Other models you considered, and why you chose the one you did
+    - Your modeling results
+    - What your model tells you about this situation (e.g. what's important, how do different factors affect the outcome, etc.)
+    - Your conclusions
+- A LinkedIn article explaining your modeling process and why you made the choices you did.
