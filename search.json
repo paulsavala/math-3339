@@ -431,7 +431,7 @@
     "href": "In-class activities/Chapter 3/3.1-3.2 - Supervised Learning and Classification.html#data",
     "title": "Chapter 3.1-3.2: Supervised Learning and Classification",
     "section": "Data",
-    "text": "Data\nWe’ll use the Titanic dataset (supervised) and Iris (for an unsupervised demo).\n\n# Load Titanic data\ntitanic = pd.read_csv('../../Textbook/data/titanic.csv')\ntitanic.head()"
+    "text": "Data\nWe’ll use the Titanic dataset (supervised) and Iris (for an unsupervised demo).\n\n# Load Titanic data\ntitanic = pd.read_csv('https://raw.githubusercontent.com/datasciencedojo/datasets/refs/heads/master/titanic.csv')\ntitanic.head()"
   },
   {
     "objectID": "In-class activities/Chapter 3/3.1-3.2 - Supervised Learning and Classification.html#practice",
