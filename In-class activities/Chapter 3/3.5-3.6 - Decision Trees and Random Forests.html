@@ -162,7 +162,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Random forests: bagging + random feature subsets</li>
 <li>Feature importances</li>
 </ul>
-<div id="cell-2" class="cell">
+<div id="cell-2" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -201,8 +201,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="practice" class="level2">
 <h2 class="anchored" data-anchor-id="practice">Practice</h2>
-<section id="use-ai-prepare-features-and-traintest-split" class="level3">
-<h3 class="anchored" data-anchor-id="use-ai-prepare-features-and-traintest-split">1. Use AI — Prepare features and train/test split</h3>
+<section id="by-hand-prepare-features-and-traintest-split" class="level3">
+<h3 class="anchored" data-anchor-id="by-hand-prepare-features-and-traintest-split">1. By hand — Prepare features and train/test split</h3>
 <p>Select features (<code>MedInc</code>, <code>HouseAge</code>, <code>AveRooms</code>, <code>AveOccup</code>, <code>Latitude</code>, <code>Longitude</code>), define the target as <code>high_value</code>, and split into train/test (80/20).</p>
 <div id="cell-8" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Select features and target</span></span>
@@ -211,8 +211,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2: Train/test split (80/20, random_state=42)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-<section id="use-ai-fit-and-visualize-a-shallow-decision-tree" class="level3">
-<h3 class="anchored" data-anchor-id="use-ai-fit-and-visualize-a-shallow-decision-tree">2. Use AI — Fit and visualize a shallow decision tree</h3>
+<section id="by-hand-fit-and-visualize-a-shallow-decision-tree" class="level3">
+<h3 class="anchored" data-anchor-id="by-hand-fit-and-visualize-a-shallow-decision-tree">2. By hand — Fit and visualize a shallow decision tree</h3>
 <p>Fit a <code>DecisionTreeClassifier(max_depth=3, random_state=42)</code> and visualize it with <code>plot_tree()</code>. Use <code>filled=True</code> and pass the feature names.</p>
 <div id="cell-10" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Fit DecisionTreeClassifier with max_depth=3</span></span>
@@ -227,8 +227,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>Your answer:</strong></p>
 <p>(Write your answer here)</p>
 </section>
-<section id="use-ai-compare-trees-with-different-depths" class="level3">
-<h3 class="anchored" data-anchor-id="use-ai-compare-trees-with-different-depths">4. Use AI — Compare trees with different depths</h3>
+<section id="by-hand-compare-trees-with-different-depths" class="level3">
+<h3 class="anchored" data-anchor-id="by-hand-compare-trees-with-different-depths">4. By hand — Compare trees with different depths</h3>
 <p>Fit decision trees with <code>max_depth</code> = 2, 5, 10, and None (unlimited). Print the <strong>train accuracy</strong> and <strong>test accuracy</strong> for each. Which one overfits?</p>
 <div id="cell-14" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit trees with different max_depth values and compare train/test accuracy</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -240,8 +240,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>Your answer:</strong></p>
 <p>(Write your answer here)</p>
 </section>
-<section id="use-ai-fit-a-random-forest-and-compare" class="level3">
-<h3 class="anchored" data-anchor-id="use-ai-fit-a-random-forest-and-compare">6. Use AI — Fit a random forest and compare</h3>
+<section id="by-hand-fit-a-random-forest-and-compare" class="level3">
+<h3 class="anchored" data-anchor-id="by-hand-fit-a-random-forest-and-compare">6. By hand — Fit a random forest and compare</h3>
 <p>Fit a <code>RandomForestClassifier(n_estimators=100, max_depth=5, random_state=42)</code>. Compare its test accuracy to the best single decision tree from above.</p>
 <div id="cell-18" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Fit RandomForestClassifier</span></span>
