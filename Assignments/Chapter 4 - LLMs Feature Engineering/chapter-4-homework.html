@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Chapter 4 Homework: LLMs for Feature Engineering – MATH 3339: Introduction to Data Science</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles/textbook-nav.css">
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-search-results"></div>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#instructions" id="toc-instructions" class="nav-link active" data-scroll-target="#instructions">Instructions</a>
+  <ul class="collapse">
+  <li><a href="#api-cost-and-sample-size" id="toc-api-cost-and-sample-size" class="nav-link" data-scroll-target="#api-cost-and-sample-size">API cost and sample size</a></li>
+  <li><a href="#dataset" id="toc-dataset" class="nav-link" data-scroll-target="#dataset">Dataset</a></li>
+  </ul></li>
+  <li><a href="#questions" id="toc-questions" class="nav-link" data-scroll-target="#questions">Questions</a>
+  <ul class="collapse">
+  <li><a href="#question-1-5-points" id="toc-question-1-5-points" class="nav-link" data-scroll-target="#question-1-5-points">Question 1 (5 points)</a></li>
+  <li><a href="#question-2-5-points" id="toc-question-2-5-points" class="nav-link" data-scroll-target="#question-2-5-points">Question 2 (5 points)</a></li>
+  <li><a href="#question-3-5-points" id="toc-question-3-5-points" class="nav-link" data-scroll-target="#question-3-5-points">Question 3 (5 points)</a></li>
+  <li><a href="#question-4-6-points" id="toc-question-4-6-points" class="nav-link" data-scroll-target="#question-4-6-points">Question 4 (6 points)</a></li>
+  <li><a href="#question-5-6-points" id="toc-question-5-6-points" class="nav-link" data-scroll-target="#question-5-6-points">Question 5 (6 points)</a></li>
+  <li><a href="#question-6-5-points" id="toc-question-6-5-points" class="nav-link" data-scroll-target="#question-6-5-points">Question 6 (5 points)</a></li>
+  <li><a href="#question-7-6-points" id="toc-question-7-6-points" class="nav-link" data-scroll-target="#question-7-6-points">Question 7 (6 points)</a></li>
+  <li><a href="#question-8-6-points" id="toc-question-8-6-points" class="nav-link" data-scroll-target="#question-8-6-points">Question 8 (6 points)</a></li>
+  <li><a href="#question-9-7-points" id="toc-question-9-7-points" class="nav-link" data-scroll-target="#question-9-7-points">Question 9 (7 points)</a></li>
+  </ul></li>
+  <li><a href="#submission-guidelines" id="toc-submission-guidelines" class="nav-link" data-scroll-target="#submission-guidelines">Submission Guidelines</a></li>
+  <li><a href="#tips-for-success" id="toc-tips-for-success" class="nav-link" data-scroll-target="#tips-for-success">Tips for Success</a>
+  <ul class="collapse">
+  <li><a href="#general" id="toc-general" class="nav-link" data-scroll-target="#general">General:</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Chapter 4 Homework: LLMs for Feature Engineering</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="instructions" class="level2">
+<h2 class="anchored" data-anchor-id="instructions">Instructions</h2>
+<p>This homework is meant to be completed <strong>with AI assistance</strong> (such as an in-browser LLM like ChatGPT, and/or using a CLI like Claude Code) while <strong>also</strong> making real API calls to a commercial LLM (OpenAI, Anthropic, or Google) for feature extraction. You are building an end-to-end pipeline that turns messy review text into structured features an ML model can actually use.</p>
+<p>For all questions, submit:</p>
+<ol type="1">
+<li>Your code (in a <code>.py</code> file or Jupyter notebook)</li>
+<li>All visualizations, tables, and pipeline outputs</li>
+<li>Written answers to interpretation questions (can be in markdown or comments)</li>
+<li>The prompts you used — both the prompts you gave to your coding assistant <strong>and</strong> the prompts you sent to the LLM API from inside your pipeline</li>
+</ol>
+<section id="api-cost-and-sample-size" class="level3">
+<h3 class="anchored" data-anchor-id="api-cost-and-sample-size">API cost and sample size</h3>
+<p>You will be sending real requests to a paid API. To keep your total spend well under <strong>$1</strong>:</p>
+<ul>
+<li>Use a cheap model by default (e.g., <code>gpt-5.4-nano</code>)</li>
+<li>Never create loops that loop over the data many times.</li>
+<li>Always test your code on just a few rows, that way you’re not wasting money send the LLM many rows of data for something that doesn’t work.</li>
+<li><strong>Cache</strong> responses so re-running your notebook does not re-bill you</li>
+<li>Be aware that some reviews in this dataset are thousands of characters long — truncate (e.g., <code>reviews.text[:2000]</code>) or summarize before extraction when token counts matter</li>
+<li><strong>Check the Slack channel for the API key.</strong> This API key will be deleted after the homework due date.</li>
+</ul>
+</section>
+<section id="dataset" class="level3">
+<h3 class="anchored" data-anchor-id="dataset">Dataset</h3>
+<p>You’ll be working with a dataset called <code>cleaned_amazon.csv</code> containing Amazon product reviews. The dataset includes:</p>
+<ul>
+<li><code>name</code>: Product name (e.g., “Kindle Paperwhite”, “Amazon Echo Dot Case - Indigo Fabric”, “Fire HD 7 Tablet”)</li>
+<li><code>reviews.numHelpful</code>: Count of “helpful” votes on the review (mostly 0, with a long tail)</li>
+<li><code>reviews.rating</code>: Star rating from 1–5. <strong>Many rows are missing this field</strong> — you will use the labeled subset as ground truth</li>
+<li><code>reviews.text</code>: The review body. Lengths range from ~10 words to multi-thousand-word essays</li>
+<li><code>reviews.title</code>: The review title</li>
+<li><code>price</code>: Product price in USD</li>
+</ul>
+<p>A few characteristics you should be aware of before you start:</p>
+<ul>
+<li>The dataset contains <strong>duplicate review text</strong> across color/variant listings of the same product (e.g., Echo Dot cases). This matters for caching.</li>
+<li>Reviews span several product families (e-readers, tablets, streaming devices, accessories), which makes category extraction interesting.</li>
+<li>Questions 8–10 require rows where <code>reviews.rating</code> is <strong>not null</strong> — filter accordingly in those questions.</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="questions" class="level2">
+<h2 class="anchored" data-anchor-id="questions">Questions</h2>
+<section id="question-1-5-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-1-5-points">Question 1 (5 points)</h3>
+<p>Write code that connects to your chosen LLM API and extracts the <strong>sentiment</strong> (<code>positive</code>, <code>negative</code>, or <code>neutral</code>) from the <strong>first 20 rows</strong> of <code>cleaned_amazon.csv</code>. For each row, send <code>reviews.text</code> (truncated to 2000 characters if needed) to the model with a simple classification prompt.</p>
+<p>Display the results as a DataFrame with three columns: <code>name</code>, a truncated preview of <code>reviews.text</code> (first 120 characters), and the extracted <code>sentiment</code>.</p>
+<p><strong>Deliverables:</strong></p>
+<ul>
+<li>The prompt(s) you used (both the coding-assistant prompt and the LLM API prompt)</li>
+<li>The code</li>
+<li>The resulting DataFrame (as a table in your notebook or a saved CSV)</li>
+<li>2–3 sentences: did the extracted sentiment match your intuition from reading a few reviews by hand?</li>
+</ul>
+<hr>
+</section>
+<section id="question-2-5-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-2-5-points">Question 2 (5 points)</h3>
+<p>Write <strong>three different prompt variants</strong> that extract a <code>product_category</code> label from each review. The allowed categories are: <code>e-reader</code>, <code>tablet</code>, <code>streaming_device</code>, <code>accessory</code>, and <code>other</code>.</p>
+<p>The three variants should differ in a meaningful way — for example:</p>
+<ul>
+<li>Variant A: zero-shot (see the textbook for details), minimal instructions</li>
+<li>Variant B: zero-shot, with an explicit category definition for each label</li>
+<li>Variant C: few-shot (see the textbook for details), including 2–3 worked examples in the prompt</li>
+</ul>
+<p>Run each variant on the <strong>same 15 rows</strong> (pick rows that span multiple product families). Compute the <strong>pairwise agreement rate</strong> between the three variants (i.e., for how many rows did all three variants agree?).</p>
+<p><strong>Deliverables:</strong></p>
+<ul>
+<li>The three prompt variants you used</li>
+<li>The code that runs all three and tabulates the results</li>
+<li>A table showing, for each row, the label assigned by each variant</li>
+<li>Your written interpretation (3–4 sentences): which variant produced the most consistent labels, and why do you think so?</li>
+</ul>
+<hr>
+</section>
+<section id="question-3-5-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-3-5-points">Question 3 (5 points)</h3>
+<p>Design a <strong>single prompt</strong> that extracts <strong>four fields at once</strong> as JSON from a review:</p>
+<ul>
+<li><code>sentiment</code>: one of <code>positive</code>, <code>negative</code>, <code>neutral</code></li>
+<li><code>aspect_mentioned</code>: one of <code>battery</code>, <code>screen</code>, <code>price</code>, <code>build_quality</code>, <code>other</code></li>
+<li><code>issue_reported</code>: boolean — did the reviewer report a defect or problem?</li>
+<li><code>recommended</code>: boolean — did the reviewer recommend the product?</li>
+</ul>
+<p>Run this on <strong>25 rows</strong> of <code>cleaned_amazon.csv</code>. Parse each response into a Python dict, then assemble the parsed results into a DataFrame.</p>
+<p><strong>Deliverables:</strong></p>
+<ul>
+<li>The prompt you used</li>
+<li>The code (including how you parsed the JSON)</li>
+<li>The resulting DataFrame (25 rows × 4 extracted columns)</li>
+<li>2–3 sentences: how often did the model’s <code>issue_reported = True</code> label line up with a low <code>reviews.rating</code> on the same row?</li>
+</ul>
+<hr>
+</section>
+<section id="question-4-6-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-4-6-points">Question 4 (6 points)</h3>
+<p>Extend your Q3 pipeline with a <strong>validation layer</strong>. For each raw model response, your validator must check:</p>
+<ol type="1">
+<li>The response parses as JSON</li>
+<li>All four required keys are present</li>
+<li>Each value is in the allowed set (e.g., <code>sentiment</code> is exactly one of the three allowed strings; <code>issue_reported</code> and <code>recommended</code> are <code>True</code>/<code>False</code>)</li>
+</ol>
+<p>Run your validated pipeline on <strong>50 rows</strong> chosen to include both very long reviews (<code>len(reviews.text) &gt; 2000</code>) and very short reviews (<code>len(reviews.text) &lt; 50</code>). Log every failure and report the overall failure rate, broken down by review length.</p>
+<p><strong>Deliverables:</strong></p>
+<ul>
+<li>The prompt(s) and validator code</li>
+<li>A table of failure counts by category (parse failure / missing key / bad value) and by review length bucket</li>
+<li>Written interpretation (4–5 sentences): do long or short reviews fail more often? What kinds of failures dominate, and what does that suggest about your prompt?</li>
+</ul>
+<hr>
+</section>
+<section id="question-5-6-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-5-6-points">Question 5 (6 points)</h3>
+<p>Using your code from from Q4, write a <strong>cost analysis report</strong>. You must:</p>
+<ul>
+<li>Count the number of words sent and received</li>
+<li>Multiply this by 1.3 (as each word is roughly equal to 1.3 tokens)</li>
+<li>Compute the <strong>total dollars spent</strong> at your model’s published per-token price (Google to see pricing for <code>gpt-5.4-nano</code>)</li>
+<li>Estimate the average cost per 100 reviews</li>
+</ul>
+<p><strong>Deliverables:</strong></p>
+<ul>
+<li>The prompt(s) you used</li>
+<li>The cost-analysis code and the resulting tables</li>
+<li>A bar chart or similar visualization of cost by length bucket</li>
+<li>Written interpretation (4–5 sentences): is upgrading to the expensive model worth the extra cost for this task, or not? Justify based on <em>both</em> cost and any accuracy differences you observed.</li>
+</ul>
+<hr>
+</section>
+<section id="question-6-5-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-6-5-points">Question 6 (5 points)</h3>
+<p>Take the extracted four-field features from Q5 and convert them into an <strong>ML-ready feature matrix <code>X</code></strong>:</p>
+<ul>
+<li><strong>One-hot encode</strong> <code>sentiment</code> (3 columns) and <code>aspect_mentioned</code> (5 columns)</li>
+<li>Keep <code>issue_reported</code> and <code>recommended</code> as boolean (0/1) columns</li>
+<li>Join back to the original row so that <code>X</code> is aligned with <code>name</code>, <code>reviews.numHelpful</code>, <code>reviews.rating</code>, and <code>price</code></li>
+</ul>
+<p>Report the shape of <code>X</code>, the data types of each column, and print the first 5 rows.</p>
+<p><strong>Deliverables:</strong></p>
+<ul>
+<li>The prompt(s) you used</li>
+<li>The feature-engineering code</li>
+<li>The shape, dtypes, and head of the resulting feature matrix</li>
+<li>2–3 sentences: which columns of <code>X</code> do you expect to be most predictive of <code>reviews.rating</code>, and why?</li>
+</ul>
+<hr>
+</section>
+<section id="question-7-6-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-7-6-points">Question 7 (6 points)</h3>
+<p>Build a <strong>keyword-based baseline</strong> that <em>does not</em> call the LLM. Specifically:</p>
+<ul>
+<li>Write a simple sentiment classifier using positive and negative word lists (e.g., “love”, “great”, “broken”, “disappointed”)</li>
+<li>Write a simple category classifier using keyword matches on <code>name</code> and <code>reviews.text</code> (e.g., “kindle” → <code>e-reader</code>, “case” → <code>accessory</code>)</li>
+</ul>
+<p>On the subset of rows where <code>reviews.rating</code> is <strong>not null</strong>, compare your keyword baseline against the LLM output using <code>reviews.rating</code> as ground truth (≥4 → positive, ≤2 → negative, 3 → neutral). Report:</p>
+<ul>
+<li>Accuracy for each approach, for both sentiment and category</li>
+<li>Per-record cost for LLM (from Q6) vs.&nbsp;zero for the keyword baseline</li>
+</ul>
+<p><strong>Deliverables:</strong></p>
+<ul>
+<li>The prompt(s) you used</li>
+<li>The keyword baseline code</li>
+<li>An accuracy and cost comparison table</li>
+<li>Written interpretation (4–5 sentences): when is the keyword baseline “good enough”? Recommend a <strong>hybrid strategy</strong> — which kinds of rows should you route to the LLM and which to the keyword baseline?</li>
+</ul>
+<hr>
+</section>
+<section id="question-8-6-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-8-6-points">Question 8 (6 points)</h3>
+<p>Pick <strong>20 reviews</strong> from the rating-labeled subset and <strong>manually label</strong> each one yourself for <code>sentiment</code> and <code>product_category</code>. Then:</p>
+<ul>
+<li>Compare your hand labels to the LLM’s labels on those same 20 rows</li>
+<li>Compute LLM accuracy against your hand labels</li>
+<li><strong>Analyze the errors</strong>: do the LLM mistakes cluster around long technical reviews? Reviews with mixed sentiment (e.g., “I love the hardware but the software is broken”)? Sarcasm?</li>
+<li>Based on the error patterns, propose <strong>one concrete prompt improvement</strong>, rerun those 20 rows with the improved prompt, and report whether accuracy improved.</li>
+</ul>
+<p><strong>Deliverables:</strong></p>
+<ul>
+<li>The prompt(s) you used (original and improved)</li>
+<li>Your 20 hand labels, alongside the original LLM labels and the improved LLM labels</li>
+<li>Written interpretation (5–6 sentences): what kind of errors did the LLM make? What did your prompt improvement target, and did it help?</li>
+</ul>
+<hr>
+</section>
+<section id="question-9-7-points" class="level3">
+<h3 class="anchored" data-anchor-id="question-9-7-points">Question 9 (7 points)</h3>
+<p>Build an <strong>end-to-end capstone pipeline</strong> on the subset of rows where <code>reviews.rating</code> is not null:</p>
+<ol type="1">
+<li>Use your Q5 pipeline to extract the four-field features from <code>reviews.text</code></li>
+<li>Build two feature matrices:
+<ul>
+<li><strong>Model A (LLM features):</strong> one-hot <code>sentiment</code> + one-hot <code>aspect_mentioned</code> + <code>issue_reported</code> + <code>recommended</code></li>
+<li><strong>Model B (no-LLM baseline):</strong> <code>len(reviews.text)</code> + <code>reviews.numHelpful</code> + one-hot <code>name</code></li>
+</ul></li>
+<li>Define your target <code>y</code>: <code>1</code> if <code>reviews.rating &gt;= 4</code>, else <code>0</code></li>
+<li>80/20 train/test split, train a classifier of your choice (e.g., logistic regression, random forest) on each feature matrix</li>
+<li>Report accuracy, a confusion matrix, and the top feature importances for each model</li>
+</ol>
+<p>Then write a <strong>1-page executive summary (300–400 words)</strong> aimed at a stakeholder with no ML background. Explain:</p>
+<ul>
+<li>What the pipeline does end-to-end</li>
+<li>How well Model A (LLM features) performed vs.&nbsp;Model B (no-LLM baseline)</li>
+<li>What the LLM-extracted features added — or failed to add — to the prediction</li>
+<li>Realistic cost considerations at production scale (use your Q6 extrapolation)</li>
+<li>Recommendations for what you’d try next</li>
+</ul>
+<p><strong>Deliverables:</strong></p>
+<ul>
+<li>The prompt(s) you used</li>
+<li>The full pipeline code and all evaluation outputs (accuracy, confusion matrices, feature importances)</li>
+<li>Your 300–400-word executive summary</li>
+<li><strong>Reflection:</strong> how did having LLM-extracted features change what was possible in this classification task compared to using only traditional tabular features?</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="submission-guidelines" class="level2">
+<h2 class="anchored" data-anchor-id="submission-guidelines">Submission Guidelines</h2>
+<p>Submit a ZIP file containing one folder for each problem. Within each folder you should have one file for each of the following:</p>
+<ol type="1">
+<li><strong>Code files:</strong> All <code>.py</code> files or Jupyter notebooks</li>
+<li><strong>Outputs folder:</strong> All tables, cached API responses, and visualizations generated</li>
+<li><strong>Written responses:</strong> A single document (PDF or Markdown) with all your written answers, interpretations, and AI prompts used</li>
+<li><strong>Data:</strong> Include your cached extracted features or any modified datasets you created</li>
+</ol>
+<hr>
+</section>
+<section id="tips-for-success" class="level2">
+<h2 class="anchored" data-anchor-id="tips-for-success">Tips for Success</h2>
+<ul>
+<li>Write specific, detailed prompts — both to your coding assistant and to the extraction LLM</li>
+<li>If the extraction LLM’s first prompt isn’t producing clean JSON, refine it; do not silently patch bad output</li>
+<li>Always review and test the AI-generated code</li>
+<li>Don’t just accept AI output — understand what it’s doing</li>
+<li>Include context in your prompts (e.g., “I’m extracting four fields from Amazon product reviews; output only valid JSON with these exact keys…”)</li>
+</ul>
+<section id="general" class="level3">
+<h3 class="anchored" data-anchor-id="general">General:</h3>
+<ul>
+<li>Start early — hitting a real API introduces flaky network behavior that takes time to handle</li>
+<li>Cache aggressively so a failed re-run doesn’t cost you money twice</li>
+<li>Your interpretations are just as important as your code</li>
+<li>When the LLM makes a weird extraction, look at the actual review — it often teaches you something</li>
+<li>Use your brain. That’s what it’s there for.</li>
+</ul>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/paulsavala\.github\.io\/math-3339\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
